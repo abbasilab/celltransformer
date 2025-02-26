@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - data: zhuang.yaml
+  - model: zhuang.yaml
+  - optimization: base.yaml
+
+checkpoint_dir: /home/ajl/work/d1/model-checkpoints/celltransformer-mouse1-encdec
+wandb_project: 'enc-dec-celltransformer'
+model_checkpoint: None
+wandb_code_dir: "/home/ajl/work/d2/code/brainformr/scripts"

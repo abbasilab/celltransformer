@@ -1,0 +1,19 @@
+_target_: brainformr.model.CellTransformer
+encoder_embedding_dim: 384
+decoder_embedding_dim: 384
+
+encoder_num_heads: 8
+decoder_num_heads: 8
+attn_pool_heads: 8
+
+encoder_depth: 4
+decoder_depth: 4
+
+cell_cardinality: 2048
+eps: 1e-9
+
+n_genes: 35936
+xformer_dropout: 0.0
+bias: True
+zero_attn: True
+

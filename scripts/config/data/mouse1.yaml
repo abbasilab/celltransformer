@@ -1,0 +1,13 @@
+adata_path: "~/abc_dataset/C57BL6J-638850-log2_dense.h5ad"
+metadata_path: "~/abc_dataset/metadata-joined-ccf.csv"
+batch_size: 32
+num_workers: 2
+patch_size: 
+  - 17
+  - 17
+celltype_colname: "subclass"
+cell_id_colname: "cell_label"
+tissue_section_colname: "brain_section_label"
+neighborhood_max_num_cells: 250
+collate_fn: brainformr.cell_loader.collate
+train_pct: 0.8

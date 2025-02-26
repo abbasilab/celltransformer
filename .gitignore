@@ -1,0 +1,96 @@
+# Also see https://github.com/github/gitignore/blob/master/Python.gitignore
+# This is simpler and easier to understand
+# We'll ignore all .* files and then re-add some
+
+outputs/*
+outputs
+
+notebooks
+
+wandb/*
+wandb
+
+tmp*.json
+
+# General hidden or unwanted
+.*
+~*
+*~
+*#
+Thumbs.db
+*.bak
+*.swp
+tmp/
+null
+
+# Log files and binary files
+*.log
+*.zip
+*.tar.gz
+*.tgz
+*.gz
+*.tar
+*.z7
+*.exe
+*.msi
+*.pkg
+*.dll
+*.so
+
+# Python temp and build files
+docs/html/
+__pycache__/
+__pypackages__/
+*.py[cod]
+*$py.class
+*.egg-info
+pip-wheel-metadata
+share/python-wheels/
+build/
+dist/
+eggs/
+sdist/
+docs/_build
+cython_debug/
+docs/autoapi
+
+# Hidden files that are definitely unwanted (redundant)
+.tox/
+.pytest_cache
+.ipynb_checkpoints
+
+# Files from other languages
+*.o
+hs_err_pid*
+*.class
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/deps.jl
+
+# Keep these config files
+!/.gitignore
+!/.travis.yml
+!/.circleci/config.yml
+!/.github
+!/.appveyor.yml
+!/.flake8
+!/.readthedocs.yml
+!/.dockerignore
+!/.editorconfig
+!/.pre-commit-config.yaml
+!.npmignore
+!/.scrutinizer.yml
+
+site
+
+_test*yml
+documentation.pdf
+smooth_embeddings.pdf
+count_celltypes_per_region.pdf
+cluster_and_visualize.pdf
+*.pdf
+
+*.pth
+scripts/aibs-embeds.pth
+something.ipynb

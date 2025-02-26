@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - data: langlieb.yaml
+  - model: langlieb.yaml
+  - optimization: base.yaml
+
+checkpoint_dir: /home/ajl/work/d1/model-checkpoints/langlieb/
+wandb_project: 'enc-dec-celltransformer_langlieb_test'
+model_checkpoint: None
+wandb_code_dir: "/home/ajl/work/d2/code/brainformr/brainformr/scripts"

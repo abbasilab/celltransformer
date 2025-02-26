@@ -1,0 +1,13 @@
+adata_path: "/home/ajl/work/n1/langlieb"
+metadata_path: "/home/ajl/abc_dataset/687997/metadata-687997.csv"
+batch_size: 32
+num_workers: 2
+patch_size: 
+  - 17
+  - 17
+celltype_colname: 'cell_type'
+cell_id_colname: "cell_label"
+tissue_section_colname: "brain_section_label"
+neighborhood_max_num_cells: 250
+collate_fn: brainformr.cell_loader.collate
+train_pct: 0.8

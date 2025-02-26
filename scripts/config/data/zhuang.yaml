@@ -1,0 +1,22 @@
+metadata_path:
+  - "~/abc_dataset/metadata/Zhuang-C57BL6J-1/20230830/views/cell_metadata_with_cluster_annotation_reconstructed.csv"
+  - "~/abc_dataset/metadata/Zhuang-C57BL6J-2/20230830/views/cell_metadata_with_cluster_annotation.csv"
+  - "~/abc_dataset/metadata/Zhuang-C57BL6J-3/20230830/views/cell_metadata_with_cluster_annotation.csv"
+  - "~/abc_dataset/metadata/Zhuang-C57BL6J-4/20230830/views/cell_metadata_with_cluster_annotation.csv"
+
+adata_path:
+  - "~/abc_dataset/expression_matrices/Zhuang-C57BL6J-1/20230830/Zhuang-C57BL6J-1-log2.h5ad"
+  - "~/abc_dataset/expression_matrices/Zhuang-C57BL6J-2/20230830/Zhuang-C57BL6J-2-log2.h5ad"
+  - "~/abc_dataset/expression_matrices/Zhuang-C57BL6J-3/20230830/Zhuang-C57BL6J-3-log2.h5ad"
+  - "~/abc_dataset/expression_matrices/Zhuang-C57BL6J-4/20230830/Zhuang-C57BL6J-4-log2.h5ad"
+  
+batch_size: 32
+num_workers: 2
+patch_size: 
+  - 17
+  - 17
+celltype_colname: "subclass"
+cell_id_colname: "cell_label"
+tissue_section_colname: "brain_section_label"
+neighborhood_max_num_cells: 250
+train_pct: 0.8

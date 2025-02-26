@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - data: mouse2.yaml
+  - model: base.yaml
+  - optimization: base.yaml
+
+checkpoint_dir: /home/ajl/work/d1/model-checkpoints/mouse_687997_hparamtest/
+wandb_project: 'enc-dec-celltransformer_687997_hparamtest'
+model_checkpoint: None
+wandb_code_dir: "/home/ajl/work/d2/code/brainformr/brainformr/scripts"

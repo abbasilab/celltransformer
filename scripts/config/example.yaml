@@ -1,0 +1,10 @@
+defaults:
+  - _self_
+  - data: mouse1.yaml
+  - model: base.yaml
+  - optimization: base.yaml
+
+checkpoint_dir: ???
+wandb_project: 
+model_checkpoint: 
+wandb_code_dir: 
