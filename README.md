@@ -26,9 +26,7 @@ This repo contains several items necessary to reproduce the paper
 # Model and data sharing
 
 * all data used in this repository was publicly available from the Allen Brain Cell dataset
-* the model weights and the embeddings for the Allen Institute for Brain Science data are available here: https://ucsf.box.com/s/n2h38wlpgqveqnywrpvvjrkdt4o2nd0h
-	* we are currently in the process of hosting these on a more permanent solution (S3 or Zenodo), but provide these as initial outputs of our work for review
-
+* 
 # Citation
 
 If this is useful to you, please consider citing: 
