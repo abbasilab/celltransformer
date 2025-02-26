@@ -26,7 +26,7 @@ This repo contains several items necessary to reproduce the paper
 # Model and data sharing
 
 * all data used in this repository was publicly available from the Allen Brain Cell dataset
-* 
+
 # Citation
 
 If this is useful to you, please consider citing: 
