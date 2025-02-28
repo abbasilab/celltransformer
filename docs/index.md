@@ -25,12 +25,12 @@ Requirements are a CSV file with cell types and cell IDs corresponding to an `an
 	| `x` | spatial coordinate that will be used to identify neighbors. Must be in same units as `patch_size` argument (default in `hydra` configs is micron). | 
 	| `y` | similar as `x` | 
 
-2. Change paths in the `hydra` config file template (`scripts/config/data/mouse1.yaml`)
+2. Change paths in the `hydra` config file template (`scripts/config/data/mouse1.yaml`). If you do not do this, the script will almost certainly not work.
 3. Make sure value of `patch_size` fits your `x` and `y` created in step (1) in the same YAML file.
 4. Adjust model parameters in `scripts/config/model/` for desired model. 
 5. Set `config_path` in `hydra.main` decorator to the path and config file of interest (see template file `scripts/training/train_base.py`).
 6. Set up `wandb` parameters in `scripts/training/train_base.py`.
-7. Run with `python train_base.py`
+7. Run with `python train_base.py`.
 
 ### I want to edit this at the hydra config level or in the starter script
 
