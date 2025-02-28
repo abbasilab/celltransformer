@@ -10,7 +10,7 @@ This is documentation for code written as part of the manuscript ["Data-driven f
 
 Requirements are a CSV file with cell types and cell IDs corresponding to an `anndata` object with probe counts. To set these up for use with the code in this repo:
 
-1. make sure you provide the right cardinality (number of cell types) to the model using the `model` config. You can also do this usinmg the `hydra` CLI by just passing `python [SCRIPT.PY] +model.cell_cardinality=9000` (or whatever the value is)
+1. make sure you provide the right cardinality (number of cell types) to the model using the `model` config. You can also do this using the `hydra` CLI by just passing (say you want to change the parameter `cell_cardinality` in the your `model.yaml` file): `python [SCRIPT.PY] +model.cell_cardinality=9000` (or whatever the value is)
 2. the code right now unfortunately assumes that the values in your anndata.X are `log1p` transformed and then uses `.exp()` in the implementation (`training/lightning_model.py`) to produce counts again for `scvi.NegativeBinomial` -- make sure you follow this convention or edit the training file for a different convention.
 
 ### I want to edit the anndata (MERFISH probe counts) and CSV (cell metadata) to work with this codebase
@@ -32,7 +32,7 @@ Requirements are a CSV file with cell types and cell IDs corresponding to an `an
 6. Set up `wandb` parameters in `scripts/training/train_base.py`.
 7. Run with `python train_base.py`.
 
-### I want to edit this at the hydra config level or in the starter script
+### I want to edit this at the hydra config level or in the starter script (or just want to better understand the above)
 
 1. Hydra config file setup: change data paths in `config/data` or create new data yaml file in that folder that has the same fields as the examples in that directory. Make sure to specify:
 	- `celltype_colname`: the column that gives the cell type of the cells in the dataset (if you are templating from the `train_aibs_mouse.py` file, which we recommend, we will use `sklearn.preprocessing.LabelEncoder` on this column in the base `train_aibs_mouse.py` file, so it doesn't matter if it's integer or string encoded. If you are not using that function, make sure the dataframe you pass to `CenterMaskSampler` has column `cell_type` (case sensitive default argument) which *must* integer encoded.)
@@ -48,6 +48,20 @@ Requirements are a CSV file with cell types and cell IDs corresponding to an `an
 4. add `wandb` project if desired to top level config in `config`
 5. copy boilerplate for initiating training from `train_aibs_mouse.py` or `train_zhuang.py` (ie code in `main` that); make sure to specify correct config file in the `@hydra.main` decorator
 	- for more information on this see the [`hydra` docs](https://hydra.cc/docs/intro/).
+
+The design of the dataloader object is:
+
+1. Store the dataframe (with cell metadata including x/y coordinates, cell types (integer encoded), and the unique identifier (referred to throughout the codebase as cell label) for each cell that we will to index into the anndata, as well as section IDs/groupings) along with the anndata 
+	* note there are some rudimentary checks to see if you have provided column names not found in the metadata dataframe. You do not need to have the metadata columns in the `anndata`
+2. Receive the string valued column names of the same (x/y coordinates, cell type column, section ID/groupings) and use them to index into the dataframe
+3. Store the cells corresponding to each column in a dictionary for later use (ie section_1: some_dataframe)
+3. The high level of the __getitem__ is then to index the cell of interest (cell_i), lookup the neighbors based on the user-provided (see __init__ for the CellTransformer model object) spatial threshold parameter, and then produce a `namedtuple` (`NeighborMetadata`) that has as attributes:
+	* `observed_expression`: a `numpy` array with dimensions (`n_cells` by `n_genes`)
+	* `masked_expression`: a 1 by `n_genes` matrix
+	* `masked_cell_type`: integer encoding for the cell type of the masked cell (cell_i)
+	* `masked_expression`: a `n_cells` by `n_genes` matrix
+	* `num_cells_obs`: number of masked cells
+4. By default we will use the `celltransformer/data/loader_pandas.py:collate` function. It will loop over the list of `NeighborMetadata` and output a dictionary containing various concatenated data including the attention masks (keys `encoder_mask` and `pooling_mask`) to allow cells within neighborhoods to attend to each other across the batch and mask for attention pooling, respectively. See `forward` function of the CellTransformer model code to understand further operations.
 
 ## Core code components and usage
 
@@ -138,18 +152,39 @@ python scripts/training/train_aibs_mouse.py
 If this is useful to you, please consider citing our preprint:
 
 ```
-@article {Lee2024.05.05.592608,
-	author = {Lee, Alex J. and Dubuc, Alma and Kunst, Michael and Yao, Shenqin and Lusk, Nicholas and Ng, Lydia and Zeng, Hongkui and Tasic, Bosiljka and Abbasi-Asl, Reza},
-	title = {Data-driven fine-grained region discovery in the mouse brain with transformers},
-	elocation-id = {2024.05.05.592608},
-	year = {2024},
-	doi = {10.1101/2024.05.05.592608},
-	publisher = {Cold Spring Harbor Laboratory},
-	abstract = {Technologies such as spatial transcriptomics offer unique opportunities to define the spatial organization of the mouse brain. We developed an unsupervised training scheme and novel transformer-based deep learning architecture to detect spatial domains across the whole mouse brain using spatial transcriptomics data. Our model learns local representations of molecular and cellular statistical patterns which can be clustered to identify spatial domains within the brain from coarse to fine-grained. Discovered domains are spatially regular, even with several hundreds of spatial clusters. They are also consistent with existing anatomical ontologies such as the Allen Mouse Brain Common Coordinate Framework version 3 (CCFv3) and can be visually interpreted at the cell type or transcript level. We demonstrate our method can be used to identify previously uncatalogued subregions, such as in the midbrain, where we uncover gradients of inhibitory neuron complexity and abundance. Notably, these subregions cannot be discovered using other methods. We apply our method to a separate multi-animal whole-brain spatial transcriptomic dataset and show that our method can also robustly integrate spatial domains across animals.Competing Interest StatementThe authors have declared no competing interest.},
-	URL = {https://www.biorxiv.org/content/early/2024/06/13/2024.05.05.592608},
-	eprint = {https://www.biorxiv.org/content/early/2024/06/13/2024.05.05.592608.full.pdf},
-	journal = {bioRxiv}
+@ARTICLE{Lee2024-bh,
+  title    = "Data-driven fine-grained region discovery in the mouse brain with
+              transformers",
+  author   = "Lee, Alex J and Dubuc, Alma and Kunst, Michael and Yao, Shenqin
+              and Lusk, Nicholas and Ng, Lydia and Zeng, Hongkui and Tasic,
+              Bosiljka and Abbasi-Asl, Reza",
+  journal  = "bioRxivorg",
+  pages    = "2024.05.05.592608",
+  abstract = "Technologies such as spatial transcriptomics offer unique
+              opportunities to define the spatial organization of the mouse
+              brain. We developed an unsupervised training scheme and novel
+              transformer-based deep learning architecture to detect spatial
+              domains across the whole mouse brain using spatial transcriptomics
+              data. Our model learns local representations of molecular and
+              cellular statistical patterns which can be clustered to identify
+              spatial domains within the brain from coarse to fine-grained.
+              Discovered domains are spatially regular, even with several
+              hundreds of spatial clusters. They are also consistent with
+              existing anatomical ontologies such as the Allen Mouse Brain
+              Common Coordinate Framework version 3 (CCFv3) and can be visually
+              interpreted at the cell type or transcript level. We demonstrate
+              our method can be used to identify previously uncatalogued
+              subregions, such as in the midbrain, where we uncover gradients of
+              inhibitory neuron complexity and abundance. Notably, these
+              subregions cannot be discovered using other methods. We apply our
+              method to a separate multi-animal whole-brain spatial
+              transcriptomic dataset and show that our method can also robustly
+              integrate spatial domains across animals.",
+  month    =  jun,
+  year     =  2024,
+  language = "en"
 }
+
 ```
 
 ## Acknowledgments

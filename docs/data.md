@@ -24,7 +24,7 @@ The units of `patch_size` are not scaled internally, so they must "match" the un
 
 What if you don't have a dataframe with those columns (and therefore is incorrectly formatted for `celltransformer.data.CenterMaskSampler`)? Your options are:
 
-1. just create a new version of the dataframe with the correct column names and metadata 
+1. just create a new version of the csv/tsv/etc. with the correct column names and metadata 
 2. use the `scripts/training/lightning_model.py:BaseTrainer.load_data` function to preprocess your data in the format that will satisfy the conditions (see `scripts/training/train_aibs_mouse.py:load_data`) as an example. The motivations for this are covered in the TLDR in the main page, but we will also discuss it here. 
 
 ### Expectations for inputs into `celltransformer.data.CenterMaskSampler`, using `scripts/training/train_aibs_mouse.py:load_data` as an example
