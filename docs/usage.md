@@ -6,6 +6,6 @@
 
 ### 
 
-::: brainformr.model.base
+::: celltransformer.model.base
 
 

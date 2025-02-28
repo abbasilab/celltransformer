@@ -1,6 +1,6 @@
 In order to train on the Zhuang lab data please see the config files labeled "Zhuang".
 
-The setup is more or less the same as for the AIBS case. One easy solution is to simply load each metadata / `anndata` object indepently as a `brainformr.data.SimpleMaskSampler` object and concatenate them together post-hoc using `torch.utils.data.ConcatDataset`. This is what we do.
+The setup is more or less the same as for the AIBS case. One easy solution is to simply load each metadata / `anndata` object indepently as a `celltransformer.data.SimpleMaskSampler` object and concatenate them together post-hoc using `torch.utils.data.ConcatDataset`. This is what we do.
 
 For reference, here is a snippet of code from the `ZhuangTrainer.load_data` function (see `scripts/training/train_zhuang.py`) and some annotation by me:
 

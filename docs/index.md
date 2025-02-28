@@ -4,7 +4,7 @@ This is documentation for code written as part of the manuscript ["Data-driven f
 
 ## Installation
 
-* `pip install git+github.com:alexj-lee/brainformr.git` or clone and pip install; alternatively use the Dockerfile -- `PyTorch` and some other heavy libraries are required, which will take more time. It's also a somewhat unoptimized Docker image (no multi-stage build etc.) so caveat emptor.
+* `pip install git+github.com:abbasilab/celltransformer.git` or clone and pip install; alternatively use the Dockerfile -- `PyTorch` and some other heavy libraries are required, which will take more time. It's also a somewhat unoptimized Docker image (no multi-stage build etc.) so caveat emptor.
 
 ## Getting started with training on different datasets
 
@@ -42,7 +42,7 @@ Requirements are a CSV file with cell types and cell IDs corresponding to an `an
 3. implement the `load_data` method for `BaseTrainer` in `scripts/training/lightning_model.py` (see `train_zhuang.py` and `train_aibs_mouse.py` for reference)
 	- in essence this is normalization: mapping spatial x and y coordinates in your data to "x" and "y" and scaling them, also normalizing cell type column names as described in (1), optionally. One example might be to filter control probes. 
 		- specifically you can look at `load_data` in `train_aibs_mouse` to see an example, but the dataloader code assumes that the spatial columns are `x` and `y`. 
-		- we also don't automatically rescale the units of the `x` and `y` columns relative to the `patch_size` arguments. The idea is for the user to correctly scaled versions and to use code in `scripts/training/lightning_model.py:BaseTrainer.load_data` to set up the data loader with the logic you need for your data, and then pass a version of that to `brainformr.data.CenterMaskSampler`
+		- we also don't automatically rescale the units of the `x` and `y` columns relative to the `patch_size` arguments. The idea is for the user to correctly scaled versions and to use code in `scripts/training/lightning_model.py:BaseTrainer.load_data` to set up the data loader with the logic you need for your data, and then pass a version of that to `celltransformer.data.CenterMaskSampler`
 	- for more information on the data and dataloader, see the [data + dataloader page](data.md)
   * alternatively just change the `data.patch_size` config value in `hydra` (see `scripts/config/data/`); as long as the desired patch size and spatial units in the dataframe are correctly scaled, then it will work
 4. add `wandb` project if desired to top level config in `config`
@@ -59,7 +59,7 @@ The pipeline controls the basic training operations through these yaml files and
 For example, `scripts/config/model/base.yaml` controls the parameters of the transformer itself, for example:
 
 ```
-_target_: brainformr.model.CellTransformer
+_target_: celltransformer.model.CellTransformer
 encoder_embedding_dim: 384
 decoder_embedding_dim: 384
 
@@ -79,14 +79,14 @@ bias: True
 zero_attn: True
 ```
 
-We can use hydra to directly instantiate this model (which we specify using the `_target_` attribute) by specifiying the object class, here `brainformr.model.CellTransformer`. What this looks like in context is in following snippet:
+We can use hydra to directly instantiate this model (which we specify using the `_target_` attribute) by specifiying the object class, here `celltransformer.model.CellTransformer`. What this looks like in context is in following snippet:
 
 ```
 cfg_path = 'config.yaml'
 cfg = OmegaConf.load(cfg_path) # same as above snippet
 model = hydra.utils.instantiate(cfg.model)
 
-# model will have 500 gene output decoder depth of 4, etc. and will be an instance of class `brainformr.model.CellTransformer`
+# model will have 500 gene output decoder depth of 4, etc. and will be an instance of class `celltransformer.model.CellTransformer`
 ```
 
 ### Composition of config files is controlled at top-level using another config

@@ -3,7 +3,7 @@ We use a packed sequence format, so the returns from this function are not in ge
 
 Here is the docstring for the loader:
 
-::: brainformr.data.CenterMaskSampler.__init__
+::: celltransformer.data.CenterMaskSampler.__init__
 	handler: python
 	options:
 	  show_source: false
@@ -22,12 +22,12 @@ The dataframe **must** have:
 
 The units of `patch_size` are not scaled internally, so they must "match" the units of `x` and `y`. 
 
-What if you don't have a dataframe with those columns (and therefore is incorrectly formatted for `brainformr.data.CenterMaskSampler`)? Your options are:
+What if you don't have a dataframe with those columns (and therefore is incorrectly formatted for `celltransformer.data.CenterMaskSampler`)? Your options are:
 
 1. just create a new version of the dataframe with the correct column names and metadata 
 2. use the `scripts/training/lightning_model.py:BaseTrainer.load_data` function to preprocess your data in the format that will satisfy the conditions (see `scripts/training/train_aibs_mouse.py:load_data`) as an example. The motivations for this are covered in the TLDR in the main page, but we will also discuss it here. 
 
-### Expectations for inputs into `brainformr.data.CenterMaskSampler`, using `scripts/training/train_aibs_mouse.py:load_data` as an example
+### Expectations for inputs into `celltransformer.data.CenterMaskSampler`, using `scripts/training/train_aibs_mouse.py:load_data` as an example
 
 1. we need columns `x` and `y` which match the units of `patch_size`
 	- e.g. if your patch size desired size is 10um, and your spatial dimensions are provided in nm, you would want to rescale either the patch size or the spatial dimensions. I elected to primarily rescale the spatial dimensions (for my own sanity) all to um, and so use the `load_data` function do do so.
@@ -78,9 +78,9 @@ These are the steps we implement so far:
 
 1. extract spatial neighbors (within some radius) for the cell of interest
 2. extract expression (from the `anndata` object) and the class encoding (`cell_type`) for each cell from the metadata dataframe you should have passed to `CenterMaskSampler`
-3. partition them into two sets, which are simply lists in a `namedtuple`, see `brainformr.data.NeighborhoodMetadata`
+3. partition them into two sets, which are simply lists in a `namedtuple`, see `celltransformer.data.NeighborhoodMetadata`
 
-Note that we then need to stack these together across batches and create attention matrix masks, which is done in `brainformr.data.loader_pandas.collate`. We create three attention mask matrices (we use a binary adjacency matrix):
+Note that we then need to stack these together across batches and create attention matrix masks, which is done in `celltransformer.data.loader_pandas.collate`. We create three attention mask matrices (we use a binary adjacency matrix):
 
 | Syntax      | Description |
 | ----------- | ----------- |
