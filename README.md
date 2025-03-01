@@ -32,14 +32,18 @@ This repo contains several items necessary to reproduce the paper
 If this is useful to you, please consider citing: 
 
 ```
-@article {Lee2024.05.05.592608,
-	author = {Lee, Alex J. and Yao, Shenqin and Lusk, Nicholas and Ng, Lydia and Kunst, Michael and Zeng, Hongkui and Tasic, Bosiljka and Abbasi-Asl, Reza},
-	title = {Data-driven fine-grained region discovery in the mouse brain with transformers},
-	elocation-id = {2024.05.05.592608},
-	year = {2024},
-	doi = {10.1101/2024.05.05.592608},
-	publisher = {Cold Spring Harbor Laboratory},
-	URL = {https://www.biorxiv.org/content/early/2024/06/13/2024.05.05.592608},
-	journal = {bioRxiv}
+
+@ARTICLE{Lee2024-bh,
+  title    = "Data-driven fine-grained region discovery in the mouse brain with
+              transformers",
+  author   = "Lee, Alex J and Dubuc, Alma and Kunst, Michael and Yao, Shenqin
+              and Lusk, Nicholas and Ng, Lydia and Zeng, Hongkui and Tasic,
+              Bosiljka and Abbasi-Asl, Reza",
+  journal  = "bioRxivorg",
+  pages    = "2024.05.05.592608",
+  month    =  feb,
+  year     =  2025,
+  language = "en"
 }
+
 ```
