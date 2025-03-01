@@ -13,7 +13,7 @@ nav:
       - zhuang_abc.md
   - API Reference: reference/
 
-repo_url: https://github.com/alexj-lee/brainformr
+repo_url: https://github.com/abbasilab/celltransformer
 
 plugins:
   - search
