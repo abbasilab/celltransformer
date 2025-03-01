@@ -188,4 +188,4 @@ If this is useful to you, please consider citing our preprint:
 ```
 
 ## Acknowledgments
-This documentation was copied from Patrick Kidger's `jaxtyping` [docs](https://github.com/patrick-kidger/jaxtyping).
+This documentation structure was copied largely from Patrick Kidger's `jaxtyping` [docs](https://github.com/patrick-kidger/jaxtyping).

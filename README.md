@@ -25,7 +25,7 @@ This repo contains several items necessary to reproduce the paper
 
 # Model and data sharing
 
-* all data used in this repository was publicly available from the Allen Brain Cell dataset
+* all data used in this repository was publicly available from the Allen Brain Cell dataset. See https://alleninstitute.github.io/abc_atlas_access/intro.html for more information. 
 
 # Citation
 
