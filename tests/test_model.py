@@ -3,7 +3,7 @@ from scvi import distributions
 from torch import nn
 from math import e
 
-from brainformr import model
+from celltransformer import model
 # TODO: split tests into smaller parts, link model generation with fixture
 
 def test_xformer():
