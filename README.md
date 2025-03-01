@@ -2,7 +2,7 @@
 This repo contains several items necessary to reproduce the paper 
 "Data-driven fine-grained region discovery in the mouse brain with transformers".
 
-1. the package `brainformr` which is pip installable
+1. the package `celltransformer` which is pip installable
 	- we also provide a Dockerfile
 	- repo has CI/automated testing set up, but right now it is a minimal set and we plan to address this prior to publication
 2. `mkdocs` automatic documentation which will be hosted at github.com/abbasilab/celltransformer upon publication

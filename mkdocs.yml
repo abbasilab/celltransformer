@@ -1,4 +1,4 @@
-site_name: "brainformr documentation"
+site_name: "celltransformer documentation"
 nav:
   - 'index.md'
   - Code reference information: 
@@ -24,7 +24,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [brainformr]
+          paths: [celltransformer]
           options:
             docstring_style: numpy
           rendering:
@@ -41,8 +41,8 @@ plugins:
         - docs_scripts/gen_ref_pages.py
       config:
         skip_paths:
-          - brainformr/brainformr/__init__.py
-          - brainformr/brainformr/data/loader_polars.py
+          - celltransformer/celltransformer/__init__.py
+          - celltransformer/celltransformer/data/loader_polars.py
 
 exclude_docs:
   _version.py
