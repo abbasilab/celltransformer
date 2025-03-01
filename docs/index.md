@@ -4,7 +4,7 @@ This is documentation for code written as part of the manuscript ["Data-driven f
 
 ## Installation
 
-* `pip install git+github.com:abbasilab/celltransformer.git` or clone and pip install; alternatively use the Dockerfile -- `PyTorch` and some other heavy libraries are required, which will take more time. It's also a somewhat unoptimized Docker image (no multi-stage build etc.) so caveat emptor.
+* `pip install git+github.com:abbasilab/celltransformer.git` or clone and pip install; alternatively use the Dockerfile -- `PyTorch`, which uses `uv` to reduce build time.
 
 ## Getting started with training on different datasets
 
