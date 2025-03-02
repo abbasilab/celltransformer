@@ -19,7 +19,6 @@ This repo contains several items necessary to reproduce the paper
 		- again, clustering the data after embeddings and visualization (because the number of clusters can be large, sometimes it is slightly nontrivial to visualize them), ex:
 		![](docs/_static/slice-31.png)
 		![](docs/_static/slice_30.png)
-
 		- smoothing the embeddings on the spatial graph (see paper)
 		- counting the number of different single-cell types (from reference atlas) in a spatial cluster (code can also be used to do so for CCF regions, whatever class labeling etc.)
 
