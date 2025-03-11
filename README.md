@@ -1,13 +1,17 @@
 # Contents of Repo
 This repo contains several items necessary to reproduce the paper 
-"Data-driven fine-grained region discovery in the mouse brain with transformers".
+"Data-driven fine-grained region discovery in the mouse brain with transformers". 
+
+CellTransformer was trained on a machine with 128GB RAM and 2 NVIDIA A6000 GPUs, running Ubuntu 22.04. Training memory usage did not exceed 64 GB RAM and did not require a full 48 GB of GPU memory on the A6000 cards; however we strongly reccomend using a system with at least this amount of RAM and a 24 GB GPU (ex. RTX 3090, 4090 or A5000 and above). 
+
+On our system performant results can be generated in as few as 10 epochs (~2.5 hrs per epoch on 1 GPU), 
 
 1. the package `celltransformer` which is pip installable
 	- we also provide a Dockerfile
-	- repo has CI/automated testing set up, but right now it is a minimal set and we plan to address this prior to publication
-2. `mkdocs` automatic documentation which will be hosted at github.com/abbasilab/celltransformer upon publication
+	- installation will require a couple minutes on a normal server assuming you have CUDA installed (see NVIDIA documentation for this); you will require a GPU for training and very likely inference
+
+2. `mkdocs` automatic documentation which is hosted at github.com/abbasilab/celltransformer 
 	- to build the docs, pip install `docs/requirements.txt`
-	- a PDF-formatted version is found at documentation.pdf in the root of this repository (note that there are various formatting changes that were made in converting the website to a PDF and that we plan to display it as a static site, not a PDF)
 	- the items in the documentation include:
 		* a walkthrough of how to use the package to train a transformer model using our objective on the AIBS MERFISH data -- configuration is limited to setting paths to the data using `hydra` config files (a brief tutorial is provided), and we provide a minimal example of how to do so
 		* descriptions of the model data requirements (ie what attention matrix formats, how the data is passed to the model itself)
@@ -21,6 +25,15 @@ This repo contains several items necessary to reproduce the paper
 		![](docs/_static/slice_30.png)
 		- smoothing the embeddings on the spatial graph (see paper)
 		- counting the number of different single-cell types (from reference atlas) in a spatial cluster (code can also be used to do so for CCF regions, whatever class labeling etc.)
+
+# Installation
+
+Clone this repo and pip install, or run:
+```
+pip install git+https://github.com/abbasilab/celltransformer
+```
+
+As a last option you can run and build the Dockerfile, which includes all necessary software (e.g. CUDA).
 
 # Model and data sharing
 
