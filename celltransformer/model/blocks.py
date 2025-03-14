@@ -44,6 +44,7 @@ class AttnPool(nn.Module):
         num_heads: int,
         dropout: Optional[float] = 0.0,
         bias: Optional[bool] = False,
+        bias_kv: Optional[bool] = True,
         zero_attn: Optional[bool] = False,
         norm: Optional[nn.Module] = nn.LayerNorm,
     ):
@@ -64,7 +65,7 @@ class AttnPool(nn.Module):
             bias=bias,
             dropout=dropout,
             num_heads=num_heads,
-            add_bias_kv=bias,
+            add_bias_kv=bias_kv,
             add_zero_attn=zero_attn,
         )
         

@@ -69,16 +69,16 @@ class CellTransformer(nn.Module):
 
         self.decoder_cell_embed = nn.Embedding(cell_cardinality, decoder_embedding_dim)
         self.attn_pool = AttnPool(encoder_embedding_dim, attn_pool_heads,
-                                  bias=True, zero_attn=True)
-        # no bias causes instability in training
+                                  bias=False, zero_attn=True, bias_kv=True)
 
         self.encoder = set_up_transformer_layers(
             encoder_embedding_dim,
             encoder_num_heads,
             encoder_depth,
             xformer_dropout,
-            bias,
-            zero_attn,
+            bias=bias,
+            bias_kv=False,
+            zero_attn=zero_attn,
         )
         #self.encoder = torch.compile(self.encoder)
 
@@ -87,8 +87,9 @@ class CellTransformer(nn.Module):
             decoder_num_heads,
             decoder_depth,
             xformer_dropout,
-            bias,
-            zero_attn,
+            bias=bias,
+            bias_kv=False,
+            zero_attn=zero_attn,
         )
         #self.decoder = torch.compile(self.decoder)
 

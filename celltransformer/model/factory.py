@@ -22,6 +22,7 @@ def set_up_transformer_layers(
     depth: int,
     dropout_p: Optional[float] = 0.0,
     bias: Optional[bool] = False,
+    bias_kv: Optional[bool] = False,
     zero_attn: Optional[bool] = True,
 ):
     layer = nn.TransformerEncoderLayer(
@@ -35,7 +36,8 @@ def set_up_transformer_layers(
         embed_dim=embedding_dim,
         num_heads=num_heads,
         dropout=dropout_p,
-        add_bias_kv=bias,
+        bias=bias,
+        add_bias_kv=bias_kv,
         add_zero_attn=zero_attn,
     )
 
