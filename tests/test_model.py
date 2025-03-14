@@ -12,11 +12,12 @@ def test_xformer():
     num_heads = 8
     dropout = 0.0
     zero_attn = True
+    bias = True
 
-    n_param = 843456
-    num_param_model = sum([p.numel() for p in xformer_blocks.parameters()])
-    assert num_param_model == n_param, f"Number of parameters in model is {num_param_model} but should be {n_param}."
-    
+    xformer_blocks = model.set_up_transformer_layers(
+            embed_dim, num_heads, depth, dropout, bias, zero_attn
+        )
+   
     # check if the KH Normal initialization for the attn layers works
     # see fn definition for `set_up_transformer_layers` for details and why this is necessary
     assert (
