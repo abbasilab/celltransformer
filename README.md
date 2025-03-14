@@ -2,7 +2,7 @@
 
 # Contents of Repo
 This repo contains several items necessary to reproduce the paper 
-"Data-driven fine-grained region discovery in the mouse brain with transformers". 
+"Data-driven fine-grained region discovery in the mouse brain with transformers". Note that this README is intended as a rough summary and particularly for model information please see the documentation website. 
 
 CellTransformer was trained on a machine with 128GB RAM and 2 NVIDIA A6000 GPUs, running Ubuntu 22.04. Training memory usage did not exceed 64 GB RAM and did not require a full 48 GB of GPU memory on the A6000 cards; however we strongly reccomend using a system with at least this amount of RAM and a 24 GB GPU (ex. RTX 3090, 4090 or A5000 and above). 
 
