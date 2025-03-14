@@ -1,3 +1,5 @@
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abbasilab/celltransformer/blob/main/notebooks/demo_celltransformer_onesection.ipynb)
+
 # Contents of Repo
 This repo contains several items necessary to reproduce the paper 
 "Data-driven fine-grained region discovery in the mouse brain with transformers". 
@@ -26,6 +28,8 @@ On our system performant results can be generated in as few as 10 epochs (~2.5 h
 		- smoothing the embeddings on the spatial graph (see paper)
 		- counting the number of different single-cell types (from reference atlas) in a spatial cluster (code can also be used to do so for CCF regions, whatever class labeling etc.)
 
+Finally, see the notebook in `notebooks/demo_celltransformer_onesection.ipynb` for a minimal example of using our trained model to get embeddings and clusters for a single section (section 52); notebook includes "one-cell" commands to download all data to your CoLab environment.
+
 # Installation
 
 Clone this repo and pip install, or run:
@@ -38,6 +42,21 @@ As a last option you can run and build the Dockerfile, which includes all necess
 # Model and data sharing
 
 * all data used in this repository was publicly available from the Allen Brain Cell dataset. See https://alleninstitute.github.io/abc_atlas_access/intro.html for more information. 
+* model weights for the model trained on Allen 1 (the Allen Institute for Brain Science component of the Allen Brain Cell dataset) can be found here: https://huggingface.co/datasets/alxlee/celltransformer_materials under `model_weights.pth` 
+	- see the CoLab notebook for parameter settings, but for reference the settings used to instantiate this model are:
+
+	```
+	model = celltransformer.model.CellTransformer(encoder_depth=4,
+                              encoder_embedding_dim=384,
+                              decoder_embedding_dim=384,
+                              decoder_depth=4,
+                              encoder_num_heads=8,
+                              decoder_num_heads=8,
+                              n_genes=500,
+                              cell_cardinality=384,
+                              bias=True
+                              )
+	```
 
 # Citation
 

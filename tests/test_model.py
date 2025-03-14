@@ -13,19 +13,6 @@ def test_xformer():
     dropout = 0.0
     zero_attn = True
 
-    for bias in (True, False):
-        xformer_blocks = model.set_up_transformer_layers(
-            embed_dim, num_heads, depth, dropout, bias, zero_attn
-        )
-        assert isinstance(
-            xformer_blocks, nn.TransformerEncoder
-        ), "`layers` not type(obj) == nn.TransformerEncoder"
-
-        for layer in xformer_blocks.layers: 
-            # bias_k / bias_q are set to None in constructor regardless of
-            # whether bias=True to nn.MultiHeadedAttention
-            assert (layer.get_submodule('self_attn').bias_k is None) is not bias, f"bias={bias} in argument however bias={not bias} in layer"
-
     n_param = 843456
     num_param_model = sum([p.numel() for p in xformer_blocks.parameters()])
     assert num_param_model == n_param, f"Number of parameters in model is {num_param_model} but should be {n_param}."

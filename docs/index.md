@@ -13,6 +13,8 @@ Requirements are a CSV file with cell types and cell IDs corresponding to an `an
 1. make sure you provide the right cardinality (number of cell types) to the model using the `model` config. You can also do this using the `hydra` CLI by just passing (say you want to change the parameter `cell_cardinality` in the your `model.yaml` file): `python [SCRIPT.PY] +model.cell_cardinality=9000` (or whatever the value is)
 2. the code right now unfortunately assumes that the values in your anndata.X are `log1p` transformed and then uses `.exp()` in the implementation (`training/lightning_model.py`) to produce counts again for `scvi.NegativeBinomial` -- make sure you follow this convention or edit the training file for a different convention.
 
+To see a minimal example of this please see `notebooks/demo_celltransformer_onesection.ipynb`.
+
 ### I want to edit the anndata (MERFISH probe counts) and CSV (cell metadata) to work with this codebase
 
 1. Provide in your CSV (case sensitive):
