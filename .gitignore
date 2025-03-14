@@ -5,7 +5,8 @@
 outputs/*
 outputs
 
-notebooks
+notebooks/*
+!notebooks/demo_celltransformer_onesection.ipynb
 
 wandb/*
 wandb
