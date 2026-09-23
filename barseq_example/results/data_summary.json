@@ -1,0 +1,279 @@
+{
+  "n_eligible": 1161154,
+  "n_train": 1103095,
+  "n_validation": 58059,
+  "n_edges": 83621664,
+  "neighbor_quantiles": [
+    1.0,
+    70.0,
+    109.0,
+    144.0,
+    204.0
+  ],
+  "n_cells": 1161387,
+  "n_nonempty": 1161387,
+  "n_isolated_nonempty": 233,
+  "n_sections": 40,
+  "n_mice": 1,
+  "n_measured_columns": 114,
+  "n_model_genes": 106,
+  "n_cell_subclasses": 46,
+  "n_cell_clusters": 135,
+  "n_qc_flagged": 208,
+  "n_reference_valid": 1150067,
+  "release": "BARseq pilot / Mendeley 8bhhk7c5n9 version 1",
+  "paper_cells": 2167762,
+  "paper_high_quality_cells": 1259256,
+  "n_published_labels_without_released_counts": 97869,
+  "release_count_discrepancy": "1,161,387 published QC-labelled IDs occur in the overlap-filtered released matrix. The 97,869 label IDs without counts are inventoried, not silently assigned or imputed. Retained IDs exactly equal the matrix non-qc-filtered set.",
+  "gene_panel": "106 named sequencing columns in released matrix; exclude 5 unused barcodes and Slc17a7/Gad1/Slc30a3 hybridization channels. Paper says 104 genes; author GitHub and supplementary panel lists differ. No attempt to force that number.",
+  "input": "log2(integer raw molecule counts + 1); no library normalization, rounding or HVG selection",
+  "type_annotations": "Published subclass; missing values fall back to released expression-derived SubCTX class. Same rule for cluster-level composition. Types with regional names are author expression clusters, not CCF region IDs.",
+  "split": "95/5 eligible centers within each section. Validation centers can appear in training neighborhoods; exploratory context-shared validation, not independent-mouse generalization.",
+  "reference_use": "Authors' registered region names mapped to Allen IDs; used only after training. Voxel lookup is a separate audit.",
+  "ccf_voxel_exact_agreement": 0.8898698945365792,
+  "coordinate_unit": "Micrometers; released fixedpos (authors' corrected 2D coordinates), not atlas-warped training coordinates",
+  "patch_width_um": 310.0,
+  "section_summaries": [
+    {
+      "section": "Slice01",
+      "n_cells": 14850,
+      "n_reference_valid": 14701,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice02",
+      "n_cells": 22156,
+      "n_reference_valid": 22124,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice03",
+      "n_cells": 29652,
+      "n_reference_valid": 29564,
+      "n_qc_flagged": 1
+    },
+    {
+      "section": "Slice04",
+      "n_cells": 32384,
+      "n_reference_valid": 32065,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice05",
+      "n_cells": 29217,
+      "n_reference_valid": 28863,
+      "n_qc_flagged": 4
+    },
+    {
+      "section": "Slice06",
+      "n_cells": 28545,
+      "n_reference_valid": 28048,
+      "n_qc_flagged": 1
+    },
+    {
+      "section": "Slice07",
+      "n_cells": 36563,
+      "n_reference_valid": 35993,
+      "n_qc_flagged": 8
+    },
+    {
+      "section": "Slice08",
+      "n_cells": 38329,
+      "n_reference_valid": 37226,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice09",
+      "n_cells": 39347,
+      "n_reference_valid": 37927,
+      "n_qc_flagged": 55
+    },
+    {
+      "section": "Slice10",
+      "n_cells": 41895,
+      "n_reference_valid": 41279,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice11",
+      "n_cells": 37793,
+      "n_reference_valid": 37428,
+      "n_qc_flagged": 17
+    },
+    {
+      "section": "Slice12",
+      "n_cells": 38740,
+      "n_reference_valid": 38636,
+      "n_qc_flagged": 27
+    },
+    {
+      "section": "Slice13",
+      "n_cells": 40137,
+      "n_reference_valid": 39802,
+      "n_qc_flagged": 78
+    },
+    {
+      "section": "Slice14",
+      "n_cells": 37979,
+      "n_reference_valid": 37518,
+      "n_qc_flagged": 1
+    },
+    {
+      "section": "Slice15",
+      "n_cells": 36208,
+      "n_reference_valid": 34755,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice16",
+      "n_cells": 35899,
+      "n_reference_valid": 35830,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice17",
+      "n_cells": 39019,
+      "n_reference_valid": 38911,
+      "n_qc_flagged": 1
+    },
+    {
+      "section": "Slice18",
+      "n_cells": 38955,
+      "n_reference_valid": 38889,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice19",
+      "n_cells": 31917,
+      "n_reference_valid": 31793,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice20",
+      "n_cells": 36707,
+      "n_reference_valid": 36672,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice21",
+      "n_cells": 37867,
+      "n_reference_valid": 37807,
+      "n_qc_flagged": 11
+    },
+    {
+      "section": "Slice22",
+      "n_cells": 35508,
+      "n_reference_valid": 34003,
+      "n_qc_flagged": 2
+    },
+    {
+      "section": "Slice23",
+      "n_cells": 36132,
+      "n_reference_valid": 36085,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice24",
+      "n_cells": 39256,
+      "n_reference_valid": 39089,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice25",
+      "n_cells": 36137,
+      "n_reference_valid": 36059,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice26",
+      "n_cells": 37060,
+      "n_reference_valid": 37045,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice27",
+      "n_cells": 31917,
+      "n_reference_valid": 31887,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice28",
+      "n_cells": 29816,
+      "n_reference_valid": 29813,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice29",
+      "n_cells": 30193,
+      "n_reference_valid": 30102,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice30",
+      "n_cells": 28052,
+      "n_reference_valid": 28024,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice31",
+      "n_cells": 19884,
+      "n_reference_valid": 19863,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice32",
+      "n_cells": 21689,
+      "n_reference_valid": 21685,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice33",
+      "n_cells": 13202,
+      "n_reference_valid": 13185,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice34",
+      "n_cells": 16414,
+      "n_reference_valid": 16399,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice35",
+      "n_cells": 14425,
+      "n_reference_valid": 14397,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice36",
+      "n_cells": 10312,
+      "n_reference_valid": 10298,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice37",
+      "n_cells": 11998,
+      "n_reference_valid": 11973,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice38",
+      "n_cells": 11998,
+      "n_reference_valid": 11470,
+      "n_qc_flagged": 0
+    },
+    {
+      "section": "Slice39",
+      "n_cells": 7122,
+      "n_reference_valid": 6750,
+      "n_qc_flagged": 2
+    },
+    {
+      "section": "Slice40",
+      "n_cells": 6113,
+      "n_reference_valid": 6109,
+      "n_qc_flagged": 0
+    }
+  ]
+}

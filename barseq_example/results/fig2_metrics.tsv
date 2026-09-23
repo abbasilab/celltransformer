@@ -1,0 +1,10 @@
+reference	k	method	method_name	neighborhood_spatial_similarity	proportion_of_discrete_domains	max_domain_CCF_similarity	matched_domain_CCF_similarity	n_evaluation_cells	n_domains_on_evaluation_cells
+depth5	63	reference	CCF (author registration)	0.9341779895085417	0.7936507936507936	1.0	1.0	1149888	63
+depth5	63	celltransformer	CellTransformer (-smoothing)	0.7677785227778717	0.9841269841269841	0.669038141959179	0.4673745912118634	1149888	63
+depth5	63	celltransformer_smoothed	CellTransformer (+smoothing)	0.8531539767351264	1.0	0.7090351165819617	0.5035127415075952	1149888	63
+depth7	252	reference	CCF (author registration)	0.8667701289169034	0.7976190476190477	1.0	1.0	1149888	252
+depth7	252	celltransformer	CellTransformer (-smoothing)	0.669385235779485	0.9841269841269841	0.8708916958204899	0.5036600717626044	1149888	252
+depth7	252	celltransformer_smoothed	CellTransformer (+smoothing)	0.7734790692658767	0.9880952380952381	0.8835368728813536	0.5374951769769141	1149888	252
+released	564	reference	CCF (author registration)	0.7551623462458957	0.799645390070922	1.0	1.0	1149888	564
+released	564	celltransformer	CellTransformer (-smoothing)	0.5982815108949743	0.9645390070921985	0.9641905625695264		1149888	561
+released	564	celltransformer_smoothed	CellTransformer (+smoothing)	0.7171171018394836	0.9804964539007093	0.9694212279633271	0.7970230310518235	1149888	564

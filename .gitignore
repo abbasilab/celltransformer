@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+.venv/
+dist/
+build/
+# Experimental state belongs outside this source repository.
+BARseq_CT2_example/
+work/
+runs/
+envs/
+mamba-root/
+*.ckpt
+*.h5ad
+*.h5
+*.mat
+*.npy
+*.npz
+*.parquet
+*.nrrd
+*.zip
+*.tar.gz
+# Retain upstream's two small tensor regression fixtures.
+*.pt
+!tests/fixtures/snapshots/*.pt

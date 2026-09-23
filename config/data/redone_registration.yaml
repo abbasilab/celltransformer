@@ -1,0 +1,52 @@
+# Per-section files produced by split_sections.py from:
+#   638850_adata.h5ad  (57 sections, subsetted via production_cell_id)
+#   687997_adata.h5ad  (54 sections, full match)
+# Spatial coords: x = center_x / 10, y = center_y / 10
+# Validation sections: 6 per mouse, numpy rng seed=42 from sorted section lists
+
+data_dir: /data1/alexlee/spatial/data/spatial/redone_registration/sections/
+
+train_anndata_patterns:
+  - "*638850*h5ad"
+  - "*687997*h5ad"
+
+valid_anndata_patterns:
+  # 638850
+  - "*638850_1199650950*h5ad"
+  - "*638850_1199651024*h5ad"
+  - "*638850_1199651063*h5ad"
+  - "*638850_1199651081*h5ad"
+  - "*638850_1199651106*h5ad"
+  - "*638850_1199651133*h5ad"
+  # 687997
+  - "*687997_1288760876*h5ad"
+  - "*687997_1288760912*h5ad"
+  - "*687997_1288760916*h5ad"
+  - "*687997_1288760920*h5ad"
+  - "*687997_1288760932*h5ad"
+  - "*687997_1288760956*h5ad"
+
+# Cell-type label encoding.
+# cell_type_colname: string column in the parquet to use as cell type labels.
+# cell_type_yaml:    path to a taxonomy YAML (ordered list of label strings →
+#                    integer = position in list). Set to null to instead run
+#                    LabelEncoder.fit_transform over all section parquets at
+#                    startup (produces a consistent vocab but no stable mapping
+#                    across runs).
+cell_type_colname: "hrc_mmc_subclass_name"
+cell_type_yaml: /data1/alexlee/spatial/data/spatial/taxonomy/338_subclass_taxonomy.yaml
+tissue_section_colname: "section"
+
+partition_strategy: "binpack"
+
+batch_size: 256
+patch_size: [31, 31]
+
+# max_tokens: cap on total neighbor cells per batch (num_cells_obs + 1 per item).
+# null = no token budget, only batch_size controls batch size.
+
+workers_per_split: 4
+num_splits: 2
+prefetch_factor: 12
+multiprocessing_method: "thread"
+max_tokens: 200000

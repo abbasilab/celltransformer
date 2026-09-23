@@ -1,0 +1,17 @@
+{
+  "model": "CellTransformer2 / SpatialCellTransformer",
+  "requested_epochs": 10,
+  "completed_updates": 49287,
+  "n_exported": 1161154,
+  "initial_full_validation_nll": null,
+  "final_full_validation_nll": 0.666628360748291,
+  "exported_checkpoint": "${RUN}/celltransformer/checkpoints/last.ckpt",
+  "checkpoint_sha256": "5f5f0a7a649646beffc18a1b3ce4a081995d0ae557b8a75edfcb4051a8a82dac",
+  "initialization": "random",
+  "pretrained_checkpoint_loaded": false,
+  "all_parameters_trainable": true,
+  "initial_sha256": "8776e79ce21cc28fffb3d8ab9989386a2cca5a46677523df6266ebcf9bf1fa9c",
+  "source_manifest_sha256": "1a18efdedd9a8f64ced795005a0b3aaf524dca35deffd24e2e7d3b6de2a60b68",
+  "software_test": false,
+  "export_precision": "float32 forward and stored embeddings, as in native extract"
+}

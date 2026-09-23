@@ -1,0 +1,13 @@
+defaults:
+  - _self_
+  - data: redone_registration
+  - model: spatial_cell_transformer
+  - optimization: redone_registration
+
+checkpoint_dir: /data2/alexlee/checkpoints_next/
+wandb_project: multianimal-registered-next
+wandb_tags: []       # list of string tags for the W&B run
+wandb_notes: ""      # freeform note attached to the W&B run
+model_checkpoint: null
+save_top_k: 5       # checkpoints to keep (best by train/loss); -1 = keep all
+output: results_redone_registration.jsonl

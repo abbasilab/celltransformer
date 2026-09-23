@@ -1,0 +1,105 @@
+Cell types	Gene names
+Excitatory	Slc17a7
+Inhibitory	Gad1
+IT	Alcam
+IT	Brinp3
+IT	Cbln2
+IT	Efna5
+IT	Etv1
+IT	Kctd1
+IT	Lypd1
+IT	Ncam2
+IT	Nnat
+IT	Olfm3
+IT	Ptprk
+IT	Sgcd
+IT	Syt17
+IT	Timp2
+IT	Trhde
+IT	Zfp804b
+IT RSP	Pam
+IT TPE-ENT	Slc24a2
+IT, but not L6 IT	Slc30a3
+IT/PT	Scnn1a
+L2/3 IT	Calb1
+L2/3 IT	Col19a1
+L2/3 IT	Cux2
+L2/3 IT	Dab1
+L2/3 IT	Enpp2
+L2/3 IT	Fam19a1/Tafa1
+L2/3 IT	Lamp5
+L2/3 IT	Lrrtm4
+L2/3 IT	Otof
+L2/3 IT	Rasgrf2
+L4/5 IT	Camk4
+L4/5 IT	Hs6st3
+L4/5 IT	Nrsn1
+L4/5 IT	Satb1
+L4/5 IT	Zmat4
+L5 ET	Coro6
+L5 ET	Hcn1
+L5 ET	Kcnn2
+L5 ET	Lpp
+L5 ET	Rab3c
+L5 IT	Fam19a2/Tafa2
+L5 IT	Fat3
+L5 IT	Galntl6
+L5 IT	Hs3st2
+L5 IT	Il1rapl2
+L5 IT	Pcp4
+L5 IT	Rora
+L5 IT	Rorb
+L5 IT	Slc24a3
+L5 IT	Tmsb10
+L5/6 NP	Grik1
+L5/6 NP	Kcnip1
+L5/6 NP	Nxph1
+L5/6 NP	Tshz2
+L5/6 NP	Vwc2l
+L6 CT	Foxp2
+L6 CT	Hs3st4
+L6 CT	Nrp1
+L6 CT	Tle4
+L6 CT	Zfpm2
+L6 IT	C1ql3
+L6 IT	Cdh13
+L6 IT	Cdh9
+L6 IT	Dgkb
+L6 IT	Galnt14
+L6 IT	Gria1
+L6 IT	Igsf21
+L6 IT	Rasl10a
+L6 IT	Sdk1
+L6 IT	Sorcs3
+L6 IT	Tenm3
+L6 IT Car3	Car3
+L6 IT Car3	Col11a1
+L6 IT Car3	Cpne4
+L6 IT Car3	Gfra1
+L6 IT Car3	Gnb4
+L6 IT Car3	Nr4a2
+L6 IT Car3	Oprk1
+L6 IT Car3	Synpr
+L6 IT Car3	Zfp804a
+L6b	Cdh18
+L6b	Cplx3
+L6b	Ctgf/Ccn2
+L6b	Fbxl7
+L6b	Inpp4b
+L6b	Svil
+PT	Dcc
+PT	Gpc5
+PT	Grin3a
+PT	Htr2a
+PT	Lmo4
+PT	Ncald
+PT	Nell1
+PT	Prkca
+PT	Rcan2
+PT	Reln
+PT	Spock3
+PT	Sv2c
+PT	Syt2
+PT	Tmtc2
+Manual marker	Fezf2
+Manual marker	Hgf

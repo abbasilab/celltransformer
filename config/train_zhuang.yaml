@@ -1,0 +1,11 @@
+defaults:
+  - _self_
+  - data: zhuang
+  - model: spatial_cell_transformer
+  - optimization: redone_registration
+
+checkpoint_dir: /data2/alexlee/checkpoints_next/
+wandb_project: multianimal-registered-next
+model_checkpoint: null
+save_top_k: 5
+output: results_zhuang.jsonl

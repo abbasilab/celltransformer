@@ -1,0 +1,50 @@
+# Per-section files in /data2/alexlee/spatial/data/spatial/sections/
+#   mouse_638850/: 59 sections (C57BL6J-638850.01 … .69, sparse numbering)
+#   mouse_687997/: 54 sections (C57BL6J-687997.01 … .57, sparse numbering)
+#
+# Spatial coords: x, y are in raw center_x / center_y units (µm).
+#   redone_registration used center_x/10 with patch_size [31,31] → ~310 µm window.
+#   Here coords are ~10× larger, so patch_size [310,310] matches the same physical window.
+#
+# Cell-type labels: RF_2lvl_consensus_subclass (scVI-based mapping).
+# Taxonomy YAML: scvi_375_subclass_taxonomy.yaml (375 subclasses, union of both mice).
+#
+# Validation sections: 6 per mouse, numpy rng seed=42 over sorted section stems.
+
+data_dir: /data2/alexlee/spatial/data/spatial/sections/
+
+train_anndata_patterns:
+  - "mouse_638850/*.h5ad"
+  - "mouse_687997/*.h5ad"
+
+valid_anndata_patterns:
+  # 638850 — rng seed=42 from sorted section list
+  - "mouse_638850/*C57BL6J-638850_05.h5ad"
+  - "mouse_638850/*C57BL6J-638850_31.h5ad"
+  - "mouse_638850/*C57BL6J-638850_44.h5ad"
+  - "mouse_638850/*C57BL6J-638850_50.h5ad"
+  - "mouse_638850/*C57BL6J-638850_59.h5ad"
+  - "mouse_638850/*C57BL6J-638850_68.h5ad"
+  # 687997 — rng seed=42 from sorted section list
+  - "mouse_687997/*C57BL6J-687997_06.h5ad"
+  - "mouse_687997/*C57BL6J-687997_26.h5ad"
+  - "mouse_687997/*C57BL6J-687997_38.h5ad"
+  - "mouse_687997/*C57BL6J-687997_43.h5ad"
+  - "mouse_687997/*C57BL6J-687997_51.h5ad"
+  - "mouse_687997/*C57BL6J-687997_57.h5ad"
+
+# Cell-type label encoding.
+cell_type_colname: "RF_2lvl_consensus_subclass"
+cell_type_yaml: /data1/alexlee/spatial/data/spatial/taxonomy/scvi_375_subclass_taxonomy.yaml
+tissue_section_colname: "brain_section_label"
+
+batch_size: 256
+patch_size: [310, 310]
+
+partition_strategy: "binpack"
+
+workers_per_split: 4
+num_splits: 2
+prefetch_factor: 12
+multiprocessing_method: "thread"
+max_tokens: 200000

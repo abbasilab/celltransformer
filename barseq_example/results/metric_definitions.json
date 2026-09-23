@@ -1,0 +1,10 @@
+{
+  "c": "Mean cell-level fraction of up to 100 closest same-section evaluation neighbors with the same domain label; self excluded",
+  "d": "Fraction of requested domains with mean cell-level score at least the reference-domain 20th percentile; missing domains count as failures",
+  "e": "Mean over model domains of maximum Pearson r between subclass composition vectors and reference vectors; undefined domains disclosed",
+  "f": "Maximum-sum one-to-one Pearson matching; average reported only for complete equal-sized matching",
+  "g": "Reference-by-model Pearson correlation of cell-subclass composition; r > 0.9 highlighted",
+  "hi": "Cell-cluster composition, row-normalized to sum to 1",
+  "reference": "Author-released CCF assignments plus two explicit ontology coarsenings; not Allen MERFISH 25/354/670 partitions",
+  "evaluation": "Identical eligible reference-labelled cells for both CT2 variants; reference excluded from model fitting; all-cell exploratory analysis, not independent-mouse validation"
+}

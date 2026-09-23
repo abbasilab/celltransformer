@@ -1,0 +1,21 @@
+_target_: celltransformer.model.SpatialCellTransformer
+
+expression_dim: 500
+cell_type_cardinality: 384
+model_dim: 384
+
+encoder_depth: 4
+decoder_depth: 4
+num_heads: 8
+ffn_dim: 384
+
+concat_mode: "add"
+use_zi: True
+use_diagonal_norm: True
+nb_proj_eps: 1e-4
+dropout: 0.0
+multiple_of: 256
+norm_eps: 1e-5
+init_std_attn_pool: 0.02
+
+compile: False

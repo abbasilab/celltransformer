@@ -1,0 +1,82 @@
+{
+  "source_run_id": "20260921T081650Z-123565",
+  "training_date": "2026-09-21",
+  "evidence": "User-retrieved results.zip from a completed Linux NVIDIA CUDA run; includes successful report recoloring audit",
+  "training_model": "Native CellTransformer2, random initialization, all weights trained",
+  "report_refresh_inputs_unchanged": true,
+  "members": {
+    "epochs.json": {
+      "archive_member": "celltransformer/epochs.json",
+      "sha256": "6dd64fba4e3862d759c7f51fddce633dee689b229e336d62e556ac9dc4957a0f",
+      "transformation": "none"
+    },
+    "fig2_metrics.tsv": {
+      "archive_member": "analysis/metrics/fig2_metrics.tsv",
+      "sha256": "d5864bb4022a1114e21d30736aa7189c058c5421bb48bff27274afe0e4609d13",
+      "transformation": "none"
+    },
+    "metric_definitions.json": {
+      "archive_member": "analysis/metrics/definitions.json",
+      "sha256": "f562d9282b9f6048941c8ab0479d2aec616c809b7f99dff639dfc2a2b5c70f02",
+      "transformation": "none"
+    },
+    "reference_colors.tsv": {
+      "archive_member": "report/reference_colors.tsv",
+      "sha256": "21bc9eba026fc6b480ad6e9745cca1a0a45f7dcd539cb8e82aa6d6e7bf240f40",
+      "transformation": "none"
+    },
+    "figures/training.png": {
+      "archive_member": "report/figures/training.png",
+      "sha256": "52cb6ce6888c7cabaa62bb8a7663f9b0667c070f0d0d4e3c50522ff8be47a788",
+      "transformation": "none"
+    },
+    "figures/fig2_metrics.png": {
+      "archive_member": "report/figures/fig2_metrics.png",
+      "sha256": "8dd7824ec32671ef73c4332bf563914d22b3c8763a8053abebf255ba84731c74",
+      "transformation": "none"
+    },
+    "figures/Slice18_released.png": {
+      "archive_member": "report/figures/Slice18_released.png",
+      "sha256": "90051a301d930f9ef38fd5065178ad30cf0662b2826ffbcb20c35ebf6d73115e",
+      "transformation": "none"
+    },
+    "figures/Slice18_released_cortex.png": {
+      "archive_member": "report/figures/Slice18_released_cortex.png",
+      "sha256": "fba5cf8b0d7edd5343de47442167641b38156073f8ad86020747110bece803ec",
+      "transformation": "none"
+    },
+    "references.json": {
+      "archive_member": "analysis/references.json",
+      "sha256": "c3a631b53c1fe89352db292d31861a233caa9e144e7f037b9b3a30644b5d2eed",
+      "transformation": "none"
+    },
+    "run_configuration.json": {
+      "archive_member": "config.json",
+      "original_sha256": "0ac25a94f45a2a32bff54c4b787a60af8cd45fcbd83096a68a2ecf8b16546f04",
+      "sha256": "610a68fb8c67a7a58f7cf47b26fab4f25b16d07e06c16db522f4d5e54df65ea5",
+      "transformation": "Machine-specific storage prefixes replaced with ${RUN}/${BARSEQ_ROOT}; numerical values unchanged"
+    },
+    "training_summary.json": {
+      "archive_member": "celltransformer/summary.json",
+      "original_sha256": "149a21c4ac06a99187e47db9d34cd11289455c2d6e6b40efc9a46660d3b8bd7e",
+      "sha256": "c5b59e8d3ba0ec3fa07cca1dce90266f5a87aea29b6cf7e6938144d72344868b",
+      "transformation": "Machine-specific storage prefixes replaced with ${RUN}/${BARSEQ_ROOT}; numerical values unchanged"
+    },
+    "data_summary.json": {
+      "archive_member": "prepared/summary.json",
+      "original_sha256": "2c898048747f2c03375254150990b33034a23b70cacc4328988ce1550aca3a54",
+      "sha256": "2c898048747f2c03375254150990b33034a23b70cacc4328988ce1550aca3a54",
+      "transformation": "Machine-specific storage prefixes replaced with ${RUN}/${BARSEQ_ROOT}; numerical values unchanged"
+    },
+    "../environment/ct2-pip-freeze.txt": {
+      "archive_member": "environment/ct2_environment.txt",
+      "sha256": "c5fe19652f99a5f21912b05463f4f9c8940f09dd633e3ea5d54a663613c8c433",
+      "transformation": "none"
+    },
+    "../environment/rapids-pip-freeze-record.txt": {
+      "archive_member": "environment/rapids_environment.txt",
+      "sha256": "647a07e2636e3dbe3bd915ff42e6a12726e8cbe01c435a4bc6e7a4c846663984",
+      "transformation": "none"
+    }
+  }
+}
