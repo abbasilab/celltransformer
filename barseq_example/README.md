@@ -5,6 +5,10 @@ supplied CellTransformer2 model from scratch, then compares **CellTransformer
 (-smoothing)** and **CellTransformer (+smoothing)** with **CCF (author
 registration)**. It runs no CellCharter, SPIRAL or other model baselines.
 
+This guide covers execution, recovery and report retrieval. The
+[repository README](../README.md) explains the model, configuration, data
+contract, reference comparisons and reproducibility records in detail.
+
 ## Requirements
 
 - Linux x86_64; system Python 3, Bash, curl, tar and standard GNU command-line tools.

@@ -42,7 +42,8 @@ reduce data, genes or neighborhoods to claim the same experiment.
 ## Training passed but HTML is missing
 
 Smoothing, clustering, metrics and report generation follow training. Wait for
-`ALL STAGES COMPLETED` and the run's `SUCCESS` file. A PID or a training success
+`BARSEQ CELLTRANSFORMER2 RUN COMPLETED`, `overall: PASSED` in `status.json`, and
+the run's `SUCCESS` file. A PID or a training success
 line alone is insufficient. Keep the launcher running rather than invoking a
 second pipeline concurrently.
 
