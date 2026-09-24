@@ -16,7 +16,8 @@ anatomical comparison, and an offline HTML report. The demonstrated experiment
 uses **1,161,387 cells, 106 sequencing targets and 40 sections from one mouse
 hemisphere**, with a **10-epoch** training budget.
 
-**For a first run, start with [Installation](#installation).** For the complete
+**For a first run, start with [Installation](#installation).** A
+[pip installation](#pip-installation) is also available. For the complete
 operator guide, including remote report retrieval, see
 [barseq_example/README.md](barseq_example/README.md).
 
@@ -139,6 +140,34 @@ allocated GPU job, following the local scheduler's submission procedure:
 bash barseq_example/run_all.sh --root "$BARSEQ_ROOT" --epochs 10
 ```
 
+### Pip installation
+
+The repository also builds an installable Python distribution,
+**`celltransformer2-test`**, with a `celltransformer-barseq` command and the
+native `celltransformer` import package. Use a fresh **Python 3.11** environment.
+On a Linux GPU workstation, from a clone:
+
+```bash
+python3.11 -m venv "$HOME/.venvs/celltransformer2"
+source "$HOME/.venvs/celltransformer2/bin/activate"
+python -m pip install --upgrade pip
+python -m pip install 'torch==2.5.1' --index-url https://download.pytorch.org/whl/cu121
+python -m pip install .
+
+celltransformer-barseq audit
+celltransformer-barseq run --root "$HOME/BARseq_CT2_example" --epochs 10 --gpu 0 --background
+```
+
+The installed command includes the example scripts and audited source needed to
+run from any directory. The workflow still creates its demonstrated training
+and RAPIDS environments under the selected storage root; pip alone does not
+install the NVIDIA driver or start an experiment. The existing checkout/Bash
+workflow remains available.
+
+See [Pip installation and builds](barseq_example/docs/PIP_INSTALLATION.md) for
+direct GitHub installation, wheels, source archives, editable installs and the
+installed native tools. The distribution has not been published to PyPI.
+
 ### Dependency environments
 
 | Environment | Purpose | Principal versions |
@@ -146,8 +175,8 @@ bash barseq_example/run_all.sh --root "$BARSEQ_ROOT" --epochs 10
 | `envs/celltransformer2-v1` | Preparation, training, export, smoothing, metrics and reporting | Python 3.11, PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.10.1, NumPy 1.26.4, SciPy 1.14.1 |
 | `envs/rapids-24.12` | Native GPU KMeans | cuML/cuDF 24.12, CUDA environment 12.2 |
 
-The supported BARseq installation path is the launcher. It imports the audited
-source directly; a separate `pip install -e .` is not needed to run the example.
+The BARseq launchers import the audited source directly. A pip installation is
+optional for the checkout workflow and supplies console commands for installed use.
 Direct requirements, constraints from the successful training environment, and
 RAPIDS compatibility pins are in [barseq_example/environment/](barseq_example/environment/README.md).
 The RAPIDS definition is not an exact historical conda build lock.
@@ -167,11 +196,11 @@ celltransformer2-test/
 │   ├── distributions/        Negative Binomial and ZINB distributions
 │   ├── train/                Lightning training module and scheduler
 │   ├── extract/              Spatial-context embedding extraction
-│   ├── infer/                Native inference utilities
 │   ├── preprocess/           Section preparation utilities
 │   ├── cluster/              GPU KMeans utilities
 │   ├── smooth/               Gaussian smoothing utilities
 │   └── profile/              Cell-type composition utilities
+├── src/celltransformer2_barseq/ Installed workflow command and resource resolution
 ├── config/                   Original native Hydra configurations
 ├── tests/                    Original upstream tests and fixtures
 ├── barseq_example/
@@ -189,12 +218,13 @@ celltransformer2-test/
 ├── provenance/               Original source manifest explanation and README
 ├── scripts/                  Example-manifest maintenance utility
 ├── .github/workflows/        Automated source and CPU checks
-├── pyproject.toml            Native package metadata and console entry points
+├── pyproject.toml            Pip distribution metadata and console entry points
+├── setup.py, MANIFEST.in     Audited wheel resources and source-archive contents
 └── LICENSE                   Original CellTransformer2 license
 ```
 
 All **66 supplied upstream files** are preserved byte for byte. The original
-README, `.gitignore` and `.roborev.toml` are retained under
+README, `.gitignore`, `.roborev.toml` and `pyproject.toml` are retained under
 `provenance/upstream/`; the source, configurations, tests and license remain at
 their original relative paths. See [source provenance](provenance/README.md).
 
@@ -254,6 +284,10 @@ Changing a shell variable does not redefine an existing experiment.
 
 ### BARseq workflow
 
+After pip installation, `celltransformer-barseq run`, `status` and `resume` expose
+the same workflow, with `audit` for installed source/resource verification.
+Use `celltransformer-barseq --help` and the subcommands' `--help` for options.
+
 | Script | Role |
 |---|---|
 | `launch_cactus.sh` | Start the complete workflow in the background |
@@ -269,8 +303,10 @@ embedding export. Each stage has its own log and required outputs.
 
 ### Native package tools
 
-The supplied `pyproject.toml` declares six console entry points. They are useful
-for developers adapting the package and are separate from the BARseq run manager.
+The distribution retains six native console entry points in addition to
+`celltransformer-barseq`. They are useful for developers adapting the package and
+are separate from the BARseq run manager. The installed training command supplies
+the bundled Hydra configuration path to the unchanged native training function.
 
 | Entry point | Function |
 |---|---|
@@ -588,6 +624,12 @@ passes source-integrity checks, 41 upstream CPU tests, three packaging tests,
 BARseq data-join checks, and a synthetic adapter test covering finite epochs,
 checkpoint recovery, smoothing, matching and HTML/ZIP generation. These software
 checks run in [GitHub Actions](https://github.com/ads303/celltransformer2-test/actions).
+
+Pip checks build a wheel from the source archive, install it with dependencies,
+verify all installed command help screens, and generate a synthetic report using
+only the wheel's bundled resources outside the checkout. The workflow also checks
+command routing and editable installation, and uploads the pip distributions as
+build artifacts. See [packaging instructions](barseq_example/docs/PIP_INSTALLATION.md).
 
 The CPU orchestration fixture uses an explicitly labelled toy forward model
 with the native loss, optimizer and scheduler. Production uses the native CUDA

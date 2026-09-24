@@ -1,0 +1,3 @@
+# Typer 0.15.2's help rendering uses the Click 8.1 API.
+# This pin applies to pip console tools; the historical run environment is preserved.
+click==8.1.8

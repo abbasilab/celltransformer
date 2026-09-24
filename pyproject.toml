@@ -1,41 +1,23 @@
 [build-system]
-requires = ["setuptools>=68", "setuptools-scm>=8"]
+requires = ["setuptools>=77,<81", "wheel>=0.45,<1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "celltransformer"
-description = "Transformer-based spatial gene expression prediction for MERFISH data"
-dynamic = ["version"]
-requires-python = ">=3.10"
+name = "celltransformer2-test"
+version = "0.1.0"
+description = "CellTransformer2 with a reproducible BARseq spatial domain discovery example"
+readme = "README.md"
+dynamic = ["dependencies"]
+requires-python = ">=3.11,<3.12"
 license = "MIT"
+license-files = ["LICENSE", "barseq_example/LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "Alex Lee" },
 ]
-urls.Homepage = "https://github.com/alexj-lee/spatialcelltransformer"
-urls.Repository = "https://github.com/alexj-lee/spatialcelltransformer"
-
-dependencies = [
-    "torch>=2.5",
-    "lightning>=2.0",
-    "anndata>=0.10",
-    "polars>=0.20",
-    "pandas>=1.5",
-    "scipy>=1.10",
-    "torchdata>=0.7",
-    "jaxtyping>=0.2",
-    "hydra-core>=1.3",
-    "omegaconf>=2.3",
-    "wandb>=0.15",
-    "scikit-learn>=1.2",
-    "typer>=0.9",
-    "numpy>=1.24",
-    "pyarrow>=12.0",
-    "matplotlib>=3.7",
-    "seaborn>=0.12",
-    "colorcet>=3.0",
-    "pyyaml>=6.0",
-    # Not on PyPI, install separately: brainformr, scvi-tools, cuml
-]
+maintainers = [{name = "ads303"}]
+urls.Homepage = "https://github.com/ads303/celltransformer2-test"
+urls.Repository = "https://github.com/ads303/celltransformer2-test"
+urls.Issues = "https://github.com/ads303/celltransformer2-test/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -44,15 +26,18 @@ dev = [
 ]
 
 [project.scripts]
-celltransformer-train      = "celltransformer.train.main:main"
+celltransformer-train      = "celltransformer2_barseq.cli:train_main"
 celltransformer-extract    = "celltransformer.extract.main:cli"
 celltransformer-preprocess = "celltransformer.preprocess.main:cli"
 celltransformer-cluster    = "celltransformer.cluster.main:cli"
 celltransformer-profile    = "celltransformer.profile.main:cli"
 celltransformer-smooth     = "celltransformer.smooth.main:cli"
+celltransformer-barseq     = "celltransformer2_barseq.cli:main"
 
-[tool.setuptools-scm]
-version_file = "src/celltransformer/_version.py"
+[tool.setuptools.dynamic]
+dependencies = {file = ["barseq_example/requirements.txt", "packaging_requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["celltransformer", "celltransformer.*", "celltransformer2_barseq"]
+namespaces = false

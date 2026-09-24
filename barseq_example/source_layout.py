@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 
 HERE = Path(__file__).resolve().parent
-RELOCATED = {'README.md', '.gitignore', '.roborev.toml'}
+RELOCATED = {'README.md', '.gitignore', '.roborev.toml', 'pyproject.toml'}
 
 
 def digest(path):

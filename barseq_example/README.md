@@ -9,6 +9,10 @@ This guide covers execution, recovery and report retrieval. The
 [repository README](../README.md) explains the model, configuration, data
 contract, reference comparisons and reproducibility records in detail.
 
+For pip installation and the `celltransformer-barseq` command, see
+[Pip installation and builds](docs/PIP_INSTALLATION.md). Both interfaces execute
+the same scientific stages and use the same run layout.
+
 ## Requirements
 
 - Linux x86_64; system Python 3, Bash, curl, tar and standard GNU command-line tools.

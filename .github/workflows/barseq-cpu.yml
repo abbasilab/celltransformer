@@ -26,3 +26,28 @@ jobs:
           PYTHONPATH=src python -m pytest -q tests/test_distributions.py tests/test_loader.py tests/test_preprocess.py
       - name: Check finite epochs, checkpoint recovery, metrics and report
         run: python barseq_example/test_adapter.py --output "$RUNNER_TEMP/barseq-synthetic"
+      - name: Check pip command routing
+        run: PYTHONPATH=src python -m pytest -q tests/test_distribution_cli.py
+      - name: Build wheel from source distribution and validate metadata
+        run: |
+          python -m pip install 'setuptools==80.9.0' 'wheel==0.45.1' 'build==1.2.2.post1' 'twine==6.1.0'
+          python -m build --no-isolation
+          python -m twine check dist/*
+      - name: Install and exercise wheel outside the checkout
+        run: |
+          python -m pip install dist/*.whl
+          python -m pip check
+          python scripts/check_installed_package.py --output "$RUNNER_TEMP/barseq-installed"
+      - name: Upload pip distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: celltransformer2-pip-distributions
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+      - name: Check editable installation preserves source integrity
+        run: |
+          python -m pip install --no-deps --no-build-isolation -e .
+          celltransformer-barseq audit
+          python barseq_example/source_layout.py
+          python -c "from celltransformer2_barseq.cli import example_path; assert example_path().name == 'barseq_example'"

@@ -54,6 +54,16 @@ different hardware or dependency builds is made.
 The GitHub Actions workflow repeats source, compilation and CPU adapter checks;
 it does not download the full dataset or claim a GPU performance benchmark.
 
+Pip packaging checks additionally build a source archive and a wheel from that
+archive, validate package metadata, install the wheel with its declared
+dependencies, and exercise all seven installed command help screens outside the
+checkout. The installed-package check verifies both native source copies, bundled
+Hydra configuration and reference resources, then runs the synthetic CPU adapter
+through checkpoint recovery and HTML/ZIP generation using the wheel's resources.
+Five command-routing tests cover launch arguments and resume storage roots.
+Editable installation is checked separately against the original source manifest.
+These are installation and software checks, not a new biological GPU experiment.
+
 The initial GitHub run passed the source audit and all 44 pytest checks, then
 stopped because the 96-cell synthetic adapter fixture inherited the full-data
 20-GiB free-space reserve. The fixture now explicitly uses a 1-GiB reserve and
