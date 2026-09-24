@@ -20,7 +20,7 @@ No administrator access, pre-existing conda installation, MATLAB, external
 pretrained checkpoint or Weights & Biases login is needed. The installer creates
 its own pinned micromamba and two environments inside the chosen storage root.
 
-## Launch on cactus or another compatible Linux machine
+## Launch on a Linux GPU workstation
 
 From the repository root:
 
@@ -31,10 +31,15 @@ export BARSEQ_EPOCHS=10
 bash barseq_example/launch_cactus.sh
 ```
 
+`launch_cactus.sh`, `status_cactus.sh` and `resume_cactus.sh` are the existing
+helper filenames. They work on any Linux GPU workstation meeting the requirements
+above; no particular hostname is required.
+
 Choose a storage root **outside the source checkout**. The new default differs
 from the historical `BARseq_CellTransformer` directory, preserving that experiment.
-The launcher starts `nohup` in the background and prints the PID and log. You can
-disconnect SSH or close your Mac after launching; cactus continues the process.
+The launcher starts `nohup` in the background and prints the PID and log. If you
+launch it over SSH, you can disconnect or close your local computer; the process
+continues on the remote GPU workstation while that workstation remains running.
 On a managed cluster with a scheduler, run `run_all.sh` inside an allocated GPU
 job instead of starting a job on a login node.
 
@@ -94,22 +99,28 @@ completed-epoch checkpoint; an interrupted partial epoch repeats, with partial
 history rolled back. The run snapshot protects the resumed computation from
 later edits to the repository.
 
-## Open the report on your Mac
+## Retrieve and open the report on your local computer
 
-After all stages pass, run these commands **on the Mac**, using your server and
-the storage path chosen above:
+After all stages pass, run these commands **on your local computer** in a
+Bash-compatible terminal, such as macOS Terminal, a Linux terminal or WSL.
+Replace `your_username@your_gpu_host` with your SSH login and hostname, and set
+`BARSEQ_REMOTE_ROOT` to the absolute storage path used on that remote machine:
 
 ```bash
-BARSEQ_HOST=asriram@cactus
-BARSEQ_REMOTE_ROOT=/home/asriram/BARseq_CT2_example
+BARSEQ_HOST="your_username@your_gpu_host"
+BARSEQ_REMOTE_ROOT="/absolute/path/to/BARseq_CT2_example"
 BARSEQ_REMOTE_RUN=$(ssh "$BARSEQ_HOST" "cat '$BARSEQ_REMOTE_ROOT/LATEST_BARSEQ_CT2'")
 ssh "$BARSEQ_HOST" "test -f '$BARSEQ_REMOTE_RUN/SUCCESS'" && \
 mkdir -p "$HOME/Downloads/BARseq_CT2_example" && \
 scp "$BARSEQ_HOST:$BARSEQ_REMOTE_RUN/report/review.html" \
     "$BARSEQ_HOST:$BARSEQ_REMOTE_RUN/report/results.zip" \
-    "$HOME/Downloads/BARseq_CT2_example/" && \
-open "$HOME/Downloads/BARseq_CT2_example/review.html"
+    "$HOME/Downloads/BARseq_CT2_example/"
 ```
+
+Open the downloaded `Downloads/BARseq_CT2_example/review.html` in your web browser.
+On macOS, you can also run `open "$HOME/Downloads/BARseq_CT2_example/review.html"`;
+on a Linux desktop, use `xdg-open` with the same path. If the browser runs on the
+GPU workstation itself, open `$BARSEQ_RUN/report/review.html` directly.
 
 The HTML embeds its images and works offline. It includes all 40 sections at all
 three reference resolutions, cortical enlargements, training diagnostics, Figure

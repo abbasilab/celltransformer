@@ -1,6 +1,6 @@
 # Validation performed 2026-09-21
 
-This is a prepared, tested launcher for cactus. **A completed 10-epoch CUDA training run is not claimed.** No SSH connection to cactus or new training on its GPUs was performed while creating this package.
+This historical note records checks performed while preparing the Linux GPU launcher, before the first full training run. **A completed 10-epoch CUDA training run was not claimed at that stage.** No SSH connection to the target GPU workstation or new training on its GPUs was performed while creating the initial package. See [the current validation record](VALIDATION.md) for the subsequent successful run.
 
 ## Real data checks performed locally
 
@@ -26,13 +26,13 @@ This is a prepared, tested launcher for cactus. **A completed 10-epoch CUDA trai
 - Offline report and ZIP generated from synthetic tests. Embedded PNGs and selector inventories checked; scientific plots inspected as PNG files. Browser preview of a local file URL was blocked by browser security policy, so browser interaction/rendering is not certified.
 - Python compilation, Bash syntax checks and source-manifest comparison. All 66 bundled CT2 files match the supplied repository byte for byte.
 
-## Checks enforced on cactus before training
+## Checks enforced on the Linux GPU workstation before training
 
 1. Fresh standalone environment setup and PyTorch CUDA/bfloat16 support.
 2. GPU KMeans test using the actual unchanged native CT2 fitting function in the RAPIDS environment.
 3. Exact native model construction, batch isolation, masked-center nonleakage, full backward pass with finite nonzero gradients in core components, and a dense-neighborhood batch within the token budget.
 4. Finite losses during training; every training center exactly once per epoch; finite exported embeddings; complete populated KMeans domains; stage output checks before SUCCESS.
 
-The native model, CUDA kernels, GPU memory use, and fresh Linux dependency solver have not been executed locally on this Mac. The launcher therefore stops on a failed cactus preflight instead of silently using a different model or CPU fallback. Timing and the 50–70 GiB total installation/run budget remain estimates until measured on cactus.
+At the time of this initial validation, the native model, CUDA kernels, GPU memory use, and fresh Linux dependency solver had not been executed on the local macOS development machine. The launcher stops if the GPU workstation's preflight checks fail instead of silently using a different model or CPU fallback. Timing and the 50–70 GiB total installation/run budget were estimates pending measurements on the target workstation.
 
 The synthetic tests exercise software behavior only. Their reports are not evidence of biological performance. Ten epochs are the requested proof-of-concept budget, not an assertion of convergence or optimal anatomical agreement.

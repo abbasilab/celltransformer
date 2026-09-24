@@ -1,7 +1,7 @@
 # Recorded BARseq result — 21 September 2026
 
 These are selected **real outputs**, extracted from the user's downloaded
-`results.zip` after the completed cactus run and the reference-color refresh.
+`results.zip` after the completed Linux GPU workstation run and the reference-color refresh.
 They are not outputs from the synthetic CPU tests. `provenance.json` records
 archive member names, SHA256 values and any path-only transformations.
 

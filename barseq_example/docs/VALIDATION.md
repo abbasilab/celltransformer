@@ -2,7 +2,7 @@
 
 ## Completed real GPU experiment
 
-The user completed the BARseq pipeline on cactus on 21 September 2026. The
+The BARseq pipeline completed on a Linux GPU workstation on 21 September 2026. The
 downloaded `results.zip` contains the 10-epoch history, final-checkpoint summary,
 CCF comparison tables, section figures and software records. Selected records
 are preserved in `../results/` with member-level provenance and hashes.

@@ -12,5 +12,5 @@
   "smoothing": "native weights, analytical two-point check, no cross-section mixing",
   "metrics": "Permutation matching r=1",
   "report": "All synthetic section/resolution maps embedded; offline HTML and ZIP generated",
-  "native_model": "CUDA model forward/backward must pass on cactus; CPU orchestration uses an explicit toy forward with native training_step/loss/optimizer/scheduler"
+  "native_model": "CUDA model forward/backward must pass on the target Linux GPU workstation; CPU orchestration uses an explicit toy forward with native training_step/loss/optimizer/scheduler"
 }
