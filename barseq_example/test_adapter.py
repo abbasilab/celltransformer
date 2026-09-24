@@ -1,6 +1,7 @@
 """CPU tests for data adaptation and Lightning orchestration (not CUDA model tests)."""
 import argparse
 import shutil
+from unittest.mock import patch
 import torch
 import lightning as L
 from omegaconf import OmegaConf
@@ -40,7 +41,8 @@ def main(out):
     require(not out.exists(),'Use a fresh test output directory');out.mkdir(parents=True);prepared=out/'prepared';prepared.mkdir()
     rng=np.random.default_rng(8);n=96;genes=12
     cfg=dict(workflow='barseq_ct2_v1',root=str(out),run=str(out),software_test=True,workers=0,patch_width_um=2.1,seed=42,batch_size=16,max_tokens=50,
-        device='cpu',threads=1,epochs=2,log_every=1000,split='within_section',validation_fraction=.1,metric_neighbors=5,smoothing=dict(sigma_um=1.,k=4,includes_self=True))
+        device='cpu',threads=1,epochs=2,log_every=1000,split='within_section',validation_fraction=.1,metric_neighbors=5,smoothing=dict(sigma_um=1.,k=4,includes_self=True),
+        storage_reserve_gib=1)  # Tiny synthetic fixture; production retains its 20-GiB reserve.
     cfg['model']=dict(_target_='celltransformer.model.SpatialCellTransformer',expression_dim=genes,cell_type_cardinality=3,model_dim=32,encoder_depth=1,decoder_depth=1,num_heads=4,ffn_dim=32,concat_mode='add',use_zi=True,use_diagonal_norm=True,nb_proj_eps=.0001,dropout=0.,multiple_of=32,norm_eps=1e-5,init_std_attn_pool=.02,compile=False)
     cfg['optimization']=dict(lr=.0003,weight_decay=1e-8,schedule_warmup=2,schedule_timescale=5,max_epochs=2,precision='32-true',accumulate_grad_batches=1)
     json_write(out/'config.json',cfg)
@@ -48,7 +50,12 @@ def main(out):
     for name,x in [('xy_um',xy),('sections',sections),('types',types),('cell_cluster',types),('nonempty',np.ones(n,bool)),('counts',rng.poisson(3,(n,genes)).astype(np.int32))]:atomic_npy(prepared/(name+'.npy'),x)
     meta=pd.DataFrame(dict(cell_id=np.arange(n),section=np.where(sections==0,'Slice01','Slice02'),x_um=xy[:,0],y_um=xy[:,1],gene_area=np.tile(np.repeat([962,1016,1015],16),2),reference_valid=True,reference_fraction=1.,cell_cluster=types.astype(str),cell_subclass=types.astype(str),cell_class='Test',total_counts=36,n_genes=12,mitochondrial_fraction=0,qc_flag=False))
     meta.to_parquet(prepared/'cells.parquet');vocab=references(meta,prepared);vocab.update(section=['Slice01','Slice02'],cell_subclass=['A','B','C'],cell_cluster=['A','B','C'],cell_class=['Test']);json_write(prepared/'vocabulary.json',vocab)
-    info=graph_and_split(out);info.update(n_cells=n,n_sections=2,n_model_genes=genes,n_mice=1);json_write(prepared/'summary.json',info)
+    # Exercise the CI storage budget even on development machines with ample space.
+    # Cap reported space rather than inventing capacity when less is available.
+    usage=shutil.disk_usage(prepared)
+    with patch('prepare_barseq.shutil.disk_usage',return_value=usage._replace(free=min(usage.free,2*1024**3))):
+        info=graph_and_split(out)
+    info.update(n_cells=n,n_sections=2,n_model_genes=genes,n_mice=1);json_write(prepared/'summary.json',info)
     ids=np.flatnonzero(array(out,'eligible'));audit=audit_sampler(out,ids);dataset=CachedDataset(out);degree=np.diff(dataset.ptr)
     require(dataset[0].observed_expression.dtype==torch.float32,'Integer input must transform to float32')
     for budget in [5,50,200,10000]:

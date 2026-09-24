@@ -1,4 +1,4 @@
-# Validation and provenance — 23 September 2026
+# Validation and provenance — updated 24 September 2026
 
 ## Completed real GPU experiment
 
@@ -53,6 +53,13 @@ different hardware or dependency builds is made.
 
 The GitHub Actions workflow repeats source, compilation and CPU adapter checks;
 it does not download the full dataset or claim a GPU performance benchmark.
+
+The initial GitHub run passed the source audit and all 44 pytest checks, then
+stopped because the 96-cell synthetic adapter fixture inherited the full-data
+20-GiB free-space reserve. The fixture now explicitly uses a 1-GiB reserve and
+caps reported free space at 2 GiB during graph preparation to exercise this
+constraint on developer machines too. Production retains its 20-GiB reserve;
+the data, model, training and analysis code are unchanged by this test fix.
 
 The original pre-GPU preparation/validation notes are retained in
 `initial_package_validation.md` as a historical record, superseded by the

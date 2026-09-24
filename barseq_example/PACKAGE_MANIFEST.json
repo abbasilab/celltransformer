@@ -25,7 +25,7 @@
   "setup_environment.sh": "6b7a95cfa8f0d3c5fc3fcbf0e80098834d0e49d79e3b3902035b37714b7132b1",
   "source_layout.py": "ff6044ceb9093d3575e4b984766424a4e2e3312be75c174cdd68854f9467cefe",
   "status_cactus.sh": "90292b5738faa7c61727c0916edc9b35b0aa553d9fbd705ef846b0e38f1973db",
-  "test_adapter.py": "3163fc8c68c2dcf2d8581b4c68a7ee288b0165a6ec0596e897d34f2ed28bfe0c",
+  "test_adapter.py": "d5dfdd01f968bd95567a98b633df7a97f8d3cca172969f151ac2b1e41ee040a1",
   "test_barseq.py": "ba6239501e6cdb7e5b6d3b9296b723505388c73a11f79add0db9bd7972ec0bf5",
   "test_packaging.py": "eb773dd118d526c30ecdfe8aca38668592be119f763c22b837d4ac0fb20d168e",
   "train_ct2.py": "f0ac039cd83b5257afba3b88362ea61672e60bacecce2544e81c494ad51cfa19"
