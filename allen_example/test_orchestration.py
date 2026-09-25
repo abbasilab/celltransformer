@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 import pytest
 import pipeline
 
@@ -29,6 +30,8 @@ def test_failed_training_resumes_without_repreparing(monkeypatch,tmp_path):
         def wait(self):return self.code
         def poll(self):return self.code
     monkeypatch.setattr(pipeline.subprocess,'Popen',Child)
+    # Stages write tiny stubs; model available storage independently of CI disk size.
+    monkeypatch.setattr(pipeline.shutil,'disk_usage',lambda root:SimpleNamespace(free=100*1024**3))
     # Isolate locking from exception traceback lifetimes in the test process.
     monkeypatch.setattr(pipeline,'lock_root',lambda root:None)
     monkeypatch.setattr(pipeline.fcntl,'flock',lambda *args:None)
@@ -40,6 +43,7 @@ def test_failed_training_resumes_without_repreparing(monkeypatch,tmp_path):
     assert status['stages']['prepare']['status']=='PASSED'
     cfg=json.loads((run/'config.json').read_text())
     assert cfg['epochs']==10 and cfg['model']['expression_dim']==500
+    assert cfg['storage_reserve_gib']==20
     assert cfg['patch_width_um']==85 and cfg['validation_fraction']==.2
     monkeypatch.setattr(sys,'argv',['pipeline.py','--resume',str(run)])
     pipeline.main()
