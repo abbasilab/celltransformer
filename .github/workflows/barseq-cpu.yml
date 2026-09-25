@@ -1,4 +1,4 @@
-name: BARseq source and CPU checks
+name: Allen and BARseq source and CPU checks
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
@@ -17,15 +17,19 @@ jobs:
       - name: Audit original source and compile
         run: |
           python barseq_example/source_layout.py
-          python -m compileall -q src barseq_example scripts
-          for script in barseq_example/*.sh; do bash -n "$script"; done
+          python allen_example/source_layout.py
+          python -m compileall -q src allen_example barseq_example scripts
+          for script in allen_example/*.sh barseq_example/*.sh; do bash -n "$script"; done
       - name: Check joins, registration lookup and palettes
         run: |
           python barseq_example/test_barseq.py
           python -m pytest -q barseq_example/test_packaging.py
+          python -m pytest -q allen_example/test_data.py allen_example/test_orchestration.py
           PYTHONPATH=src python -m pytest -q tests/test_distributions.py tests/test_loader.py tests/test_preprocess.py
       - name: Check finite epochs, checkpoint recovery, metrics and report
-        run: python barseq_example/test_adapter.py --output "$RUNNER_TEMP/barseq-synthetic"
+        run: |
+          python allen_example/test_adapter.py --output "$RUNNER_TEMP/allen-synthetic"
+          python barseq_example/test_adapter.py --output "$RUNNER_TEMP/barseq-synthetic"
       - name: Check pip command routing
         run: PYTHONPATH=src python -m pytest -q tests/test_distribution_cli.py
       - name: Build wheel from source distribution and validate metadata
@@ -37,7 +41,7 @@ jobs:
         run: |
           python -m pip install dist/*.whl
           python -m pip check
-          python scripts/check_installed_package.py --output "$RUNNER_TEMP/barseq-installed"
+          python scripts/check_installed_package.py --output "$RUNNER_TEMP/ct2-installed"
       - name: Upload pip distributions
         uses: actions/upload-artifact@v4
         with:
@@ -49,5 +53,7 @@ jobs:
         run: |
           python -m pip install --no-deps --no-build-isolation -e .
           celltransformer-barseq audit
+          celltransformer-allen audit
           python barseq_example/source_layout.py
-          python -c "from celltransformer2_barseq.cli import example_path; assert example_path().name == 'barseq_example'"
+          python allen_example/source_layout.py
+          python -c "from celltransformer2_barseq.cli import example_path; assert example_path('allen').name == 'allen_example'; assert example_path('barseq').name == 'barseq_example'"

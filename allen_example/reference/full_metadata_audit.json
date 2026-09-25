@@ -1,0 +1,19 @@
+{
+  "annotated_cells": 3739961,
+  "sections": 53,
+  "eligible_centers": 3737501,
+  "isolated_centers": 2460,
+  "neighborhood_edges": 73834240,
+  "neighbor_quantiles": [
+    1.0,
+    17.0,
+    35.0,
+    63.0,
+    217.0
+  ],
+  "reference_counts": {
+    "division": 25,
+    "structure": 354,
+    "substructure": 670
+  }
+}

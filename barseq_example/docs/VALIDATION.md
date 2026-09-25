@@ -1,4 +1,4 @@
-# Validation and provenance — updated 24 September 2026
+# Validation and provenance — updated 25 September 2026
 
 ## Completed real GPU experiment
 
@@ -56,11 +56,13 @@ it does not download the full dataset or claim a GPU performance benchmark.
 
 Pip packaging checks additionally build a source archive and a wheel from that
 archive, validate package metadata, install the wheel with its declared
-dependencies, and exercise all seven installed command help screens outside the
+dependencies, and exercise all eight installed command help screens outside the
 checkout. The installed-package check verifies both native source copies, bundled
 Hydra configuration and reference resources, then runs the synthetic CPU adapter
 through checkpoint recovery and HTML/ZIP generation using the wheel's resources.
-Five command-routing tests cover launch arguments and resume storage roots.
+The same installed-package checks now run independently for the Allen adapter.
+Command-routing tests cover both examples, launch arguments, saved resume storage
+roots, workflow identity, and Allen environment-reuse options.
 Editable installation is checked separately against the original source manifest.
 These are installation and software checks, not a new biological GPU experiment.
 

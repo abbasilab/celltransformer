@@ -1,6 +1,8 @@
 # BARseq: download → CellTransformer2 → CCF comparison → HTML
 
-This example packages the completed 10-epoch BARseq experiment. It trains the
+This secondary example packages the completed 10-epoch BARseq experiment.
+The [Allen 1 example](../allen_example/README.md) is the primary demonstration
+because it uses the original CellTransformer paper's primary dataset. It trains the
 supplied CellTransformer2 model from scratch, then compares **CellTransformer
 (-smoothing)** and **CellTransformer (+smoothing)** with **CCF (author
 registration)**. It runs no CellCharter, SPIRAL or other model baselines.
@@ -15,7 +17,9 @@ the same scientific stages and use the same run layout.
 
 ## Requirements
 
-- Linux x86_64; system Python 3, Bash, curl, tar and standard GNU command-line tools.
+- Linux x86_64; reported workstation OS Ubuntu 22.04.5 LTS, kernel
+  5.15.0-190-generic. System Python 3, Bash, curl, tar and standard GNU tools.
+  This OS/kernel record is descriptive, not an exact-version requirement.
 - Internet access to GitHub, PyPI/PyTorch, conda channels, Mendeley and Allen downloads.
 - NVIDIA GPU with bfloat16 support; an NVIDIA driver advertising CUDA ≥12.2.
 - Demonstrated hardware: RTX 6000 Ada, approximately 48 GB GPU memory, 128 GB RAM,

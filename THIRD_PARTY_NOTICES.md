@@ -4,8 +4,18 @@ The original CellTransformer2 code is copyright (c) 2026 Alex Lee, MIT licensed;
 the full original license is retained at the root. Its supplied distribution
 implementation and other inline provenance comments remain intact.
 
-The BARseq example scripts are distributed under the MIT license in
-`barseq_example/LICENSE`. Code licensing does not relicense external data.
+The example scripts are distributed under the MIT licenses in
+`allen_example/LICENSE` and `barseq_example/LICENSE`. Code licensing does not relicense external data.
+
+The Allen 1 MERFISH expression and cell/CCF annotation data are downloaded from
+the Allen Brain Cell Atlas. The source collection is licensed CC BY-NC 4.0:
+https://alleninstitute.github.io/abc_atlas_access/descriptions/MERFISH-C57BL6J-638850.html.
+The example pins the 20231215 manifest and preserves published hashes and release
+paths. Large expression files, annotation volumes and cell tables are downloaded
+at runtime; they are not distributed with this repository. Small manifest and
+input-audit records identify those resources. Cite Yao and colleagues:
+https://doi.org/10.1038/s41586-023-06812-z. Preserve the source data's terms when
+sharing data or derived results; the MIT code license does not replace them.
 
 The public BARseq pilot deposit by Xiaoyin Chen and Stephan Fischer is licensed
 CC BY 4.0: https://doi.org/10.17632/8bhhk7c5n9.1. The example downloads its processed

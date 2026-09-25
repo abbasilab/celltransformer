@@ -77,6 +77,7 @@ PY
 nvidia-smi > "$BARSEQ_ROOT/logs/nvidia_smi.txt"
 if command -v lscpu >/dev/null 2>&1; then lscpu > "$BARSEQ_ROOT/logs/lscpu.txt"; fi
 uname -a > "$BARSEQ_ROOT/logs/uname.txt"
+if [[ -r /etc/os-release ]]; then cat /etc/os-release > "$BARSEQ_ROOT/logs/os_release.txt"; fi
 cat /proc/meminfo > "$BARSEQ_ROOT/logs/meminfo.txt"
 "$BARSEQ_PYTHON" -m pip freeze > "$BARSEQ_ROOT/logs/ct2_environment.txt"
 "$BARSEQ_RAPIDS_PYTHON" -m pip freeze > "$BARSEQ_ROOT/logs/rapids_environment.txt"

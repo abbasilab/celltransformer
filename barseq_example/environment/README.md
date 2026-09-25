@@ -6,6 +6,7 @@ environments under the storage root, without requiring a global conda install.
 | Component | Demonstrated version / setting |
 |---|---|
 | Platform | Linux x86_64, Python 3.11 |
+| Reported workstation OS | Ubuntu 22.04.5 LTS; kernel 5.15.0-190-generic (user-supplied banner) |
 | Bootstrap | micromamba 2.9.0-0; executable SHA256 pinned |
 | Training | PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.10.1 |
 | Arrays / tables | NumPy 1.26.4, pandas 2.2.3, SciPy 1.14.1 |
@@ -31,6 +32,9 @@ reconstructed from that record alone.
 New runs now save `ct2_conda_explicit.txt`, `rapids_conda_explicit.txt` and
 `rapids_conda_packages.json`, in addition to both pip freezes and hardware records.
 These are included in the generated report ZIP for stronger future reproduction.
+New runs also capture `/etc/os-release` as `os_release.txt` alongside `uname.txt`;
+the reported OS/kernel above describes the workstation rather than setting an
+exact-version requirement.
 
 Fresh environment solves require the original package versions to remain
 available on their public channels. No dependency cache or binary is stored in

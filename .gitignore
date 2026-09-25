@@ -9,6 +9,7 @@ dist/
 build/
 # Experimental state belongs outside this source repository.
 BARseq_CT2_example/
+Allen1_CellTransformer2/
 work/
 runs/
 envs/

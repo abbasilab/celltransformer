@@ -1,0 +1,70 @@
+{
+  "release_manifest": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/releases/20231215/manifest.json",
+  "dataset": "MERFISH-C57BL6J-638850",
+  "files": [
+    {
+      "name": "expression_raw.h5ad",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/expression_matrices/MERFISH-C57BL6J-638850/20230830/C57BL6J-638850-raw.h5ad",
+      "size": 7627589574,
+      "md5": "9484a3992a4b6d3a7c0281c72e1be522",
+      "release": "20230830"
+    },
+    {
+      "name": "cells_ccf.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/MERFISH-C57BL6J-638850-CCF/20231215/views/cell_metadata_with_parcellation_annotation.csv",
+      "size": 1606515935,
+      "md5": "51dda47ab139e91357bc09bc4e12c073",
+      "release": "20231215"
+    },
+    {
+      "name": "gene.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/MERFISH-C57BL6J-638850/20231215/gene.csv",
+      "size": 48416,
+      "md5": "d9cee1242bc13374b5e2beeea827de3e",
+      "release": "20231215"
+    },
+    {
+      "name": "taxonomy.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/WMB-taxonomy/20231215/views/cluster_to_cluster_annotation_membership_pivoted.csv",
+      "size": 530641,
+      "md5": "06a0f8cd2b2181fed0fc6e3597af5c20",
+      "release": "20231215"
+    },
+    {
+      "name": "parcellation_terms.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/Allen-CCF-2020/20230630/parcellation_term.csv",
+      "size": 176626,
+      "md5": "2d91c7f148dc5149cb51cafcfdbabdf0",
+      "release": "20230630"
+    },
+    {
+      "name": "parcellation_membership.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/Allen-CCF-2020/20230630/parcellation_to_parcellation_term_membership.csv",
+      "size": 679969,
+      "md5": "957b7da082cc94b9307d4e225e401f5a",
+      "release": "20230630"
+    },
+    {
+      "name": "parcellation_acronyms.csv",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/metadata/Allen-CCF-2020/20230630/views/parcellation_to_parcellation_term_membership_acronym.csv",
+      "size": 22261,
+      "md5": "3e415e67f7089192bbce62bf9aac7bd1",
+      "release": "20230630"
+    },
+    {
+      "name": "registered_annotation.nii.gz",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/image_volumes/MERFISH-C57BL6J-638850-CCF/20230630/resampled_annotation.nii.gz",
+      "size": 2115809,
+      "md5": "7f6ce8f7221791ce8cd6243e77ec316f",
+      "release": "20230630"
+    },
+    {
+      "name": "ccf_annotation_10.nii.gz",
+      "url": "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/image_volumes/Allen-CCF-2020/20230630/annotation_10.nii.gz",
+      "size": 27539347,
+      "md5": "84735b65980bd862cde8c2cb4e8560a7",
+      "release": "20230630"
+    }
+  ],
+  "total_bytes": 9265218578
+}

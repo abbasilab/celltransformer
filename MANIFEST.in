@@ -5,6 +5,8 @@ graft config
 graft provenance
 graft tests
 graft barseq_example
+graft allen_example
+graft docs
 graft scripts
 global-exclude __pycache__ *.py[cod] .DS_Store
 global-exclude *.ckpt *.h5ad *.h5 *.mat *.npy *.npz *.parquet *.nrrd *.zip *.tar.gz

@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "celltransformer2-test"
-version = "0.1.0"
-description = "CellTransformer2 with a reproducible BARseq spatial domain discovery example"
+version = "0.2.0"
+description = "CellTransformer2 with Allen 1 MERFISH and BARseq spatial domain discovery examples"
 readme = "README.md"
 dynamic = ["dependencies"]
 requires-python = ">=3.11,<3.12"
 license = "MIT"
-license-files = ["LICENSE", "barseq_example/LICENSE", "THIRD_PARTY_NOTICES.md"]
+license-files = ["LICENSE", "allen_example/LICENSE", "barseq_example/LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "Alex Lee" },
 ]
@@ -33,6 +33,7 @@ celltransformer-cluster    = "celltransformer.cluster.main:cli"
 celltransformer-profile    = "celltransformer.profile.main:cli"
 celltransformer-smooth     = "celltransformer.smooth.main:cli"
 celltransformer-barseq     = "celltransformer2_barseq.cli:main"
+celltransformer-allen      = "celltransformer2_barseq.cli:allen_main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["barseq_example/requirements.txt", "packaging_requirements.txt"]}

@@ -140,7 +140,7 @@ body{font:16px/1.55 system-ui,sans-serif;color:#21323d;background:#f5f7fa;margin
     with zipfile.ZipFile(out/'results.zip','w',zipfile.ZIP_DEFLATED,compresslevel=3) as z:
         for path in [out/'review.html',out/'section_images.tsv',out/'reference_colors.tsv',out/'domain_colors.tsv',*figures.glob('*.png'),*metrics.glob('*.tsv'),*metrics.glob('*.json'),run/'config.json',run/'environment.json',run/'prepared/summary.json',run/'prepared/genes.json',run/'prepared/gene_selection.tsv',run/'prepared/section_inventory.tsv',run/'prepared/published_label_ids_without_released_counts.tsv',run/'analysis/clustering.json',run/'analysis/smoothing.json',run/'celltransformer/epochs.json',run/'celltransformer/summary.json',HERE/'CT2_SOURCE_MANIFEST.json',HERE/'DOWNLOAD_MANIFEST.json']:
             if path.exists():z.write(path,str(path.relative_to(run)) if path.is_relative_to(run) else 'provenance/'+path.name)
-        for name in ['ct2_environment.txt','rapids_environment.txt','nvidia_smi.txt','lscpu.txt','uname.txt','meminfo.txt','ct2_conda_explicit.txt','rapids_conda_explicit.txt','rapids_conda_packages.json']:
+        for name in ['ct2_environment.txt','rapids_environment.txt','nvidia_smi.txt','lscpu.txt','uname.txt','os_release.txt','meminfo.txt','ct2_conda_explicit.txt','rapids_conda_explicit.txt','rapids_conda_packages.json']:
             path=Path(cfg['root'])/'logs'/name
             if path.exists():z.write(path,'environment/'+name)
         for path in (HERE/'reference').iterdir():
