@@ -263,7 +263,8 @@ def main(cfg: DictConfig) -> None:
         opt_cfg=o,
     )
 
-    devices = [0, 1, 2, 3, 4, 5, 6, 7]
+    #GPU indices from the config (a list, or an int count)
+    devices = OmegaConf.to_container(cfg, resolve=True)["devices"]
     trainer = L.Trainer(
         log_every_n_steps=100,
         max_epochs=o.max_epochs,

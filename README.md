@@ -262,7 +262,9 @@ celltransformer2-test/
 └── LICENSE                   Original CellTransformer2 license
 ```
 
-All **66 supplied upstream files** are preserved byte for byte. The original
+Of the **66 supplied upstream files**, 63 are preserved byte for byte. Three were
+changed to make the native training GPUs configurable (see
+[Configurable training devices](#configurable-training-devices)). The original
 README, `.gitignore`, `.roborev.toml` and `pyproject.toml` are retained under
 `provenance/upstream/`; the source, configurations, tests and license remain at
 their original relative paths. See [source provenance](provenance/README.md).
@@ -326,6 +328,38 @@ starting a new run, refresh its manifest with
 Existing runs resume from their own saved configuration and source snapshot.
 Changing a shell variable does not redefine an existing experiment.
 
+### Configurable training devices
+
+The supplied training entry point hardcoded eight GPUs
+(`devices = [0, 1, 2, 3, 4, 5, 6, 7]` in `src/celltransformer/train/main.py`).
+This package reads the device list from a top-level `devices` key instead, so
+the GPU count can be set at launch with a Hydra override:
+
+```bash
+celltransformer-train devices=[0]    # one GPU (index 0)
+celltransformer-train devices=[0,1]  # two specific GPUs
+celltransformer-train devices=2      # any two GPUs
+```
+
+The default in both `config/train_redone_registration.yaml` and
+`config/train_zhuang.yaml` is `[0, 1, 2, 3, 4, 5, 6, 7]`, which reproduces the
+original behavior. Training still uses DDP, and `batch_size` is per GPU, so
+changing the GPU count changes the effective batch size and the number of
+optimizer updates per epoch. Use `optimization.accumulate_grad_batches` to keep
+the effective batch size constant (for example, 2 GPUs × 4 = 8 GPUs × 1).
+
+This is a change to the core source, which `update_example_manifest.py`
+deliberately does not approve. The new hashes of the three changed files were
+therefore written into both `CT2_SOURCE_MANIFEST.json` files by hand, and the
+package manifests were then refreshed. The audit now certifies this release;
+the original hashes are recorded in [source provenance](provenance/README.md).
+
+| File | Original SHA256 | Current SHA256 |
+|---|---|---|
+| `src/celltransformer/train/main.py` | `23012c04d2d8b008336eda09f90204a072b3a2aa27ffc70c1e451adb23332c5a` | `00b86996a437fa411c5274a237018fa712b177ddee9a21e64ad78e8729683648` |
+| `config/train_redone_registration.yaml` | `8a76d2aaaa829cf64311925ee49cd3365e20aaaa9946666c69d398186f1c6239` | `90841bbd8b0da134ce468fdd52a8c319a599aa4607e5927809a781b3fa52bae7` |
+| `config/train_zhuang.yaml` | `cd4a78880b8eec0731bf1653c2f1cb6b4397a3bfd79eff7170a77e8e48bc1f96` | `e48e7da050e2ffd90855b99d41cb7320096a9193401144d33532506b0744fc72` |
+
 ## Scripts and entry points
 
 ### Example workflows
@@ -353,7 +387,9 @@ export. Each stage has a separate log and required outputs.
 The distribution retains six native console entry points in addition to
 the two example commands. They are useful for developers adapting the package and
 are separate from the example run managers. The installed training command supplies
-the bundled Hydra configuration path to the unchanged native training function.
+the bundled Hydra configuration path to the native training function, which is
+unchanged except for its configurable device list
+(see [Configurable training devices](#configurable-training-devices)).
 
 | Entry point | Function |
 |---|---|
@@ -365,7 +401,7 @@ the bundled Hydra configuration path to the unchanged native training function.
 | `celltransformer-profile` | Cell-type composition profiles |
 
 The original training launcher has machine-specific multi-GPU and logging
-defaults. Both adapters supply single-GPU execution and section-safe smoothing.
+defaults; the GPU list can now be overridden with `devices=`. Both adapters supply single-GPU execution and section-safe smoothing.
 Use the example launchers for these workflows;
 the [preserved upstream README](provenance/upstream/README.md) documents the
 native interface as supplied.
