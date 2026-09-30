@@ -68,7 +68,7 @@ def main():
     status_path=run/'status.json';status=json.loads(status_path.read_text()) if status_path.exists() else dict(stages={})
     status.update(overall='RUNNING',run=str(run));status.pop('error',None);write(status_path,status)
     (root/'tmp').mkdir(exist_ok=True)
-    env=os.environ.copy();env.update(TMPDIR=str(root/'tmp'),ALLEN_ROOT=str(root),ALLEN_PYTHON=cfg['python'],ALLEN_RAPIDS_PYTHON=cfg['rapids_python'],ALLEN_REUSE_PYTHON=str(int(cfg['reuse_python'])),ALLEN_REUSE_RAPIDS=str(int(cfg['reuse_rapids'])),MPLCONFIGDIR=str(root/'matplotlib-cache'))
+    env=os.environ.copy();env.update(TMPDIR=str(root/'tmp'),ALLEN_ROOT=str(root),ALLEN_PYTHON=cfg['python'],ALLEN_RAPIDS_PYTHON=cfg['rapids_python'],ALLEN_REUSE_PYTHON=str(int(cfg['reuse_python'])),ALLEN_REUSE_RAPIDS=str(int(cfg['reuse_rapids'])),MPLCONFIGDIR=str(root/'matplotlib-cache'),MPLBACKEND='Agg')
     child=None
     def terminate(signum,frame):
         if child is not None and child.poll() is None:os.killpg(child.pid,signal.SIGTERM)

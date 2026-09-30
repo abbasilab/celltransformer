@@ -1,5 +1,5 @@
 {
-  "CT2_SOURCE_MANIFEST.json": "c9b7dd51ae597793af600f7f0dddb8954a86c22a6d4385e20c7b62ffa11310ed",
+  "CT2_SOURCE_MANIFEST.json": "c80004914c94f3b7e1321968c86ecb12eec74d74eaecfcb257b4abf62eea8fb2",
   "DOWNLOAD_MANIFEST.json": "febf494d8f9160ae36c80c1c8fccdf23d2ced4ad3740de656bb1df418ae9b446",
   "README.md": "dd6050845764f8a75fa571f9f9e8161932a00f0df99225cd74c5c7b5905a208f",
   "analyze.py": "c18c0bd1833d16238eaecf6af3578378a53214b1071f9c356b9c634347dad9d5",
@@ -11,7 +11,7 @@
   "environment/rapids-pip-freeze-record.txt": "647a07e2636e3dbe3bd915ff42e6a12726e8cbe01c435a4bc6e7a4c846663984",
   "environment/rapids.yml": "92f259d1fd95832ccd04cf91f242d3aa0c67953dc39b988d58751e28f32acb6a",
   "launch_cactus.sh": "5ae445bb1166229132317ad21bd51b5e3e532ab6f8e2b8ebd7d9c86049325528",
-  "pipeline.py": "0dd87e012af9b461451c5ab74f0a838d7e0fdcf7145bab683bffbd00d8204cfa",
+  "pipeline.py": "5eeb8eda494366376a8549b94c7d6229175640358f6915f8715b6f950630e451",
   "prepare_barseq.py": "4c8988bfc4c636ee7872dbb5b83b4de07d9163c9ece65aed68a714d6f1e2aedd",
   "reference/PROVENANCE.json": "f7372e31ffd0989d08840904813f40830b0503412de65bc02d53e6e4dc35f626",
   "reference/allen_structure_graph.json": "b5f0d024d1df09ee18aef15093f55240f4a70b3924ee9689add612dadff80386",

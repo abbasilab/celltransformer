@@ -360,6 +360,41 @@ the original hashes are recorded in [source provenance](provenance/README.md).
 | `config/train_redone_registration.yaml` | `8a76d2aaaa829cf64311925ee49cd3365e20aaaa9946666c69d398186f1c6239` | `90841bbd8b0da134ce468fdd52a8c319a599aa4607e5927809a781b3fa52bae7` |
 | `config/train_zhuang.yaml` | `cd4a78880b8eec0731bf1653c2f1cb6b4397a3bfd79eff7170a77e8e48bc1f96` | `e48e7da050e2ffd90855b99d41cb7320096a9193401144d33532506b0744fc72` |
 
+### Per-section smoothing
+
+The supplied `celltransformer-smooth` read one metadata CSV and one `.pt` tensor
+of all cells and wrote one `.pt`. That format matched neither
+`celltransformer-extract`'s output nor `celltransformer-cluster`'s input, so
+smoothed embeddings could not be clustered with the native commands. It also
+indexed the all-cells tensor with section-local kNN indices, so every section
+except the first was averaged over the wrong cells.
+
+`src/celltransformer/smooth/main.py` now reads a folder of
+`{stem}_embeddings.npz` files with their co-located `{stem}.parquet`, smooths
+each section on its own, and writes files of the same names, plus a copy of
+each parquet, to a separate output folder:
+
+```bash
+celltransformer-smooth sections/ sections_smoothed/ --gaussian-kernel 12.01 --n-neighbors 500
+celltransformer-cluster --embeddings-dirs sections_smoothed/ ...
+```
+
+The Gaussian kernel (`_gaussian_weights`, which both examples import) is
+unchanged. Neighbor embeddings are gathered in chunks of cells (`--chunk-size`,
+default 1024) to bound memory, and `--gaussian-kernel` now accepts non-integer
+values. The `--section-col` option was removed because each file is one section.
+All cells, including those without neighbors at extraction, remain smoothing
+sources. The examples do not call this command; they use their own section-safe
+smoothing.
+
+As with the device change, the new hash was written into both
+`CT2_SOURCE_MANIFEST.json` files by hand and the package manifests were then
+refreshed.
+
+| File | Original SHA256 | Current SHA256 |
+|---|---|---|
+| `src/celltransformer/smooth/main.py` | `9e9ec8eb0d77014cb81967bcf672e3708df3cede8b1840f99e17d665d784d496` | `a6c46f6d982464831ffb0be795fea269d66ced507036e5f28382cd44bf881758` |
+
 ## Scripts and entry points
 
 ### Example workflows
@@ -397,7 +432,7 @@ unchanged except for its configurable device list
 | `celltransformer-extract` | Attention-pool embedding extraction |
 | `celltransformer-preprocess` | Section data preparation |
 | `celltransformer-cluster` | GPU KMeans and spatial plots |
-| `celltransformer-smooth` | Gaussian embedding smoothing |
+| `celltransformer-smooth` | Gaussian embedding smoothing of per-section embeddings (see [Per-section smoothing](#per-section-smoothing)) |
 | `celltransformer-profile` | Cell-type composition profiles |
 
 The original training launcher has machine-specific multi-GPU and logging

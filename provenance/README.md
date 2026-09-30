@@ -8,7 +8,7 @@ Git history; no upstream commit hash or tagged version is asserted.
 `allen_example/CT2_SOURCE_MANIFEST.json` and
 `barseq_example/CT2_SOURCE_MANIFEST.json` contain the same SHA256 values for all
 66 supplied files. The manifest's own SHA256 is
-`c9b7dd51ae597793af600f7f0dddb8954a86c22a6d4385e20c7b62ffa11310ed`.
+`c80004914c94f3b7e1321968c86ecb12eec74d74eaecfcb257b4abf62eea8fb2`.
 
 The manifest as originally supplied had SHA256
 `1a18efdedd9a8f64ced795005a0b3aaf524dca35deffd24e2e7d3b6de2a60b68`. It was
@@ -16,7 +16,10 @@ updated by hand when three core files were changed to make the training GPUs
 configurable: `src/celltransformer/train/main.py`,
 `config/train_redone_registration.yaml` and `config/train_zhuang.yaml`. Their
 original and current hashes are listed under "Configurable training devices" in
-the root README. The other 63 files are unchanged.
+the root README. It was updated by hand again when
+`src/celltransformer/smooth/main.py` was changed to read and write per-section
+embedding files; its original and current hashes are listed under "Per-section
+smoothing" in the root README. The other 62 files are unchanged.
 
 Original paths `README.md`, `.gitignore`, `.roborev.toml` and `pyproject.toml` are stored under
 `provenance/upstream/`; other original paths remain at the repository root.
