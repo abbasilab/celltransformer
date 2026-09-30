@@ -231,6 +231,7 @@ def main(cfg: DictConfig) -> None:
     checkpoint_callback = L.pytorch.callbacks.ModelCheckpoint(
         dirpath=ckpt_dir,
         filename="epoch{epoch:03d}-step{step}-valloss{valid/nll_epoch:.4f}",
+        auto_insert_metric_name=False,
         monitor="valid/nll_epoch",
         mode="min",
         save_top_k=cfg.get("save_top_k", 5),

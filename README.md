@@ -356,7 +356,7 @@ the original hashes are recorded in [source provenance](provenance/README.md).
 
 | File | Original SHA256 | Current SHA256 |
 |---|---|---|
-| `src/celltransformer/train/main.py` | `23012c04d2d8b008336eda09f90204a072b3a2aa27ffc70c1e451adb23332c5a` | `00b86996a437fa411c5274a237018fa712b177ddee9a21e64ad78e8729683648` |
+| `src/celltransformer/train/main.py` | `23012c04d2d8b008336eda09f90204a072b3a2aa27ffc70c1e451adb23332c5a` | `2c1e8d510b5c43981318d71d83cbff2fb9711582907b996d4bb99f7b3030074c` |
 | `config/train_redone_registration.yaml` | `8a76d2aaaa829cf64311925ee49cd3365e20aaaa9946666c69d398186f1c6239` | `90841bbd8b0da134ce468fdd52a8c319a599aa4607e5927809a781b3fa52bae7` |
 | `config/train_zhuang.yaml` | `cd4a78880b8eec0731bf1653c2f1cb6b4397a3bfd79eff7170a77e8e48bc1f96` | `e48e7da050e2ffd90855b99d41cb7320096a9193401144d33532506b0744fc72` |
 
