@@ -81,7 +81,7 @@ smmap==5.0.3
 sympy==1.13.1
 threadpoolctl==3.7.0
 torch==2.5.1+cu121
-torchdata==0.10.1
+torchdata==0.11.0
 torchmetrics==1.6.0
 tqdm==4.70.1
 triton==3.1.0

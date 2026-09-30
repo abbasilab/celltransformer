@@ -200,7 +200,7 @@ installed native tools. The distribution has not been published to PyPI.
 
 | Environment | Purpose | Principal versions |
 |---|---|---|
-| `envs/celltransformer2-v1` | Preparation, training, export, smoothing, metrics and reporting | Python 3.11, PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.10.1, NumPy 1.26.4, SciPy 1.14.1 |
+| `envs/celltransformer2-v1` | Preparation, training, export, smoothing, metrics and reporting | Python 3.11, PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.11.0, NumPy 1.26.4, SciPy 1.14.1 |
 | `envs/rapids-24.12` | Native GPU KMeans | cuML/cuDF 24.12, CUDA environment 12.2 |
 
 Both example launchers import the audited source directly. A pip installation is
@@ -214,6 +214,105 @@ The launcher sets `CUBLAS_WORKSPACE_CONFIG=:4096:8` before Python starts and
 verifies driver capability before setting the RAPIDS solver's CUDA metadata.
 The environments contain their runtime dependencies; the installer does not
 replace the system NVIDIA driver.
+
+### Environments for the notebooks
+
+> **Not yet tested from scratch.** These commands were reconstructed from the
+> working environments on the development workstation. Run them in a clean
+> account and confirm the checks below before relying on them.
+
+The notebooks in `notebooks/` (`01_allen_dataset.ipynb` and
+`02_custom_dataset.ipynb`) use two conda environments that you create
+yourself. They are separate from the environments the launchers above build.
+
+| Environment | Used for |
+|---|---|
+| `celltransformer2-dev` | The notebooks' Jupyter kernel: data preparation, training and embedding export |
+| `celltransformer2-rapids` | Smoothing and clustering on the GPU with cuML (`celltransformer-smooth`, `celltransformer-cluster`) |
+
+Two environments are needed because cuDF 24.12 requires pyarrow older than
+19, while this package pins pyarrow 19.0.1.
+
+**Before you start**
+
+1. Check the GPU driver. Run `nvidia-smi`; the `CUDA Version` shown in the top
+   right must be 12.2 or newer.
+2. Install conda. We recommend [Miniforge](https://github.com/conda-forge/miniforge),
+   which uses the free conda-forge channel by default. (Anaconda's default
+   channel may require a paid license at larger institutions.)
+3. Clone the repository and run all commands below from its top-level directory:
+
+   ```bash
+   git clone https://github.com/ads303/celltransformer2-test.git
+   cd celltransformer2-test
+   ```
+
+**1. Create `celltransformer2-dev`**
+
+```bash
+conda create -y -n celltransformer2-dev -c conda-forge python=3.11 pip
+conda activate celltransformer2-dev
+
+# PyTorch first, from PyTorch's own index, so pip gets the CUDA 12.1 build
+pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+
+# this package and its pinned requirements
+pip install -e .
+
+# register the environment as a Jupyter kernel
+pip install ipykernel
+python -m ipykernel install --user --name celltransformer2-dev --display-name celltransformer2-dev
+```
+
+Check the installation:
+
+```bash
+python -c "import torch, torchdata; print(torch.__version__, torchdata.__version__, torch.cuda.is_available())"
+```
+
+The expected output is `2.5.1+cu121 0.11.0 True`.
+
+**2. Create `celltransformer2-rapids`**
+
+```bash
+conda create -y -n celltransformer2-rapids --override-channels -c rapidsai -c conda-forge -c nvidia \
+    python=3.11 cuml=24.12 cudf=24.12 cuda-version=12.2 numpy=1.26.4 scipy=1.14.1 \
+    numba=0.60.0 numba-cuda=0.0.17.1 pynvjitlink=0.4.0 pip
+conda activate celltransformer2-rapids
+
+pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+
+# the package's requirements, except pyarrow, which must stay at the version cuDF installed
+pip install $(grep -v '^pyarrow==' barseq_example/requirements.txt) -r packaging_requirements.txt
+
+# the package itself, without letting pip change any dependencies
+pip install --no-deps -e .
+```
+
+> **Do not run `pip install -e .` without `--no-deps` in this environment.** It
+> upgrades pyarrow to 19.0.1, and cuDF stops working.
+
+Check the installation:
+
+```bash
+python -c "import cuml, pyarrow; print(cuml.__version__, pyarrow.__version__)"
+celltransformer-smooth --help
+```
+
+cuML should report 24.12 and pyarrow a version older than 19 (17.0.0 on the
+development workstation). `pip check` in this environment lists several cuML and
+cuDF dependencies as missing, plus pyarrow and click version mismatches. This is
+expected: conda installs those dependencies under names pip does not recognize,
+and the version differences are deliberate.
+
+**3. Point the notebooks at the environments**
+
+- In Jupyter or VS Code, select the `celltransformer2-dev` kernel. The notebooks
+  find the development environment from the running kernel.
+- Set `RAPIDS_BIN` in the configuration cell near the top of each notebook to the `bin/`
+  directory of `celltransformer2-rapids`. To find it, run `conda env list` and add
+  `/bin` to the path shown for `celltransformer2-rapids`, for example
+  `/home/<user>/miniforge3/envs/celltransformer2-rapids/bin`.
 
 ## Repository layout
 
@@ -232,6 +331,10 @@ celltransformer2-test/
 ├── src/celltransformer2_barseq/ Installed commands for both examples and resource resolution
 ├── config/                   Original native Hydra configurations
 ├── tests/                    Original upstream tests and fixtures
+├── notebooks/                Step-by-step notebooks using the native commands
+│   ├── 01_allen_dataset.ipynb   Full Allen 1 MERFISH run (all sections)
+│   ├── 02_custom_dataset.ipynb  Your own data, with five Allen sections as the example
+│   └── helper.py             Shared plumbing for both notebooks
 ├── allen_example/            Primary Allen 1 MERFISH workflow
 │   ├── pipeline.py           Download → training → analysis → report
 │   ├── download.py           Pinned, resumable public Allen downloads

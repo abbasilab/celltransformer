@@ -47,7 +47,7 @@ fi
 import torch, lightning, torchdata
 assert torch.__version__.split('+')[0]=='2.5.1'
 assert lightning.__version__=='2.4.0'
-assert torchdata.__version__.split('+')[0]=='0.10.1'
+assert torchdata.__version__.split('+')[0]=='0.11.0'
 assert torch.cuda.is_available() and torch.cuda.is_bf16_supported()
 print('CT2 environment:',torch.__version__,lightning.__version__,torch.cuda.get_device_name())
 PY

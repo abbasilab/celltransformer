@@ -8,7 +8,7 @@ environments under the storage root, without requiring a global conda install.
 | Platform | Linux x86_64, Python 3.11 |
 | Reported workstation OS | Ubuntu 22.04.5 LTS; kernel 5.15.0-190-generic (user-supplied banner) |
 | Bootstrap | micromamba 2.9.0-0; executable SHA256 pinned |
-| Training | PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.10.1 |
+| Training | PyTorch 2.5.1+cu121, Lightning 2.4.0, torchdata 0.11.0 |
 | Arrays / tables | NumPy 1.26.4, pandas 2.2.3, SciPy 1.14.1 |
 | AnnData / HDF5 | anndata 0.11.4, h5py 3.12.1 |
 | GPU clustering | RAPIDS cuML/cuDF 24.12, CUDA environment 12.2 |
@@ -20,6 +20,8 @@ environments under the storage root, without requiring a global conda install.
 previous successful BARseq GPU run and supplies constraints during installation. PyTorch's CUDA
 wheel is installed first from its official cu121 index. The CPU-only software
 tests use the direct requirements with a CPU PyTorch wheel instead.
+The one exception is `torchdata`: it was edited from the observed 0.10.1 to
+0.11.0, because the native training loader needs 0.11 or newer.
 
 `rapids.yml` describes the conda channels, main compatibility pins and plotting
 dependencies used by the installer. It is not an exact build-level lock.

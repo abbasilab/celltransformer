@@ -79,7 +79,7 @@ does not re-register cells to the reference volume.
   reserve is checked before expensive stages.
 
 The installer creates isolated Python 3.11 environments, using the working
-BARseq package pins: PyTorch 2.5.1/cu121, Lightning 2.4.0, torchdata 0.10.1 and
+BARseq package pins: PyTorch 2.5.1/cu121, Lightning 2.4.0, torchdata 0.11.0 and
 RAPIDS 24.12. See `environment/README.md`. A global conda installation is not
 required. Existing environments can be reused read-only by specifying their
 Python executables. The script validates them and stops if incompatible.
