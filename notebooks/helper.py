@@ -64,13 +64,31 @@ def safe_section(name):
     return str(name).replace(".", "_").replace(" ", "_")
 
 
-def check_environment(dev_bin):
-    '''List the visible GPUs and run the source hash audit.'''
+def check_environment(dev_bin, rapids_bin):
+    '''List the visible GPUs and check that both environments can run their steps.'''
     #visible GPUs
     print(subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True).stdout)
 
-    #source and package hash audit
-    run("celltransformer-allen", "audit", bin_dir=dev_bin)
+    #training environment: PyTorch must see the GPU
+    torch_ok = subprocess.run([str(Path(dev_bin) / "python"), "-c",
+                               "import torch; assert torch.cuda.is_available()"],
+                              capture_output=True).returncode == 0
+    if not torch_ok:
+        raise RuntimeError("PyTorch cannot use the GPU; see Equipment setup step 3")
+    print("training environment: PyTorch can use the GPU")
+
+    #RAPIDS environment: smoothing and clustering commands, and a working cuML/cuDF
+    for command in ["celltransformer-smooth", "celltransformer-cluster"]:
+        if not (Path(rapids_bin) / command).exists():
+            raise RuntimeError(f"{command} not found in RAPIDS_BIN; see Equipment setup step 4")
+    rapids_ok = subprocess.run([str(Path(rapids_bin) / "python"), "-c", "import cuml, cudf"],
+                               capture_output=True).returncode == 0
+    if not rapids_ok:
+        raise RuntimeError("RAPIDS environment is broken (often pyarrow was upgraded); "
+                           "see Equipment setup step 4")
+    print("RAPIDS environment: smoothing and clustering commands found, cuML and cuDF import")
+
+    print("\nENVIRONMENT CHECK: PASSED")
 
 
 def neighbor_counts(parquet_path, patch_size, n_sample=5000, seed=42):
