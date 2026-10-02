@@ -117,8 +117,10 @@ class NotebookReportTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(Path(helper.__file__).read_bytes()).hexdigest(), proof['helper_sha256'])
 
     def test_notebook_folder_has_no_companion_files(self):
-        self.assertEqual(sorted(p.name for p in NOTEBOOKS.iterdir() if p.is_file()),
-                         ['01_allen_dataset.ipynb', '02_custom_dataset.ipynb'])
+        files = [p for p in NOTEBOOKS.iterdir() if p.is_file()]
+        self.assertTrue({'01_allen_dataset.ipynb', '02_custom_dataset.ipynb'} <=
+                        {p.name for p in files})
+        self.assertEqual(sorted(p.name for p in files if p.suffix != '.ipynb'), [])
 
     def test_helper_works_away_from_the_notebooks(self):
         with tempfile.TemporaryDirectory() as directory, chdir(directory):

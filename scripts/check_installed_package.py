@@ -32,14 +32,14 @@ def main(output):
     env=os.environ.copy();env.pop('PYTHONPATH',None)
     with tempfile.TemporaryDirectory(prefix='ct2-installed-check-') as tmp:
         env['MPLCONFIGDIR']=tmp
-        # Exercise the actual notebook cells with only the two .ipynb files in
+        # Exercise the actual notebook cells with only the .ipynb files in
         # their folder; helpers must resolve from the installed wheel.
         source=Path(__file__).resolve().parents[1]
         standalone=Path(tmp)/'standalone'
         (standalone/'notebooks').mkdir(parents=True)
         (standalone/'tests/fixtures').mkdir(parents=True)
-        for name in ['01_allen_dataset.ipynb', '02_custom_dataset.ipynb']:
-            shutil.copy2(source/'notebooks'/name, standalone/'notebooks'/name)
+        for notebook in sorted((source/'notebooks').glob('*.ipynb')):
+            shutil.copy2(notebook, standalone/'notebooks'/notebook.name)
         shutil.copy2(source/'tests/test_notebook_report.py', standalone/'tests/test_notebook_report.py')
         shutil.copy2(source/'tests/fixtures/notebook_report_preservation.json', standalone/'tests/fixtures/notebook_report_preservation.json')
         env.pop('CT2_TEST_NOTEBOOKS',None)
