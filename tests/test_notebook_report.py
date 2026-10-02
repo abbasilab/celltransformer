@@ -1,11 +1,13 @@
-"""Run with python -m unittest discover -s notebooks -p test_html_report.py.
+"""Run with PYTHONPATH=src python -m unittest discover -s tests -p test_notebook_report.py.
 
 The end-to-end tests execute only the newly added cells, against synthetic
 completed native outputs. No model training or GPU is involved.
 """
 import hashlib
 import json
+import os
 from pathlib import Path
+from contextlib import chdir
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -13,24 +15,12 @@ from unittest.mock import patch
 import numpy as np
 import pandas as pd
 
-import notebook_report
-from ct2_report import pearson_rows
+from celltransformer.notebooks import helper
+from celltransformer.notebooks import reporting as notebook_report
+from celltransformer.notebooks._report import pearson_rows
 
 HERE = Path(__file__).resolve().parent
-
-
-def cell_fragments(text):
-    decoder = json.JSONDecoder()
-    position = text.index('[', text.index('"cells"')) + 1
-    fragments = []
-    while True:
-        while text[position].isspace() or text[position] == ',':
-            position += 1
-        if text[position] == ']':
-            return fragments
-        cell, end = decoder.raw_decode(text, position)
-        fragments.append((cell, text[position:end]))
-        position = end
+NOTEBOOKS = Path(os.environ.get('CT2_TEST_NOTEBOOKS', HERE.parent/'notebooks'))
 
 
 def make_history(checkpoint, epochs):
@@ -102,34 +92,53 @@ def native_fixture(root, notebook):
 
 class NotebookReportTests(unittest.TestCase):
     def test_original_cells_and_metadata_unchanged(self):
-        proof = json.loads((HERE/'report_preservation.json').read_text())
+        proof = json.loads((HERE/'fixtures/notebook_report_preservation.json').read_text())
         for name, expected in proof['notebooks'].items():
-            text = (HERE/name).read_text()
-            fragments = cell_fragments(text)
-            retained = [raw for cell, raw in fragments if not cell.get('id', '').startswith('step13-')]
-            self.assertEqual([hashlib.sha256(raw.encode()).hexdigest() for raw in retained], expected['unchanged_cell_sha256'])
-            doc = json.loads(text)
-            doc.pop('cells')
+            doc = json.loads((NOTEBOOKS/name).read_text())
+            cells = doc.pop('cells')
+            reverse = {new: old for old, new in expected['allowed_source_replacements']}
+            restored = []
+            for cell in cells:
+                original = dict(cell)
+                if isinstance(cell['source'], list):
+                    original['source'] = [reverse.get(line, line) for line in cell['source']]
+                restored.append(hashlib.sha256(json.dumps(original, sort_keys=True).encode()).hexdigest())
+            self.assertEqual(restored, expected['original_cell_sha256'])
             self.assertEqual(hashlib.sha256(json.dumps(doc, sort_keys=True).encode()).hexdigest(), expected['notebook_metadata_sha256'])
-            new = [cell for cell, _ in fragments if cell.get('id', '').startswith('step13-')]
+            new = [cell for cell in cells if cell.get('id', '').startswith('step13-')]
             self.assertEqual(len(new), 3)
             for cell in new:
                 if cell['cell_type'] == 'code':
                     self.assertIsNone(cell['execution_count'])
                     self.assertEqual(cell['outputs'], [])
 
+    def test_helper_code_is_unchanged(self):
+        proof = json.loads((HERE/'fixtures/notebook_report_preservation.json').read_text())
+        self.assertEqual(hashlib.sha256(Path(helper.__file__).read_bytes()).hexdigest(), proof['helper_sha256'])
+
+    def test_notebook_folder_has_no_companion_files(self):
+        self.assertEqual(sorted(p.name for p in NOTEBOOKS.iterdir() if p.is_file()),
+                         ['01_allen_dataset.ipynb', '02_custom_dataset.ipynb'])
+
+    def test_helper_works_away_from_the_notebooks(self):
+        with tempfile.TemporaryDirectory() as directory, chdir(directory):
+            self.assertEqual(helper.safe_section('example.1'), 'example_1')
+            metadata = Path(directory)/'section.parquet'
+            pd.DataFrame({'x': [0., 1., 10.], 'y': [0., 1., 10.]}).to_parquet(metadata)
+            np.testing.assert_array_equal(np.sort(helper.neighbor_counts(metadata, 4)), [0, 1, 1])
+
     def run_notebook_step13(self, filename, with_reference=True):
         with tempfile.TemporaryDirectory(prefix='ct2-step13-') as directory:
             ns = native_fixture(Path(directory), filename)
             paths = [p for p in ns['WORK_DIR'].rglob('*') if p.is_file()]
             before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
-            notebook = json.loads((HERE/filename).read_text())
+            notebook = json.loads((NOTEBOOKS/filename).read_text())
             cells = {cell.get('id'): ''.join(cell.get('source', [])) for cell in notebook['cells']}
             actual_generate = notebook_report.generate_report
             def synthetic_report(**kwargs):
                 kwargs['synthetic'] = True
                 return actual_generate(**kwargs)
-            with patch.object(notebook_report, 'generate_report', side_effect=synthetic_report), patch.object(notebook_report, 'show_report'):
+            with chdir(directory), patch.object(notebook_report, 'generate_report', side_effect=synthetic_report), patch.object(notebook_report, 'show_report'):
                 exec(compile(cells['step13-settings'], filename+':Step13 settings', 'exec'), ns)
                 if not with_reference:
                     ns['REFERENCE_COLUMNS'] = {}

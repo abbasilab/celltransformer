@@ -4,6 +4,7 @@ graft src
 graft config
 graft provenance
 graft tests
+recursive-include notebooks *.ipynb
 graft barseq_example
 graft allen_example
 graft docs

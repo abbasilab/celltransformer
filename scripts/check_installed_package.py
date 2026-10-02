@@ -3,6 +3,7 @@ import argparse
 from importlib.metadata import distribution
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -10,10 +11,14 @@ import tempfile
 
 def main(output):
     import celltransformer
+    from celltransformer.notebooks import helper, reporting
+    from celltransformer.notebooks import _report
     from celltransformer2_barseq.cli import audit,example_path
     root=Path(sys.prefix).resolve()
     package=Path(celltransformer.__file__).resolve().parent
     assert package.is_relative_to(root),'Test must import the installed wheel, not the checkout'
+    for module in [helper, reporting, _report]:
+        assert Path(module.__file__).resolve().is_relative_to(package)
     bundles={example:example_path(example) for example in ['allen','barseq']}
     for example,bundle in bundles.items():
         assert bundle.name==('_allen_bundle' if example=='allen' else '_bundle') and bundle.is_relative_to(root)
@@ -27,6 +32,19 @@ def main(output):
     env=os.environ.copy();env.pop('PYTHONPATH',None)
     with tempfile.TemporaryDirectory(prefix='ct2-installed-check-') as tmp:
         env['MPLCONFIGDIR']=tmp
+        # Exercise the actual notebook cells with only the two .ipynb files in
+        # their folder; helpers must resolve from the installed wheel.
+        source=Path(__file__).resolve().parents[1]
+        standalone=Path(tmp)/'standalone'
+        (standalone/'notebooks').mkdir(parents=True)
+        (standalone/'tests/fixtures').mkdir(parents=True)
+        for name in ['01_allen_dataset.ipynb', '02_custom_dataset.ipynb']:
+            shutil.copy2(source/'notebooks'/name, standalone/'notebooks'/name)
+        shutil.copy2(source/'tests/test_notebook_report.py', standalone/'tests/test_notebook_report.py')
+        shutil.copy2(source/'tests/fixtures/notebook_report_preservation.json', standalone/'tests/fixtures/notebook_report_preservation.json')
+        env.pop('CT2_TEST_NOTEBOOKS',None)
+        subprocess.run([sys.executable,'-m','unittest','discover','-s','tests','-p','test_notebook_report.py','-v'],
+                       cwd=standalone,env=env,check=True)
         assert len([entry for entry in dist.entry_points if entry.group=='console_scripts'])==8
         for entry in dist.entry_points:
             if entry.group!='console_scripts':continue
@@ -39,7 +57,7 @@ def main(output):
             subprocess.run([sys.executable,str(bundle/'test_adapter.py'),'--output',str(destination)],cwd=tmp,env=env,check=True)
             assert (destination/'report/review.html').is_file()
             assert (destination/'report/results.zip').is_file()
-    print('INSTALLED WHEEL: BOTH EXAMPLES, SOURCE, HYDRA CONFIG, COMMANDS, CPU ADAPTERS AND REPORTS: PASSED')
+    print('INSTALLED WHEEL: STANDALONE NOTEBOOK REPORTS, BOTH EXAMPLES, SOURCE, HYDRA CONFIG, COMMANDS AND CPU ADAPTERS: PASSED')
 
 
 if __name__=='__main__':

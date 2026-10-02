@@ -1,0 +1,139 @@
+{
+  "base_commit": "f698cfd39da309a6d49fd958ead5a6ba42e587c1",
+  "notebooks": {
+    "01_allen_dataset.ipynb": {
+      "original_cell_sha256": [
+        "9774a596d451cf43754740df4f71490eda927e830ca9655d299baf9e54a03409",
+        "1530f43a8984fb6fce634f9f2fa8fd460fab035b7bdc9913efbf48d031703596",
+        "a7005f25f9579351c8950d3d10a6d435ed0c3f131a5257b5acd4002a203e5904",
+        "86597f7cd28285b9e8b617dcfb2844aece28d7e5554875c29e53c8409f2082a8",
+        "4b51c7659e59863ff1a8564b9e3b339284cf0b9b18fd8ba1a8045e3f5a89bb81",
+        "31ee07d6dc39b176d2b6b789ccd5350d8ee76c32b046b906891af99f1732a610",
+        "5ed58587753ffff0837a1c2f7fbe1c9d92c95b6a2260a26564b6b9cf633f327c",
+        "dcb3f240f2190f370a3841b44fc30be95fc3b7a1735bb22dbe6d979e917c4113",
+        "e5adb34313bc4f939e7db04b779ea26e33546b7c009e047f014e00333e5cfe24",
+        "7ba040655d264d58eab78f76f84e6478a48bd917ff1e23ebf152c0565aec727d",
+        "729f010f46c9b5f7d99388027c7b99d2d28946624d186c955169113afa556d9f",
+        "e7088faef4023a2877cf07967a5755cc1901497970fa77895341b21327acc47c",
+        "11043a5f788773acc6f773a1c5f25fa430dfde3fcce526096de39f374a596441",
+        "22bebb075ee5bcf486d3e2da4727f2573e32d1b53761be2ac660ba1b36a19c35",
+        "11825a199db048cb9c5a403247f7432738e42630821042c5fc91275ee6d70232",
+        "b67293552eebc5e2389b9b84acc62381511a107e8246d4a664cf385da0c60f27",
+        "b6070174b0c431faef224d4f6fa711dd823acdef13631e8e6ebb7723d4c59b4d",
+        "58251beb2afb360c916a56fc0859026775a66da282094b5ed7ef8ab5d645596b",
+        "f3d3ffd6a27dfe3fef0e4b11c05f2fd1a55df0e0c63e2443aeb6700860714248",
+        "f611bb9dcfb975fb2359e212b6b38c24bc7844955f8b7db39a62a75516fb4bbb",
+        "e1d0efabeb8d2532d2f4b12100d63418ab768da7d383387ba54f8d7967a94072",
+        "6ce7892ce1692a687eff90e02c5cf4c7835a3cde420a85e07a370407959f3dca",
+        "c2c42e09c276b3014f74ae5db57372e58d5cd2293fd9f0e5fe8ad65098e5d394",
+        "be28b07c6b7b6e229e79c98a53bbe48efbe6a597649ffc12a6261ffe132f2fc3",
+        "e67e49ce79b6e013397806b4b26944f92c72dd887ad0e265d73757f17c8705ef",
+        "355c3532286b86fa60fa9ea2bf2673fe92e292be6de17ff8ddafe061350ec236",
+        "8cc2da8834f48619a1398756ae2f71cd83f126dd6d7cd3351e65afd73ddc97ff",
+        "bce0a753156ff57a80699e9e6fa5e5f4113010a3bf08bba612238b45f85ddd60",
+        "e5f0189907cbcf17982079485f7ab2b1226041d3ff5e1f93b992f97d1cc34199",
+        "32d8e352c96e5083b4e3407a977516a1eaab62934af33870c8637d1e82d9ed4f",
+        "bad5a428d2bdb6ffa6e8880053249ac9f49a9d28ce011f64e9d0ff30cf8e9c63",
+        "9fbf94fd140f4f1d107db8b3ccd8bad5b9a3cfb7bd226e98a9ed3b7e8eed7c87",
+        "d90d91c434dc21e83abfe484e1a196412875449c219dbb7ff04420c324d9b63a",
+        "5f60e06c956fa30d2fb13e697a118ca466adcd014ceb435b2043f1d775438e99",
+        "aa2856c0c76fd1f553732f44663d4b7850920ef27705e77b1eb39e9ab3a9ef89"
+      ],
+      "notebook_metadata_sha256": "4a45827e74aedfbe252f8d843eff2f6d9d4b45d5ae55c47c8f786997b9a44ff2",
+      "allowed_source_replacements": [
+        [
+          "import helper\n",
+          "from celltransformer.notebooks import helper\n"
+        ],
+        [
+          "from notebook_report import report_from_notebook, read_reference_table, read_training_history, show_report\n",
+          "from celltransformer.notebooks.reporting import report_from_notebook, read_reference_table, read_training_history, show_report\n"
+        ],
+        [
+          "`ct2_report.py` and `notebook_report.py` must be next to this notebook. Both are supplied in the\n",
+          "The reporting functions are included in the installed CellTransformer2 package.\n"
+        ],
+        [
+          "repository and use the existing environment. No separate launcher or execution manifest is required.\n",
+          "No companion Python files, separate launcher or execution manifest are required. See the [reporting guide](https://github.com/ads303/celltransformer2-test/blob/codex/barseq-example/docs/notebook_html_report.md).\n"
+        ],
+        [
+          "- `helper.py` next to this notebook (running commands, environment checks, background training, plot display).\n",
+          "- Notebook support and HTML reporting are included in the installed CellTransformer2 package.\n"
+        ]
+      ]
+    },
+    "02_custom_dataset.ipynb": {
+      "original_cell_sha256": [
+        "5f95fae36b63165c5019a7f376713d48d293c3b19eed403488ebfaaf4d4c69b3",
+        "a36e59cbee3425c37373a56f1c9cea2a21f78d1f765b62a315edb169ec0d28f9",
+        "de38d19b58e2d8e5feb4007a3ceabf7240e0a594eb67fbff28bd408baa78eec2",
+        "87c9aa24800b6e12182020e695b98bad78f15d612264d2244d21c8b3467d3f27",
+        "dda5579c254648024785884acd3d0a83620abc2cef4209830a9824b19dc7ded8",
+        "c061f59b388db6fc348709a936ffbbc015d6e4419ab2e43318aff9b15441d122",
+        "49360c3b6416dd1d4625fbf524a178d048ccacad5d5a618fcfcacca45d517060",
+        "8f376cbadb7a690271d063a81902661f78ee99be1f5e1cd162091b19bfee3f49",
+        "933d523b2ba61167b24eac0e766c50e05584af1c02e1559a2b1ef0864571b7d2",
+        "154a7635c505189e50ba198b398b9d804c8cf8e413532d9eb5fec7db29755f97",
+        "9ccea6ef4750921cc4c9617c583ab4ef6d5039f558d15ba9d390e4fd8a681ec6",
+        "a491b9bcf795486fd3d3ba2e8d144cd7aacc2e842f6a4c0b138ad55412f63623",
+        "983666f83da6c6b417314351518b5b0909b79a285052993d9d626804d6da4b31",
+        "bcae5c9b01c7884a00b694ae272c67a6b21087d7038aa683812e342694418196",
+        "c2c03fd42681dccacb4d6971be766d96baa589ef2bcc3090ce8ba60a9848471b",
+        "6cc6c15802fa94f10a0d0b6ebaf1f26e7c808913f1e471c8e47b819e3ef70ff2",
+        "899851ec74bc3ba0be2f5fbfc7085148bfbd9231defd6f9844b31af537cf43a3",
+        "fe6ecd0af11a12d58140a848408d207cd40bd5fc3b7822fb31812177f4d7a45e",
+        "4fb7428e33ea1ad1684cd3346d97998b46c8de8b44b168e275695665892c1834",
+        "2cc30a6a84e0b33c6bb155c375f07f81f21c76282968c4288558ef6b8be59e82",
+        "f0e3a36fdb5f548f18bce0f808354ac89ed78e4fa44c2e61ceb624837396001b",
+        "a85f9faa4d5ff0640bafead5263f8b6f182852263999df2f828ce8fe8213d71d",
+        "76bef688eadb7473a06424d0a809e4d95971a968a28861aee7446deb38cc720c",
+        "e88e7e16025026afdeeb77ee8a7d03076b8676e18f1390c794024e89740cce8e",
+        "f2effa93081df44100ef77e67048ea707ae725d5e59ff3b2fd94b4a151429486",
+        "c0e9630a8f8a73c104c7e42219e4f18d77f8721e1d11fa6b8303ab0b9552660a",
+        "e890d1ef96f4df543dab6a2d4e9c25e5bada2c5043e24e8203eeec01bcd7a611",
+        "4b6c0977382c562133fd4705f80c6cd34e68b7802d1299d90663e8ee321e2ec0",
+        "c4805326528eac75bd02865db48d0e1268026542a7b5140b933c33d3e22b5790",
+        "3ea11030852ad6210223f6920a6a98bba679d30ca1d8614f1e1571bf4d5ebf30",
+        "bcca500dd0578d653f7e642356321a5ba28d5f736ab6a2c149097aaa08f8822d",
+        "9fbf94fd140f4f1d107db8b3ccd8bad5b9a3cfb7bd226e98a9ed3b7e8eed7c87",
+        "0b7d7619b7a1d59fd5645626a9eb889ec007ba2febabe93802c405851ff7d950",
+        "5f60e06c956fa30d2fb13e697a118ca466adcd014ceb435b2043f1d775438e99",
+        "ca0e304ef10b3ae2de9306965557b042c48529fb8f51a105034f248ed04ad9a0",
+        "bccc81e4efafe5937bcf02560b1d31dcb5303896b2e3d9313a41d898ce7ade74"
+      ],
+      "notebook_metadata_sha256": "4a45827e74aedfbe252f8d843eff2f6d9d4b45d5ae55c47c8f786997b9a44ff2",
+      "allowed_source_replacements": [
+        [
+          "import helper\n",
+          "from celltransformer.notebooks import helper\n"
+        ],
+        [
+          "from notebook_report import report_from_notebook, read_reference_table, read_training_history, show_report\n",
+          "from celltransformer.notebooks.reporting import report_from_notebook, read_reference_table, read_training_history, show_report\n"
+        ],
+        [
+          "`ct2_report.py` and `notebook_report.py` must be next to this notebook. Both are supplied in the\n",
+          "The reporting functions are included in the installed CellTransformer2 package.\n"
+        ],
+        [
+          "repository and use the existing environment. No separate launcher or execution manifest is required.\n",
+          "No companion Python files, separate launcher or execution manifest are required. See the [reporting guide](https://github.com/ads303/celltransformer2-test/blob/codex/barseq-example/docs/notebook_html_report.md).\n"
+        ],
+        [
+          "`helper.py` next to this notebook holds the plumbing (running commands, environment checks, background\n",
+          "Notebook support and HTML reporting are included in the installed CellTransformer2 package.\n"
+        ],
+        [
+          "training, plot display); nothing in it needs editing for your data.\n",
+          "No companion Python files are needed next to this notebook.\n"
+        ],
+        [
+          "# See HTML_REPORT.md for explicit crop bounds and other reference layouts.\n",
+          "# See the reporting guide linked above for explicit crop bounds and other reference layouts.\n"
+        ]
+      ]
+    }
+  },
+  "helper_sha256": "cbea439cf28344941cff3975ca642fc8fab8500cbb48a5b2d5777f54ecf4a428"
+}

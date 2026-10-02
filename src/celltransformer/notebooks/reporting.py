@@ -9,7 +9,7 @@ import tempfile
 import numpy as np
 import pandas as pd
 
-from ct2_report import Reference, generate_report, require
+from ._report import Reference, generate_report, require
 
 
 def read_reference_table(path, id_column, columns):

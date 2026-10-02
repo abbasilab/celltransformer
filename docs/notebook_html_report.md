@@ -2,7 +2,9 @@
 
 Both notebooks can generate an HTML report from the completed outputs of Steps 9–11. The report includes training curves, maps for every section and clustering resolution, and reference–domain correspondence heatmaps when reference annotations are supplied. It uses the existing domain assignments and does not retrain, extract, smooth or cluster again.
 
-The new step uses `ct2_report.py` and `notebook_report.py`, alongside the notebooks. The environment already used by the notebook supplies NumPy, pandas, SciPy, Matplotlib, PyArrow and W&B. No additional environment, GPU computation, W&B account or unattended-run manifest is needed for reporting.
+Notebook support and reporting are part of the installed `celltransformer.notebooks` package. Either notebook can be copied to its own working folder and run without companion Python files. The environment already used by the notebook supplies NumPy, pandas, SciPy, Matplotlib, PyArrow and W&B. No additional environment, GPU computation, W&B account or unattended-run manifest is needed for reporting.
+
+For an existing installation, pull the updated repository and run `python -m pip install --no-deps -e .` from its root in the notebook's Python environment. Restart the kernel after updating. The notebooks then import `helper` from `celltransformer.notebooks` and reporting functions from `celltransformer.notebooks.reporting`. A regular wheel installation includes the same modules; an editable install is not required to run the notebook from another folder.
 
 ## Run the added step
 
@@ -42,14 +44,14 @@ The underlying `report_from_notebook` function also accepts explicit `crop_bound
 
 ## Preservation and testing
 
-Only Step 13 was added to notebook 02; notebook 01's existing unimplemented Step 13 was replaced. All other original cells, outputs, execution counts, cell metadata and top-level notebook metadata are unchanged. `helper.py`, the model/training code, configuration files and environment requirements were not edited.
+Moving the support files into the package changes only their imports and the instructions that described companion files. Notebook settings, analysis calls, saved outputs, execution counts, cell metadata and top-level notebook metadata are unchanged. The command helper and HTML renderer were moved without code changes; the report adapter uses a package-relative import. The model/training code, configuration files and environment requirements were not edited.
 
-`report_preservation.json` records the original cell-fragment hashes from repository commit `b90f82f88fe71ccdcfca71aa024b687a0fd053ae`. The tests verify that every retained original cell is byte-identical. They also execute the actual added code cells on synthetic completed outputs for both notebooks, exercise missing references and missing training history, and check cell-ID joins and source-file preservation.
+`tests/fixtures/notebook_report_preservation.json` records the notebook cell hashes from commit `f698cfd39da309a6d49fd958ead5a6ba42e587c1` and the explicitly allowed import/instruction replacements. Tests verify that no other cell content, output or metadata changed. They also execute the actual Step 13 code cells on synthetic completed outputs for both notebooks, exercise missing references and missing training history, and check cell-ID joins and source-file preservation. Package checks repeat these tests outside the checkout using the installed wheel, with only `.ipynb` files in the notebook directory.
 
 From the repository root:
 
 ```bash
-python -m unittest discover -s notebooks -p test_html_report.py -v
+PYTHONPATH=src python -m unittest discover -s tests -p test_notebook_report.py -v
 ```
 
 These CPU tests verify the reporting addition. They do not rerun the biological training experiments. Future intentional changes to existing notebook cells should update the preservation record as part of their own review.

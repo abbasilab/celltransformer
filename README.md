@@ -314,6 +314,18 @@ and the version differences are deliberate.
   `/bin` to the path shown for `celltransformer2-rapids`, for example
   `/home/<user>/miniforge3/envs/celltransformer2-rapids/bin`.
 
+The notebooks import their supporting functions from the installed
+`celltransformer.notebooks` package. You can keep either `.ipynb` in a separate
+working folder; no helper Python files need to accompany it. Step 13 creates the
+HTML report from the completed outputs. See the
+[notebook reporting guide](docs/notebook_html_report.md) for reference annotations
+and report settings.
+
+If you installed an earlier checkout, pull the updated repository and run
+`python -m pip install --no-deps -e .` in the notebook's existing Python
+environment, then restart its kernel before using the updated notebooks. This
+updates the package code without changing the environment's dependencies.
+
 ## Repository layout
 
 ```text
@@ -327,14 +339,14 @@ celltransformer2-test/
 │   ├── preprocess/           Section preparation utilities
 │   ├── cluster/              GPU KMeans utilities
 │   ├── smooth/               Gaussian smoothing utilities
-│   └── profile/              Cell-type composition utilities
+│   ├── profile/              Cell-type composition utilities
+│   └── notebooks/            Installed notebook support and HTML reporting
 ├── src/celltransformer2_barseq/ Installed commands for both examples and resource resolution
 ├── config/                   Original native Hydra configurations
-├── tests/                    Original upstream tests and fixtures
+├── tests/                    Upstream and notebook tests and fixtures
 ├── notebooks/                Step-by-step notebooks using the native commands
 │   ├── 01_allen_dataset.ipynb   Full Allen 1 MERFISH run (all sections)
-│   ├── 02_custom_dataset.ipynb  Your own data, with five Allen sections as the example
-│   └── helper.py             Shared plumbing for both notebooks
+│   └── 02_custom_dataset.ipynb  Your own data, with five Allen sections as the example
 ├── allen_example/            Primary Allen 1 MERFISH workflow
 │   ├── pipeline.py           Download → training → analysis → report
 │   ├── download.py           Pinned, resumable public Allen downloads
