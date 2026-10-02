@@ -9,6 +9,14 @@ Binomial (ZINB) distribution for the center cell. The learned representations ca
 then be clustered to identify spatial domains and compared with anatomical
 annotations.
 
+> **Start with the notebooks.** The notebooks in [`notebooks/`](notebooks/) are
+> the primary way to run CellTransformer2: `01_allen_dataset.ipynb` runs the full
+> Allen 1 MERFISH dataset and `02_custom_dataset.ipynb` runs your own data (with
+> five Allen sections as the example). Set up their environments with
+> [Environments for the notebooks](#environments-for-the-notebooks).
+> `03_Barseq_mousebrain.ipynb` is an executed record of the BARseq analysis, not
+> a tutorial. The launcher workflows described below are the earlier route.
+
 This repository packages the supplied CellTransformer2 source with two complete
 examples: public data download, preparation, training from scratch, embedding
 export, spatial smoothing, domain discovery, anatomical comparison and an

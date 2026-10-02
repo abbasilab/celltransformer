@@ -74,18 +74,18 @@ def check_environment(dev_bin, rapids_bin):
                                "import torch; assert torch.cuda.is_available()"],
                               capture_output=True).returncode == 0
     if not torch_ok:
-        raise RuntimeError("PyTorch cannot use the GPU; see Equipment setup step 3")
+        raise RuntimeError("PyTorch cannot use the GPU; see Software setup step 3")
     print("training environment: PyTorch can use the GPU")
 
     #RAPIDS environment: smoothing and clustering commands, and a working cuML/cuDF
     for command in ["celltransformer-smooth", "celltransformer-cluster"]:
         if not (Path(rapids_bin) / command).exists():
-            raise RuntimeError(f"{command} not found in RAPIDS_BIN; see Equipment setup step 4")
+            raise RuntimeError(f"{command} not found in RAPIDS_BIN; see Software setup step 4")
     rapids_ok = subprocess.run([str(Path(rapids_bin) / "python"), "-c", "import cuml, cudf"],
                                capture_output=True).returncode == 0
     if not rapids_ok:
         raise RuntimeError("RAPIDS environment is broken (often pyarrow was upgraded); "
-                           "see Equipment setup step 4")
+                           "see Software setup step 4")
     print("RAPIDS environment: smoothing and clustering commands found, cuML and cuDF import")
 
     print("\nENVIRONMENT CHECK: PASSED")
