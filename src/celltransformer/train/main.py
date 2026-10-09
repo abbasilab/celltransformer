@@ -162,7 +162,9 @@ class SpatialTransformerModule(L.LightningModule):
         gt_expr = batch['gt_expr']
         loss, _ = zinb_loss_log2(zinb, gt_expr)
         batch_size = gt_expr.shape[0]
-        self.log("valid/nll", loss, prog_bar=True, sync_dist=True, on_step=True, on_epoch=True, batch_size=batch_size)
+        #the pre-training trainer.validate() pass gets its own name so it cannot be mistaken for epoch 1
+        name = "valid/nll" if self.trainer.state.fn == "fit" else "valid_pretrain/nll"
+        self.log(name, loss, prog_bar=True, sync_dist=True, on_step=True, on_epoch=True, batch_size=batch_size)
 
     def configure_optimizers(self):
         cfg = self.opt_cfg
@@ -278,6 +280,9 @@ def main(cfg: DictConfig) -> None:
         enable_checkpointing=True,
         logger=wandb_logger,
         callbacks=[checkpoint_callback],
+        #trainer.validate() defaults to torch.inference_mode, which has no layer_norm for nested tensors (torch 2.5);
+        #no_grad matches what validation inside fit() already uses
+        inference_mode=False,
     )
 
     ckpt_path = cfg.get("model_checkpoint", None)
@@ -294,6 +299,9 @@ def main(cfg: DictConfig) -> None:
         print(f"[train] resuming from checkpoint: {ckpt_path}", flush=True)
     else:
         print("[train] starting from scratch", flush=True)
+        #baseline validation loss of the untrained model (logged as valid_pretrain/nll_epoch)
+        print("[train] pre-training validation pass", flush=True)
+        trainer.validate(lightning_model, datamodule=data_module)
 
     trainer.fit(
         lightning_model,

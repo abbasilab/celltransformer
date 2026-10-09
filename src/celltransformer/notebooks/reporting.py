@@ -64,6 +64,10 @@ def read_training_history(checkpoint, expected_epochs=None):
                             continue
                         row = {item.key or '/'.join(item.nested_key): json.loads(item.value_json)
                                for item in record.history.item}
+                        #pre-training validation pass: recorded as epoch 0 (no training loss exists yet)
+                        value = row.get('valid_pretrain/nll_epoch')
+                        if isinstance(value, (int, float)) and np.isfinite(value):
+                            records[0] = {'epoch': 0, 'training_nll': None, 'validation_nll': float(value)}
                         if 'epoch' in row:
                             epoch = int(row['epoch']) + 1
                         if epoch is None:
@@ -80,7 +84,7 @@ def read_training_history(checkpoint, expected_epochs=None):
     if expected_epochs is not None:
         for epoch in range(1, int(expected_epochs) + 1):
             records.setdefault(epoch, {'epoch': epoch, 'training_nll': None, 'validation_nll': None})
-    missing = {name: [i for i in sorted(records) if records[i][name] is None]
+    missing = {name: [i for i in sorted(records) if records[i][name] is None and not (i == 0 and name == 'training_nll')]
                for name in ['training_nll', 'validation_nll']}
     if any(missing.values()):
         notes.append(f'Missing epoch-average loss values: {missing}. Batch losses are not substituted.')
