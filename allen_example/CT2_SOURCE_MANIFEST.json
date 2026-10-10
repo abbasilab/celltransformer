@@ -53,7 +53,7 @@
   "src/celltransformer/smooth/main.py": "a6c46f6d982464831ffb0be795fea269d66ced507036e5f28382cd44bf881758",
   "src/celltransformer/train/__init__.py": "3192c6c2d84d5475ba48d379ee080b4feb4244d9c7609014011f676f24cf6ddb",
   "src/celltransformer/train/__main__.py": "5fb701426a311c8a4fd74b03d8c5f942bbccf154929df56fe5496f80801d9c7e",
-  "src/celltransformer/train/main.py": "2c1e8d510b5c43981318d71d83cbff2fb9711582907b996d4bb99f7b3030074c",
+  "src/celltransformer/train/main.py": "cdb8d1062cd1d15be0bf6965133280da67b97c7c10ddba15d9d6d64eae96a58c",
   "src/celltransformer/train/scheduler.py": "3a58b755ff90507529943435bf650b87434527d6494a59fc78583c060dbd3ca7",
   "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "tests/conftest.py": "084be277cbebf271ee34804e5c1c4f716b786c4b786a8d86d5c1a8bc1fb39412",

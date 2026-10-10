@@ -483,6 +483,10 @@ the original hashes are recorded in [source provenance](provenance/README.md).
 | `config/train_redone_registration.yaml` | `8a76d2aaaa829cf64311925ee49cd3365e20aaaa9946666c69d398186f1c6239` | `90841bbd8b0da134ce468fdd52a8c319a599aa4607e5927809a781b3fa52bae7` |
 | `config/train_zhuang.yaml` | `cd4a78880b8eec0731bf1653c2f1cb6b4397a3bfd79eff7170a77e8e48bc1f96` | `e48e7da050e2ffd90855b99d41cb7320096a9193401144d33532506b0744fc72` |
 
+`src/celltransformer/train/main.py` was changed again later; its hash above is
+the one after this change. See [Pre-training validation loss](#pre-training-validation-loss)
+for its current hash.
+
 ### Per-section smoothing
 
 The supplied `celltransformer-smooth` read one metadata CSV and one `.pt` tensor
@@ -517,6 +521,25 @@ refreshed.
 | File | Original SHA256 | Current SHA256 |
 |---|---|---|
 | `src/celltransformer/smooth/main.py` | `9e9ec8eb0d77014cb81967bcf672e3708df3cede8b1840f99e17d665d784d496` | `a6c46f6d982464831ffb0be795fea269d66ced507036e5f28382cd44bf881758` |
+
+### Pre-training validation loss
+
+When training starts from scratch, `src/celltransformer/train/main.py` now runs
+one validation pass (`trainer.validate`) on the untrained model before
+`trainer.fit`. It is logged as `valid_pretrain/nll` so it cannot be mistaken for
+the first training epoch's `valid/nll`; the notebook report shows it as epoch 0.
+Resumed runs skip it. The trainer is built with `inference_mode=False`, because
+`trainer.validate` otherwise uses `torch.inference_mode`, which has no
+`layer_norm` for nested tensors in torch 2.5; validation inside `fit` already ran
+under `no_grad`. The model, loss, optimizer and training loop are unchanged.
+
+As with the earlier changes, the new hash was written into both
+`CT2_SOURCE_MANIFEST.json` files by hand and the package manifests were then
+refreshed. The original hash below is the one after the device change.
+
+| File | Original SHA256 | Current SHA256 |
+|---|---|---|
+| `src/celltransformer/train/main.py` | `2c1e8d510b5c43981318d71d83cbff2fb9711582907b996d4bb99f7b3030074c` | `cdb8d1062cd1d15be0bf6965133280da67b97c7c10ddba15d9d6d64eae96a58c` |
 
 ## Scripts and entry points
 
