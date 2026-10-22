@@ -251,6 +251,7 @@ class CenterMaskNodeOptimized(torch.utils.data.Dataset):
         max_num_cells: Optional[int] = None,
         mode: str = "r",
         cell_type_int_map: Optional[Dict[str, int]] = None,
+        use_cell_type: bool = True,
     ):
         self.current_index = 0
         self.mode = mode
@@ -259,6 +260,7 @@ class CenterMaskNodeOptimized(torch.utils.data.Dataset):
         self.tissue_section_colname = tissue_section_colname
         self.cell_type_colname = cell_type_colname
         self.cell_type_int_map = cell_type_int_map
+        self.use_cell_type = use_cell_type
         self.patch_size = patch_size
         self.x_col = x_col
         self.y_col = y_col
@@ -296,7 +298,12 @@ class CenterMaskNodeOptimized(torch.utils.data.Dataset):
         # Apply label encoding if the cell-type column is not already integer.
         # cell_type_int_map is a {str_label: int} dict built once at the
         # training-script level from either a taxonomy YAML or LabelEncoder.
-        if self.cell_type_int_map is not None:
+        if not self.use_cell_type:
+            # cell types switched off: every cell gets the same label, and
+            # cell_type_colname is never read
+            self.metadata['_cell_type_int'] = np.zeros(len(self.metadata), dtype=np.int64)
+            self._ct_col = '_cell_type_int'
+        elif self.cell_type_int_map is not None:
             # .map() on a Categorical series can return a Categorical with int
             # categories rather than a plain numeric series; force int64 so
             # that .values later gives a plain numpy array, not a Categorical.

@@ -200,12 +200,18 @@ def main(cfg: DictConfig) -> None:
     d = cfg.data
     o = cfg.optimization
 
-    cell_type_int_map = build_cell_type_int_map(
-        cell_type_colname=d.cell_type_colname,
-        data_dir=d.data_dir,
-        patterns=OmegaConf.to_container(d.train_anndata_patterns),
-        cell_type_yaml=d.get("cell_type_yaml", None),
-    )
+    use_cell_type = cfg.model.get("use_cell_type", True)
+    if use_cell_type:
+        cell_type_int_map = build_cell_type_int_map(
+            cell_type_colname=d.cell_type_colname,
+            data_dir=d.data_dir,
+            patterns=OmegaConf.to_container(d.train_anndata_patterns),
+            cell_type_yaml=d.get("cell_type_yaml", None),
+        )
+    else:
+        cell_type_int_map = None
+        print("[label_enc] model.use_cell_type=false → all cells share label 0; "
+              "cell_type_colname and cell_type_yaml are ignored", flush=True)
 
     # --- Timestamped checkpoint directory ---------------------------------
     timestamp    = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -259,6 +265,7 @@ def main(cfg: DictConfig) -> None:
         tissue_section_colname=d.tissue_section_colname,
         cell_type_int_map=cell_type_int_map,
         partition_strategy=d.partition_strategy,
+        use_cell_type=use_cell_type,
     )
 
     lightning_model = SpatialTransformerModule(

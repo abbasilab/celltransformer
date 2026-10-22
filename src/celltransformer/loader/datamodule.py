@@ -96,6 +96,7 @@ class MERFISHDataModule(L.LightningDataModule):
                  read_mode: Optional[str] = None,
                  cell_type_int_map: Optional[Dict[str, int]] = None,
                  partition_strategy: Literal["binpack", "roundrobin"] = "binpack",
+                 use_cell_type: bool = True,
                  ):
         super().__init__()
 
@@ -116,6 +117,7 @@ class MERFISHDataModule(L.LightningDataModule):
         self.shuffle = shuffle
         self.mode = read_mode
         self.partition_strategy = partition_strategy
+        self.use_cell_type = use_cell_type
 
     def setup_node(self, anndata_patterns: List[str],
                    exclude_patterns: List[str],
@@ -179,6 +181,7 @@ class MERFISHDataModule(L.LightningDataModule):
                 dist_log_str=this_node.dist_log_str,
                 read_mode=self.mode,
                 cell_type_int_map=self.cell_type_int_map,
+                use_cell_type=self.use_cell_type,
         )
 
         mn_sampler = MultiNodeWeightedSampler(

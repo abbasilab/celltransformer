@@ -28,6 +28,7 @@ class SpatialCellTransformer(nn.Module):
                  multiple_of: int = 256,
                  norm_eps: float = 1e-5,
                  init_std_attn_pool: float = 0.02,
+                 use_cell_type: bool = True,
                  compile: bool = False,
                  device: Optional[torch.device] = None,
                  dtype: Optional[torch.dtype] = None,
@@ -35,6 +36,9 @@ class SpatialCellTransformer(nn.Module):
         super().__init__()
 
         factory_kwargs = {'device': device, 'dtype': dtype}
+
+        # not used in forward(); recorded so extraction knows how the data loader labeled cells
+        self.use_cell_type = use_cell_type
 
         self.nb_proj = ZINBProj(
             embed_dim=model_dim,

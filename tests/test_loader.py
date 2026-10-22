@@ -22,6 +22,7 @@ What we test:
   3. Section isolation — neighbors never cross section boundaries
   4. Edge cases — tiny patch (zero neighbors), dataset length
   5. Collate — batch assembly produces correct shapes and lengths
+  6. use_cell_type=False — all labels 0, no cell-type column needed
 
 What we DON'T test:
   - MERFISHDataModule (requires torchdata infra, Lightning, distributed)
@@ -245,3 +246,49 @@ class TestCollate:
 
         # gt_expr: one per sample (the masked cell's expression)
         assert batch["gt_expr"].shape == (n_samples, N_GENES)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 6. Cell types switched off (use_cell_type=False)
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+class TestUseCellTypeOff:
+    """With use_cell_type=False every cell gets label 0 and the cell-type
+    column is never read, so data without cell types can be used."""
+
+    def test_all_labels_zero(self, synthetic_data):
+        """Every observed and masked label is 0; neighborhoods are unchanged."""
+        h5ad_path, pq_path, meta = synthetic_data
+        ds_on = _make_dataset(h5ad_path, pq_path, [4.0, 4.0])
+        ds_off = CenterMaskNodeOptimized(
+            metadata_path=str(pq_path),
+            adata_path=str(h5ad_path),
+            cell_type_colname="subclass_int",
+            patch_size=[4.0, 4.0],
+            tissue_section_colname="section",
+            use_cell_type=False,
+        )
+
+        for i in range(len(ds_off)):
+            on, off = ds_on[i], ds_off[i]
+            assert off.masked_cell_type.tolist() == [0]
+            assert (off.observed_cell_type == 0).all()
+            assert off.num_cells_obs == on.num_cells_obs
+
+    def test_no_cell_type_column(self, synthetic_data, tmp_path):
+        """A parquet with no cell-type column loads when cell types are off."""
+        h5ad_path, pq_path, meta = synthetic_data
+        pq_no_ct = tmp_path / "no_cell_type.parquet"
+        meta.drop(columns=["subclass_int"]).to_parquet(pq_no_ct, index=False)
+
+        ds = CenterMaskNodeOptimized(
+            metadata_path=str(pq_no_ct),
+            adata_path=str(h5ad_path),
+            cell_type_colname=None,
+            patch_size=[4.0, 4.0],
+            tissue_section_colname="section",
+            use_cell_type=False,
+        )
+        sample = ds[0]
+        assert sample.masked_cell_type.tolist() == [0]

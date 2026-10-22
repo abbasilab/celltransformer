@@ -161,7 +161,7 @@ def load_cached_tables(entry, ref_names, k):
 
 def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatial transcriptomics dataset',
                     section_column='section', x_column='x', y_column='y', cell_id_column='cell_id',
-                    cell_type_column='cell_type', eligible=None, references=None, reference_for_k=None,
+                    cell_type_column='cell_type', use_cell_type=True, eligible=None, references=None, reference_for_k=None,
                     method_names=None, coordinate_units='µm', training_history=None, n_genes=None,
                     notes=None, provenance=None, cached_correspondence=None, crop_bounds=None,
                     crop_name='Enlargement', boundary_grid_size=None, boundary_max_distance=None,
@@ -174,6 +174,8 @@ def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatia
     cached_correspondence: optional {(reference_id, method, k): {table paths}}.
     crop_bounds: optional {section: [[xmin,ymin],[xmax,ymax]]}, in coordinate units.
     Training history is a list/DataFrame with epoch, training_nll, validation_nll.
+    use_cell_type=False (model trained without cell types): no composition heatmaps,
+    even if the metadata has cell-type labels.
     """
     output_dir = Path(output_dir)
     require(not output_dir.exists(), 'Choose a new report directory; previous reports are preserved')
@@ -189,6 +191,10 @@ def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatia
     require(eligible.dtype==bool and eligible.shape==(n,), 'Eligible mask must be one Boolean per cell')
     references = references or {}; method_names = method_names or {}; cached_correspondence = cached_correspondence or {}
     crop_bounds = crop_bounds or {}; notes = list(notes or []); provenance = provenance or {}
+    if not use_cell_type:
+        # no cell types in the model -> no composition heatmaps, fresh or cached
+        cell_type_column = None; cached_correspondence = {}
+        notes.append('The model was trained without cell types (model.use_cell_type=false), so cell-type composition heatmaps are not shown.')
     require(bool(domain_labels), 'No domain assignments supplied')
     ks = sorted({int(k) for assignments in domain_labels.values() for k in assignments})
     require(all(k>0 for k in ks), 'k must be positive')
@@ -221,7 +227,7 @@ def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatia
         x_column=x_column,y_column=y_column,coordinate_units=coordinate_units,ks=ks,methods=methods,
         reference_for_k=reference_for_k,crop_bounds=crop_bounds,notes=notes,n_cells=n,eligible_centers=int(eligible.sum()),
         references={key:{'name':ref.name,'display_name':ref.display_name,'names':ref.names,'ids':ref.ids} for key,ref in references.items()},
-        correspondence='Pearson r of cell-type proportions; no domain refitting',synthetic=synthetic))
+        correspondence='Pearson r of cell-type proportions; no domain refitting',use_cell_type=use_cell_type,synthetic=synthetic))
 
     training_html = ''
     history = pd.DataFrame(training_history if training_history is not None else [])
@@ -288,7 +294,7 @@ def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatia
     pd.DataFrame([dict(k=k,domain=i,color=to_hex(c)) for k in ks for i,c in enumerate(palette(k))]).to_csv(output_dir/'domain_colors.tsv',sep='\t',index=False)
 
     correspondence={}; matrix_records=[]
-    for k,ref_id in reference_for_k.items():
+    for k,ref_id in (reference_for_k.items() if use_cell_type else []):
         ref=references[ref_id]; selected=[m for m in methods if k in domain_labels[m]]
         common=eligible & (ref.codes>=0)
         for method in selected:common &= domain_labels[method][k]>=0
@@ -358,7 +364,9 @@ body{font:16px/1.55 system-ui,sans-serif;color:#21323d;background:#f5f7fa;margin
         options=''.join(f'<option value="{k}">k = {k}</option>' for k in available)
         document+='<section><h2>Reference–domain correspondence</h2><p>Pearson correlation between the cell-type proportions of each reference region and each discovered domain. Rows and columns are ordered independently by average-linkage clustering of those proportions. Colors range from −1 (blue) to +1 (red); grey denotes an undefined correlation. This measures similarity in cell-type composition, not direct spatial overlap or a one-to-one anatomical match.</p>'
         document+=f'<label>Clustering resolution <select id="correspondence-k">{options}</select></label><label>Embedding variant <select id="correspondence-method"></select></label><p id="correspondence-note" class="small"></p><img id="correspondence-image" alt="Reference–domain Pearson correlation heatmap"></section>'
-    document+='<section><h2>Run details and provenance</h2><p>The report reads saved domain assignments. It does not train a model, extract embeddings, smooth embeddings or fit new clusters. Cell-type annotations used for the model also contribute to composition-based correspondence; the reference is an external comparison when it was not used during training.</p><details><summary>Analysis configuration</summary><pre>'+esc((output_dir/'report_configuration.json').read_text())+'</pre></details><details><summary>Source information</summary><pre>'+esc(json.dumps(provenance,indent=2,default=str))+'</pre></details><p>The companion results.zip contains this self-contained HTML, figures, correspondence tables, matrix ordering, palettes and provenance. Large input arrays and checkpoints are not copied into the archive.</p></section>'
+    cell_type_sentence=('Cell-type annotations used for the model also contribute to composition-based correspondence; the reference is an external comparison when it was not used during training.'
+                        if use_cell_type else 'The model was trained without cell-type annotations (model.use_cell_type=false), so no composition-based correspondence is computed.')
+    document+='<section><h2>Run details and provenance</h2><p>The report reads saved domain assignments. It does not train a model, extract embeddings, smooth embeddings or fit new clusters. '+cell_type_sentence+'</p><details><summary>Analysis configuration</summary><pre>'+esc((output_dir/'report_configuration.json').read_text())+'</pre></details><details><summary>Source information</summary><pre>'+esc(json.dumps(provenance,indent=2,default=str))+'</pre></details><p>The companion results.zip contains this self-contained HTML, figures, correspondence tables, matrix ordering, palettes and provenance. Large input arrays and checkpoints are not copied into the archive.</p></section>'
     payload={'maps':gallery,'details':enlarged,'legends':legends,'correspondence':available}
     document+='<script>const data='+json.dumps(payload).replace('<','\\u003c').replace('>','\\u003e').replace('&','\\u0026')+''';
 const s=document.getElementById('section'), k=document.getElementById('k'), view=document.getElementById('view'), map=document.getElementById('map');

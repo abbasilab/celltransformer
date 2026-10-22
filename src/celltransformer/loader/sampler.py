@@ -46,13 +46,15 @@ class CellParallelSampler(BaseNode):
                  read_mode: Optional[str] = None,
                  bs: Optional[bool] = 128,
                  dist_log_str: Optional[str] = None,
-                 cell_type_int_map: Optional[Dict[str, int]] = None):
+                 cell_type_int_map: Optional[Dict[str, int]] = None,
+                 use_cell_type: bool = True):
 
         self.source = source
         self.n_workers = n_workers
         self.current_sampling_node = None
         self.cell_type_colname = cell_type_colname
         self.cell_type_int_map = cell_type_int_map
+        self.use_cell_type = use_cell_type
         self.patch_size = patch_size
         self.tissue_section_colname = tissue_section_colname
         self.max_num_cells = max_num_cells
@@ -117,6 +119,7 @@ class CellParallelSampler(BaseNode):
                     max_num_cells = self.max_num_cells,
                     mode = self.mode,
                     cell_type_int_map = self.cell_type_int_map,
+                    use_cell_type = self.use_cell_type,
                 )
 
                 if self.subsample_info is not None:

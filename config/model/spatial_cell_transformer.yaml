@@ -18,4 +18,7 @@ multiple_of: 256
 norm_eps: 1e-5
 init_std_attn_pool: 0.02
 
+# False: ignore cell-type labels; every cell gets the same label (0)
+use_cell_type: True
+
 compile: False

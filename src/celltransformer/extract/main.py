@@ -24,9 +24,13 @@ Example:
         --checkpoint-path /path/to/last.ckpt \\
         --cell-type-yaml /path/to/taxonomy.yaml \\
         --cell-type-colname hrc_mmc_subclass_name
+
+If the model was trained with model.use_cell_type=false (read from the
+checkpoint), --cell-type-yaml and --cell-type-colname are not needed.
 """
 
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import torch
@@ -103,8 +107,8 @@ def _embed(
 def main(
     h5ad_path: str,
     checkpoint_path: str = typer.Option(..., help="Path to Lightning .ckpt file."),
-    cell_type_yaml: str = typer.Option(..., help="Path to taxonomy YAML (ordered list of label strings)."),
-    cell_type_colname: str = typer.Option(..., help="Column in parquet with cell type label strings."),
+    cell_type_yaml: Optional[str] = typer.Option(None, help="Path to taxonomy YAML (ordered list of label strings). Required unless the model was trained with model.use_cell_type=false."),
+    cell_type_colname: Optional[str] = typer.Option(None, help="Column in parquet with cell type label strings. Required unless the model was trained with model.use_cell_type=false."),
     section_colname: str = typer.Option("section", help="Column in parquet with tissue section IDs."),
     patch_size: float = typer.Option(31, help="Square spatial window size in coordinate units."),
     output_dir: str = typer.Option("", help="Directory to write .npz. Defaults to same dir as h5ad."),
@@ -141,12 +145,24 @@ def main(
         print("Already done — skipping.")
         return
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    cell_type_map = _build_cell_type_map(cell_type_yaml)
-
     print(f"Loading checkpoint: {checkpoint_path}")
     model = _load_model(checkpoint_path, device)
     print(f"Model ready — model_dim={model.attn_pool.output_dim}, device={device}")
+
+    # the checkpoint records whether training used cell types; extraction must match
+    if model.use_cell_type:
+        if cell_type_yaml is None or cell_type_colname is None:
+            raise typer.BadParameter(
+                "This model was trained with cell types: pass --cell-type-yaml and "
+                "--cell-type-colname (the same taxonomy and column used for training)."
+            )
+        cell_type_map = _build_cell_type_map(cell_type_yaml)
+    else:
+        if cell_type_yaml is not None or cell_type_colname is not None:
+            print("Model was trained with use_cell_type=false — ignoring cell-type options.")
+        cell_type_map = None
+
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     print("Building dataset...", end="", flush=True)
     dataset = CenterMaskNodeOptimized(
@@ -156,6 +172,7 @@ def main(
         patch_size=(patch_size, patch_size),
         tissue_section_colname=section_colname,
         cell_type_int_map=cell_type_map,
+        use_cell_type=model.use_cell_type,
     )
     n_cells = len(dataset)
     print(f" {n_cells:,} cells — embedding...", end="", flush=True)

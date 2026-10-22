@@ -187,6 +187,43 @@ class NotebookReportTests(unittest.TestCase):
                     domains_dir=ns['DOMAINS_DIR'], ks=ns['KS'], reference_metadata=refs,
                     reference_id_column='cell_label', reference_columns={'Reference':'parcellation_substructure'})
 
+    def _report_without_cell_types(self, root, drop_column):
+        ns = native_fixture(root, '02_custom_dataset.ipynb')
+        if drop_column:
+            for directory in ns['EMBEDDING_SETS'].values():
+                for path in Path(directory).glob('*.parquet'):
+                    pd.read_parquet(path).drop(columns=['cell_type']).to_parquet(path, index=False)
+        refs = pd.read_csv(ns['RAW_METADATA'], keep_default_na=False)
+        output = root/'report'
+        notebook_report.report_from_notebook(work_dir=ns['WORK_DIR'], embedding_sets=ns['EMBEDDING_SETS'],
+            domains_dir=ns['DOMAINS_DIR'], ks=ns['KS'], reference_metadata=refs,
+            reference_id_column='cell_label', reference_columns={'Reference':'parcellation_substructure'},
+            use_cell_type=False, output_dir=output)
+        return output
+
+    def test_no_cell_types_means_no_heatmaps(self):
+        # cell-type labels are present in the metadata, but the model did not use them
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._report_without_cell_types(Path(directory), drop_column=False)
+            self.assertEqual(list((output/'figures').glob('correspondence_*')), [])
+            html = (output/'review.html').read_text()
+            self.assertNotIn('<h2>Reference–domain correspondence</h2>', html)
+            self.assertIn('trained without cell types', html)
+            self.assertFalse(json.loads((output/'report_configuration.json').read_text())['use_cell_type'])
+
+    def test_no_cell_type_column_needed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = self._report_without_cell_types(Path(directory), drop_column=True)
+            self.assertTrue((output/'review.html').exists())
+
+    def test_read_use_cell_type(self):
+        import torch
+        with tempfile.TemporaryDirectory() as directory:
+            for value, expected in [({'use_cell_type': False}, False), ({}, True)]:
+                path = Path(directory)/'last.ckpt'
+                torch.save({'hyper_parameters': {'model_cfg': value}}, path)
+                self.assertEqual(notebook_report.read_use_cell_type(path), expected)
+
     def test_pearson_and_undefined_compositions(self):
         corr = pearson_rows(np.eye(3), np.eye(3))
         np.testing.assert_allclose(np.diag(corr), 1)

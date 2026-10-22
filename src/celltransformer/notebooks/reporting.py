@@ -29,6 +29,16 @@ def read_reference_table(path, id_column, columns):
     return table
 
 
+def read_use_cell_type(checkpoint):
+    """Whether the checkpoint's model was trained with cell types.
+
+    Checkpoints from before the model.use_cell_type setting count as True.
+    """
+    import torch
+    saved = torch.load(checkpoint, map_location='cpu', weights_only=False)
+    return bool(saved['hyper_parameters']['model_cfg'].get('use_cell_type', True))
+
+
 def read_training_history(checkpoint, expected_epochs=None):
     """Read local epoch averages for this checkpoint's run, without a cloud login.
 
@@ -110,7 +120,7 @@ def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
                          reference_metadata=None, reference_columns=None, reference_id_column='cell_id',
                          reference_for_k=None, reference_display_names=None, cell_id_column='cell_id',
                          section_column='section', x_column='x', y_column='y', cell_type_column='cell_type',
-                         coordinate_units='µm', training_history=None, n_genes=None,
+                         use_cell_type=True, coordinate_units='µm', training_history=None, n_genes=None,
                          crop_bounds=None, crop_name='Enlargement', notes=None, provenance=None,
                          output_dir=None, boundary_grid_size=None, boundary_max_distance=None,
                          crop_selection=None):
@@ -121,6 +131,8 @@ def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
     {"Histological annotation": "annotated_region"}. No reference is required.
     For multiple reference levels, provide reference_for_k explicitly.
     training_history may be recorded epoch dictionaries, a DataFrame, or None.
+    use_cell_type is read_use_cell_type(checkpoint); when False, cell_type_column
+    is not needed and no composition heatmaps are made.
     """
     work_dir=Path(work_dir); domains_dir=Path(domains_dir)
     require(embedding_sets, 'Supply at least one completed embedding set')
@@ -128,7 +140,8 @@ def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
     files=sorted(first.glob('*_embeddings.npz'))
     require(files, 'No native embedding files found')
     wanted=[path.name for path in files]; frames=[]; masks=[]; inventory=[]
-    needed=[cell_id_column,section_column,x_column,y_column,cell_type_column]
+    if not use_cell_type:cell_type_column=None
+    needed=[cell_id_column,section_column,x_column,y_column]+([cell_type_column] if cell_type_column else [])
     for path in files:
         metadata_path=path.with_name(path.stem.removesuffix('_embeddings')+'.parquet')
         frame=pd.read_parquet(metadata_path)
@@ -197,7 +210,7 @@ def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
     output=Path(output_dir) if output_dir else work_dir/'html_reports'/(time.strftime('%Y%m%dT%H%M%SZ',time.gmtime())+f'-{os.getpid()}')
     result=generate_report(metadata=metadata,domain_labels=labels,output_dir=output,dataset_name=dataset_name,
         cell_id_column=cell_id_column,section_column=section_column,x_column=x_column,y_column=y_column,
-        cell_type_column=cell_type_column,eligible=eligible,references=refs,reference_for_k=reference_for_k,
+        cell_type_column=cell_type_column,use_cell_type=use_cell_type,eligible=eligible,references=refs,reference_for_k=reference_for_k,
         method_names=method_names,coordinate_units=coordinate_units,training_history=training_history,n_genes=n_genes,
         notes=notes,provenance=details,crop_bounds=crop_bounds,crop_name=crop_name,
         boundary_grid_size=boundary_grid_size,boundary_max_distance=boundary_max_distance)
