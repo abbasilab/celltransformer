@@ -11,7 +11,7 @@ For an existing installation, pull the updated repository and run `python -m pip
 After the earlier steps have completed, run the settings and generation cells under Step 13. The settings reuse the paths, embedding tags and k values already defined in the notebook. They do not modify those variables or the preceding analysis.
 
 - Notebook 01 compares the full Allen example with the supplied CCF divisions, structures and substructures at the notebook's k values. Its optional cortical crops use motor/somatosensory labels, falling back to Isocortex when needed.
-- Notebook 02 uses its existing k values, 20 and 50, and the example's substructure reference. For another dataset, change `REPORT_NAME`, `REPORT_COORD_UNITS`, `REFERENCE_FILE`, `REFERENCE_ID_COLUMN` and `REFERENCE_COLUMNS` in Step 13. Set `REFERENCE_COLUMNS = {}` when no reference is available.
+- Notebook 03 uses its existing k values, 20 and 50, and the example's substructure reference. For another dataset, change `REPORT_NAME`, `REPORT_COORD_UNITS`, `REFERENCE_FILE`, `REFERENCE_ID_COLUMN` and `REFERENCE_COLUMNS` in Step 13. Set `REFERENCE_COLUMNS = {}` when no reference is available.
 
 The output directory is `WORK_DIR/html_reports/<timestamp>-<pid>/`. Each execution creates a new report, preserving earlier reports and analysis inputs. `WORK_DIR/LATEST_HTML_REPORT` contains the newest successful report directory.
 

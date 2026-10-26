@@ -118,7 +118,7 @@ class NotebookReportTests(unittest.TestCase):
 
     def test_notebook_folder_has_no_companion_files(self):
         files = [p for p in NOTEBOOKS.iterdir() if p.is_file()]
-        self.assertTrue({'01_allen_dataset.ipynb', '02_custom_dataset.ipynb'} <=
+        self.assertTrue({'01_allen_dataset.ipynb', '03_custom_dataset.ipynb'} <=
                         {p.name for p in files})
         self.assertEqual(sorted(p.name for p in files if p.suffix != '.ipynb'), [])
 
@@ -166,10 +166,10 @@ class NotebookReportTests(unittest.TestCase):
         self.run_notebook_step13('01_allen_dataset.ipynb')
 
     def test_custom_added_cells(self):
-        self.run_notebook_step13('02_custom_dataset.ipynb')
+        self.run_notebook_step13('03_custom_dataset.ipynb')
 
     def test_custom_without_reference(self):
-        self.run_notebook_step13('02_custom_dataset.ipynb', with_reference=False)
+        self.run_notebook_step13('03_custom_dataset.ipynb', with_reference=False)
 
     def test_missing_history_is_not_fabricated(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -179,7 +179,7 @@ class NotebookReportTests(unittest.TestCase):
 
     def test_reference_join_rejects_duplicate_ids(self):
         with tempfile.TemporaryDirectory() as directory:
-            ns = native_fixture(Path(directory), '02_custom_dataset.ipynb')
+            ns = native_fixture(Path(directory), '03_custom_dataset.ipynb')
             refs = pd.read_csv(ns['RAW_METADATA'], keep_default_na=False)
             refs = pd.concat([refs, refs.iloc[:1]])
             with self.assertRaisesRegex(ValueError, 'unique'):
@@ -188,7 +188,7 @@ class NotebookReportTests(unittest.TestCase):
                     reference_id_column='cell_label', reference_columns={'Reference':'parcellation_substructure'})
 
     def _report_without_cell_types(self, root, drop_column):
-        ns = native_fixture(root, '02_custom_dataset.ipynb')
+        ns = native_fixture(root, '03_custom_dataset.ipynb')
         if drop_column:
             for directory in ns['EMBEDDING_SETS'].values():
                 for path in Path(directory).glob('*.parquet'):

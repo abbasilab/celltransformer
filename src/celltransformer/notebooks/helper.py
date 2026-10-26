@@ -1,4 +1,4 @@
-'''Plumbing shared by 01_allen_dataset.ipynb and 02_custom_dataset.ipynb: running commands, environment checks,
+'''Plumbing shared by 01_allen_dataset.ipynb and 03_custom_dataset.ipynb: running commands, environment checks,
 background training and plot display. Nothing here needs editing to use the notebooks.'''
 import os
 import shlex

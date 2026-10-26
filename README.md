@@ -10,12 +10,14 @@ then be clustered to identify spatial domains and compared with anatomical
 annotations.
 
 > **Start with the notebooks.** The notebooks in [`notebooks/`](notebooks/) are
-> the primary way to run CellTransformer2: `01_allen_dataset.ipynb` runs the full
-> Allen 1 MERFISH dataset and `02_custom_dataset.ipynb` runs your own data (with
-> five Allen sections as the example). Set up their environments with
-> [Environments for the notebooks](#environments-for-the-notebooks).
-> `03_Barseq_mousebrain.ipynb` is an executed record of the BARseq analysis, not
-> a tutorial. The launcher workflows described below are the earlier route.
+> the primary way to run CellTransformer2:
+>
+> - [01_allen_dataset.ipynb](notebooks/01_allen_dataset.ipynb) runs the full Allen 1 MERFISH dataset.
+> - [02_Barseq_mousebrain.ipynb](notebooks/02_Barseq_mousebrain.ipynb) is an executed record of the BARseq analysis, not a tutorial.
+> - [03_custom_dataset.ipynb](notebooks/03_custom_dataset.ipynb) runs your own data, with five Allen sections as the example.
+>
+> Set up the environments with [Environments for the notebooks](#environments-for-the-notebooks).
+> The launcher workflows described below are the earlier route.
 
 This repository packages the supplied CellTransformer2 source with two complete
 examples: public data download, preparation, training from scratch, embedding
@@ -230,7 +232,7 @@ replace the system NVIDIA driver.
 > account and confirm the checks below before relying on them.
 
 The notebooks in `notebooks/` (`01_allen_dataset.ipynb` and
-`02_custom_dataset.ipynb`) use two conda environments that you create
+`03_custom_dataset.ipynb`) use two conda environments that you create
 yourself. They are separate from the environments the launchers above build.
 
 | Environment | Used for |
@@ -353,8 +355,9 @@ celltransformer2-test/
 ├── config/                   Original native Hydra configurations
 ├── tests/                    Upstream and notebook tests and fixtures
 ├── notebooks/                Step-by-step notebooks using the native commands
-│   ├── 01_allen_dataset.ipynb   Full Allen 1 MERFISH run (all sections)
-│   └── 02_custom_dataset.ipynb  Your own data, with five Allen sections as the example
+│   ├── 01_allen_dataset.ipynb    Full Allen 1 MERFISH run (all sections)
+│   ├── 02_Barseq_mousebrain.ipynb Executed BARseq analysis record
+│   └── 03_custom_dataset.ipynb   Your own data, with five Allen sections as the example
 ├── allen_example/            Primary Allen 1 MERFISH workflow
 │   ├── pipeline.py           Download → training → analysis → report
 │   ├── download.py           Pinned, resumable public Allen downloads

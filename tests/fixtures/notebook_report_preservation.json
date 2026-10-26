@@ -60,10 +60,18 @@
         [
           "- `helper.py` next to this notebook (running commands, environment checks, background training, plot display).\n",
           "- Notebook support and HTML reporting are included in the installed CellTransformer2 package.\n"
+        ],
+        [
+          "sections) with the same native commands as `02_custom_dataset.ipynb`:\n",
+          "sections) with the same native commands as `03_custom_dataset.ipynb`:\n"
+        ],
+        [
+          "The steps and cells mirror notebook 02, so what you learn here carries over to your own data.\n",
+          "The steps and cells mirror notebook 03, so what you learn here carries over to your own data.\n"
         ]
       ]
     },
-    "02_custom_dataset.ipynb": {
+    "03_custom_dataset.ipynb": {
       "original_cell_sha256": [
         "5f95fae36b63165c5019a7f376713d48d293c3b19eed403488ebfaaf4d4c69b3",
         "6841f4e8ca425155b82e1a9186314c1b1609f2b26b5a38cbc46f9294b9853e6e",
@@ -135,5 +143,5 @@
       ]
     }
   },
-  "helper_sha256": "ae1771c564dd01264ada8502e4ccb95456d67df8edea1a4a37e5f6e98b104df5"
+  "helper_sha256": "c4c88e8a4b14948836c985db24921bbb0564fc0e04de6cf657c832136465db45"
 }
