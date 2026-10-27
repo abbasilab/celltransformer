@@ -13,7 +13,7 @@ annotations.
 > the primary way to run CellTransformer2:
 >
 > - [01_allen_dataset.ipynb](notebooks/01_allen_dataset.ipynb) runs the full Allen 1 MERFISH dataset.
-> - [02_Barseq_mousebrain.ipynb](notebooks/02_Barseq_mousebrain.ipynb) is an executed record of the BARseq analysis, not a tutorial.
+> - [02_barseq_dataset.ipynb](notebooks/02_barseq_dataset.ipynb) is an executed record of the BARseq analysis, not a tutorial.
 > - [03_custom_dataset.ipynb](notebooks/03_custom_dataset.ipynb) runs your own data, with five Allen sections as the example.
 >
 > Set up the environments with [Environments for the notebooks](#environments-for-the-notebooks).
@@ -356,7 +356,7 @@ celltransformer2-test/
 ├── tests/                    Upstream and notebook tests and fixtures
 ├── notebooks/                Step-by-step notebooks using the native commands
 │   ├── 01_allen_dataset.ipynb    Full Allen 1 MERFISH run (all sections)
-│   ├── 02_Barseq_mousebrain.ipynb Executed BARseq analysis record
+│   ├── 02_barseq_dataset.ipynb   Executed BARseq analysis record
 │   └── 03_custom_dataset.ipynb   Your own data, with five Allen sections as the example
 ├── allen_example/            Primary Allen 1 MERFISH workflow
 │   ├── pipeline.py           Download → training → analysis → report
