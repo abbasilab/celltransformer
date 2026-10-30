@@ -23,7 +23,7 @@ Example:
     celltransformer-extract data.h5ad \\
         --checkpoint-path /path/to/last.ckpt \\
         --cell-type-yaml /path/to/taxonomy.yaml \\
-        --cell-type-colname hrc_mmc_subclass_name
+        --cell-type-colname cell_type
 
 If the model was trained with model.use_cell_type=false (read from the
 checkpoint), --cell-type-yaml and --cell-type-colname are not needed.
@@ -110,7 +110,7 @@ def main(
     cell_type_yaml: Optional[str] = typer.Option(None, help="Path to taxonomy YAML (ordered list of label strings). Required unless the model was trained with model.use_cell_type=false."),
     cell_type_colname: Optional[str] = typer.Option(None, help="Column in parquet with cell type label strings. Required unless the model was trained with model.use_cell_type=false."),
     section_colname: str = typer.Option("section", help="Column in parquet with tissue section IDs."),
-    patch_size: float = typer.Option(31, help="Square spatial window size in coordinate units."),
+    patch_size: float = typer.Option(85, help="Square spatial window size in coordinate units; must match training (data.patch_size)."),
     output_dir: str = typer.Option("", help="Directory to write .npz. Defaults to same dir as h5ad."),
     device: str = typer.Option("cuda:0", help="CUDA device string, e.g. cuda:0 or cuda:1."),
     batch_size: int = typer.Option(512, help="Cells per GPU forward pass."),
