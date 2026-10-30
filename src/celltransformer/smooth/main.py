@@ -11,6 +11,10 @@ The Gaussian kernel is applied to the Euclidean distances returned by the kNN
 query: w_i = exp(-d_i^2 / (2 * sigma^2)), then row-normalized. The smoothed
 embedding for cell j is sum_i(w_ij * embed_i).
 
+cuML computes these distances in float32, so they are imprecise at large
+coordinates (up to ~4 µm at ~10,000 µm). On the example sections the neighbor
+sets were identical to exact ones and smoothed embeddings differed by <1% per cell.
+
 Operates per-section to respect tissue boundaries (no cross-section smoothing).
 Neighbor embeddings are gathered in chunks of cells to bound memory.
 
@@ -19,7 +23,7 @@ it directly:
   {output_dir}/{stem}_embeddings.npz   embeddings (smoothed), has_neighbors
   {output_dir}/{stem}.parquet          copy of the input metadata
 
-Requires cuML (RAPIDS) for GPU-accelerated kNN. Use the bfm_cml conda env.
+Requires cuML (RAPIDS) for GPU-accelerated kNN. Run it in the RAPIDS environment.
 """
 
 import logging
