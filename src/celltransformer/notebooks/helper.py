@@ -1,4 +1,4 @@
-'''Plumbing shared by 01_allen_dataset.ipynb and 03_custom_dataset.ipynb: running commands, environment checks,
+'''Plumbing shared by the three notebooks: running commands, environment checks,
 background training and plot display. Nothing here needs editing to use the notebooks.'''
 import os
 import shlex
@@ -14,9 +14,9 @@ from scipy.spatial import cKDTree
 from celltransformer2_barseq.cli import example_path
 
 
-def download_allen(root):
-    '''Download the raw Allen 1 files into root/data/raw/ with the repository's checksummed downloader.'''
-    script = example_path("allen") / "download.py"
+def _run_download(example, root):
+    '''Run an example's checksummed downloader (download.py) with --root.'''
+    script = example_path(example) / "download.py"
     #stream the downloader's output into the notebook
     process = subprocess.Popen([sys.executable, "-u", str(script), "--root", str(root)],
                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -24,6 +24,16 @@ def download_allen(root):
         print(line, end="")
     if process.wait():
         raise RuntimeError(f"download failed ({process.returncode})")
+
+
+def download_allen(root):
+    '''Download the raw Allen 1 files into root/data/raw/ with the repository's checksummed downloader.'''
+    _run_download("allen", root)
+
+
+def download_barseq(root):
+    '''Download the BARseq files into root/data/raw/ and convert them into root/data/converted/.'''
+    _run_download("barseq", root)
 
 
 def check_absolute(work_dir):

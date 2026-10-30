@@ -21,15 +21,12 @@ EXAMPLES = {
 
 
 def example_path(example='barseq'):
+    '''The example folder (allen_example/ or barseq_example/) in the repository checkout.'''
     settings = EXAMPLES[example]
-    package = Path(__file__).resolve().parent
-    bundled = package / settings['bundle']
-    if (bundled / 'PACKAGE_MANIFEST.json').is_file():
-        return bundled
-    checkout = package.parents[1] / settings['directory']
-    if (checkout / 'PACKAGE_MANIFEST.json').is_file():
-        return checkout
-    raise RuntimeError(settings['title'] + ' runtime resources are missing; reinstall the package.')
+    folder = Path(__file__).resolve().parents[2] / settings['directory']
+    if not folder.is_dir():
+        raise RuntimeError(f'{folder} not found; install the package with pip install -e . from the repository.')
+    return folder
 
 
 def load_layout(example='barseq'):
@@ -55,10 +52,10 @@ def audit(example='barseq'):
 
 
 def train_main():
-    """Resolve Hydra resources in a wheel; retain the native training implementation."""
+    """Point Hydra at the repository's config/ unless --config-path is given; run the native training."""
     if not any(arg == '--config-path' or arg.startswith('--config-path=') for arg in sys.argv[1:]):
-        layout = load_layout('allen')
-        sys.argv[1:1] = ['--config-path', str(layout.source_root() / 'config')]
+        config = Path(__file__).resolve().parents[2] / 'config'
+        sys.argv[1:1] = ['--config-path', str(config)]
     from celltransformer.train.main import main as native_main
     native_main()
 

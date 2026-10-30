@@ -15,12 +15,6 @@
       "sha256": "85d818d8df0d25cc0b6f10d249a7676188e211e9e36e69fe6cd4d33b9b36e698"
     },
     {
-      "name": "annotation_25.nrrd",
-      "url": "https://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/annotation_25.nrrd",
-      "size": 4035363,
-      "sha256": "c620cbcc562183e4dcd40250d440130501781f74b41de35b1c1bdabace290c42"
-    },
-    {
       "name": "neurons_registered.csv",
       "url": "https://data.mendeley.com/public-files/datasets/8bhhk7c5n9/files/592cad1f-5a58-43ff-b4d5-66fc6baf4622/file_downloaded",
       "size": 570583089,
