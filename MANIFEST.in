@@ -5,8 +5,8 @@ graft tests
 graft environment
 graft docs
 recursive-include notebooks *.ipynb
-include allen_example/LICENSE allen_example/DOWNLOAD_MANIFEST.json allen_example/download.py
-include barseq_example/LICENSE barseq_example/DOWNLOAD_MANIFEST.json barseq_example/download.py barseq_example/requirements.txt
+include allen_example/DOWNLOAD_MANIFEST.json allen_example/download.py
+include barseq_example/DOWNLOAD_MANIFEST.json barseq_example/download.py barseq_example/requirements.txt
 recursive-include barseq_example/reference *.json
 global-exclude __pycache__ *.py[cod] .DS_Store
 global-exclude *.ckpt *.h5ad *.h5 *.mat *.npy *.npz *.parquet *.nrrd *.zip *.tar.gz

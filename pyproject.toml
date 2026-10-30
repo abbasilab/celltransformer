@@ -10,7 +10,7 @@ readme = "README.md"
 dynamic = ["dependencies"]
 requires-python = ">=3.11,<3.12"
 license = "MIT"
-license-files = ["LICENSE", "allen_example/LICENSE", "barseq_example/LICENSE", "THIRD_PARTY_NOTICES.md"]
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "Alex Lee" },
     { name = "Sara Lichtarge" },
