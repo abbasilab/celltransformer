@@ -15,13 +15,14 @@ Pipeline:
 
 Example:
     # Single specimen, single GPU
-    celltransformer-cluster --ks 100 --ks 1000
+    celltransformer-cluster --embeddings-dirs /path/to/sections --ks 100 --ks 1000
 
     # Multiple specimens, 4 GPUs (recommended for >1M cells)
     celltransformer-cluster \\
-        --embeddings-dirs /data2/alexlee/embeddings/638850 \\
-        --embeddings-dirs /data2/alexlee/embeddings/687997 \\
-        --tag 638850_687997 \\
+        --embeddings-dirs /path/to/mouse1/sections \\
+        --embeddings-dirs /path/to/mouse2/sections \\
+        --output-base /path/to/domains \\
+        --tag mouse1_mouse2 \\
         --ks 100 --ks 1000 \\
         --n-gpus 4
 """
@@ -159,8 +160,8 @@ def _cluster_and_plot(
 
 def main(
     embeddings_dirs: Optional[List[str]] = None,
-    output_base: str = "/data2/alexlee/embeddings",
-    tag: str = "638850",
+    output_base: str = ".",
+    tag: str = "domains",
     ks: Optional[List[int]] = None,
     n_gpus: int = typer.Option(1, help="Number of GPUs for KMeans. Use >1 for multi-GPU (recommended above ~1M cells)."),
     random_state: int = 42,
@@ -179,10 +180,10 @@ def main(
 
     Args:
         embeddings_dirs: One or more directories containing *_embeddings.npz files.
-                         Defaults to /data2/alexlee/embeddings/638850.
-                         Pass multiple: --embeddings-dirs /path/a --embeddings-dirs /path/b
+                         Required. Pass multiple: --embeddings-dirs /path/a --embeddings-dirs /path/b
         output_base:     Root directory for outputs (labels + plot dirs written here).
-        tag:             Prefix for output filenames, e.g. '638850_687997'.
+                         Defaults to the current directory.
+        tag:             Prefix for output filenames, e.g. 'mouse1_mouse2'. Defaults to 'domains'.
         ks:              List of cluster counts. Defaults to [100].
                          Pass multiple: --ks 100 --ks 1000
         n_gpus:          Number of GPUs for KMeans. 1 = single-GPU cuml.cluster.KMeans.
@@ -196,8 +197,8 @@ def main(
         dry_run:         Print summary stats and exit without clustering or plotting.
         no_plots:        Save labels only, skip per-section scatter plots.
     """
-    if embeddings_dirs is None:
-        embeddings_dirs = ["/data2/alexlee/embeddings/638850"]
+    if not embeddings_dirs:
+        raise typer.BadParameter("give at least one --embeddings-dirs")
     if ks is None:
         ks = [100]
 

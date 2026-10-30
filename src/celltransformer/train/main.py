@@ -3,8 +3,8 @@
 Launches training via Hydra. Config is read from the sibling config/ directory
 at the repo root. Override any config value on the command line:
 
-    celltransformer-train data=scvi_sections model.dropout=0.1
-    python -m celltransformer.train data=scvi_sections model.dropout=0.1
+    celltransformer-train data.data_dir=/path/to/sections/ model.dropout=0.1
+    python -m celltransformer.train data.data_dir=/path/to/sections/ model.dropout=0.1
 
 Exports:
   SpatialTransformerModule  — Lightning module wrapping SpatialCellTransformer

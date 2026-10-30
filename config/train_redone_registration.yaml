@@ -4,11 +4,11 @@ defaults:
   - model: spatial_cell_transformer
   - optimization: redone_registration
 
-checkpoint_dir: /data2/alexlee/checkpoints_next/
-wandb_project: multianimal-registered-next
+checkpoint_dir: checkpoints/
+wandb_project: celltransformer2
 wandb_tags: []       # list of string tags for the W&B run
 wandb_notes: ""      # freeform note attached to the W&B run
 model_checkpoint: null
 save_top_k: 5       # checkpoints to keep (best by train/loss); -1 = keep all
-devices: [0, 1, 2, 3, 4, 5, 6, 7]  # GPU indices for training; override e.g. devices=[0]
-output: results_redone_registration.jsonl
+devices: [0]        # GPU indices for training; override e.g. devices=[0,1]
+output: train_results.jsonl
