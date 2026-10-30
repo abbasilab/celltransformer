@@ -1,4 +1,0 @@
-# Preserve audited source/data bytes, including original line endings, on checkout.
-* -text
-*.png binary
-*.pt binary
