@@ -30,10 +30,7 @@ celltransformer-train      = "celltransformer2_barseq.cli:train_main"
 celltransformer-extract    = "celltransformer.extract.main:cli"
 celltransformer-preprocess = "celltransformer.preprocess.main:cli"
 celltransformer-cluster    = "celltransformer.cluster.main:cli"
-celltransformer-profile    = "celltransformer.profile.main:cli"
 celltransformer-smooth     = "celltransformer.smooth.main:cli"
-celltransformer-barseq     = "celltransformer2_barseq.cli:main"
-celltransformer-allen      = "celltransformer2_barseq.cli:allen_main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["barseq_example/requirements.txt", "packaging_requirements.txt"]}

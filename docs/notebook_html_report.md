@@ -41,17 +41,3 @@ Training curves use the selected checkpoint's local offline W&B file. The reader
 `REPORT_CROP = None` shows whole sections only. For an annotation-based crop, supply a dictionary with `column`, optional `prefixes` or exact `values`, `min_cells` and `padding`. The crop column must be included in the loaded reference table. Optional `fallback_column` and `fallback_values` select a larger area when too few cells match the preferred labels. Padding and boundary distances use the same units as the coordinates.
 
 The underlying `report_from_notebook` function also accepts explicit `crop_bounds={section: [[xmin, ymin], [xmax, ymax]]}`. Supply either those bounds or `crop_selection`, not both. `boundary_grid_size` and `boundary_max_distance` enable outlines inferred from nearby reference-labelled cells. These are display approximations, not original atlas polygons.
-
-## Preservation and testing
-
-Moving the support files into the package changes only their imports and the instructions that described companion files. Notebook settings, analysis calls, saved outputs, execution counts, cell metadata and top-level notebook metadata are unchanged. The command helper and HTML renderer were moved without code changes; the report adapter uses a package-relative import. The model/training code, configuration files and environment requirements were not edited.
-
-`tests/fixtures/notebook_report_preservation.json` records the notebook cell hashes from commit `f698cfd39da309a6d49fd958ead5a6ba42e587c1` and the explicitly allowed import/instruction replacements. Tests verify that no other cell content, output or metadata changed. They also execute the actual Step 13 code cells on synthetic completed outputs for both notebooks, exercise missing references and missing training history, and check cell-ID joins and source-file preservation. Package checks repeat these tests outside the checkout using the installed wheel, with only `.ipynb` files in the notebook directory.
-
-From the repository root:
-
-```bash
-PYTHONPATH=src python -m unittest discover -s tests -p test_notebook_report.py -v
-```
-
-These CPU tests verify the reporting addition. They do not rerun the biological training experiments. Future intentional changes to existing notebook cells should update the preservation record as part of their own review.
