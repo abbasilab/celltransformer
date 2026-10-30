@@ -16,6 +16,6 @@ jobs:
           python -m pip install -r barseq_example/requirements.txt pytest==8.3.5
       - name: Compile source
         run: python -m compileall -q src
-      # test_model.py and test_model_regression.py need a GPU (nested tensors are CUDA-only)
+      # tests that need a GPU (model forward passes, torch.compile) are reported as skipped here
       - name: Run CPU tests
-        run: PYTHONPATH=src python -m pytest -q tests/test_distributions.py tests/test_loader.py tests/test_preprocess.py
+        run: PYTHONPATH=src python -m pytest -q -rs tests
