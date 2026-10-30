@@ -1,6 +1,6 @@
 # Environments
 
-CellTransformer2 uses two Python environments; see the paper's Software setup for the install commands.
+CellTransformer2 uses two Python environments; the install commands are in the Installation section of the [top-level README](../README.md#installation).
 
 - `ct2-pip-freeze.txt`: full package list of the training environment used for the tested runs (`pip freeze`).
 - `rapids.yml`: the main version pins of the RAPIDS environment (cuML/cuDF 24.12) used for smoothing and
