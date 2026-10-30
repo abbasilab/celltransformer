@@ -6,7 +6,7 @@ then visualize cluster labels as spatial scatter plots per brain section.
 Pipeline:
   1. For each embeddings_dir, load all *_embeddings.npz files (one per section).
   2. Load corresponding .parquet metadata files (must be co-located with the .npz files)
-     to get center_x/center_y/section.
+     to get x/y/section.
   3. Concatenate all specimens into a single (N, 384) float32 array + metadata DataFrame.
   4. For each k in ks: run cuML KMeans(k) on GPU, save labels, plot all sections.
      Embeddings are loaded once and reused across all k values.
@@ -94,8 +94,8 @@ def _cluster_and_plot(
     tag: str,
     random_state: int,
     s: float,
-    x_col: str = "center_x",
-    y_col: str = "center_y",
+    x_col: str = "x",
+    y_col: str = "y",
     section_col: str = "section",
     n_gpus: int = 1,
     no_plots: bool = False,
@@ -168,7 +168,7 @@ def main(
     s: float = 1.5,
     x_col: str = "x",
     y_col: str = "y",
-    section_col: str = "brain_section_label",
+    section_col: str = "section",
     dry_run: bool = False,
     no_plots: bool = False,
 ) -> None:

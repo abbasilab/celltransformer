@@ -16,8 +16,8 @@ import pandas as pd
 def make_section_plot(
     section_name: str,
     df: pd.DataFrame,
-    x_col: str = "center_x",
-    y_col: str = "center_y",
+    x_col: str = "x",
+    y_col: str = "y",
     color_col: str = "datadrivencolor",
     section_col: str = "section",
     s: float = 2.5,
