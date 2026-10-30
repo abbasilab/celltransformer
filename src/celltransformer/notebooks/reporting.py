@@ -1,4 +1,4 @@
-"""Optional Step 13 for native notebooks; no unattended-run manifest required."""
+"""Notebook Step 13: read the saved outputs of Steps 9-11 and build the HTML report."""
 from pathlib import Path
 import time
 import os
@@ -115,6 +115,132 @@ def show_report(path):
     display(FileLink(os.path.relpath(path.with_name('results.zip'), Path.cwd())))
 
 
+def _metadata_path(embedding_path):
+    """The .parquet next to an embedding file: the same section's metadata."""
+    return embedding_path.with_name(embedding_path.stem.removesuffix('_embeddings') + '.parquet')
+
+
+def _read_has_neighbors(embedding_path):
+    with np.load(embedding_path, allow_pickle=False) as archive:
+        return archive['has_neighbors'].copy()
+
+
+def _load_sections(embedding_sets, needed, cell_id_column):
+    """Metadata and neighborhood masks of all sections, in celltransformer-cluster's cell order.
+
+    Order: sorted embedding filenames, then row order within each section. Every embedding
+    set (e.g. raw and smoothed) must have the same sections, metadata and masks."""
+    require(embedding_sets, 'Supply at least one completed embedding set')
+    tags = list(embedding_sets)
+    files = sorted(Path(embedding_sets[tags[0]]).glob('*_embeddings.npz'))
+    require(files, 'No native embedding files found')
+
+    #first embedding set: read metadata and masks
+    frames, masks, inventory = [], [], []
+    for path in files:
+        metadata_path = _metadata_path(path)
+        frame = pd.read_parquet(metadata_path)
+        require(set(needed) <= set(frame), f'Missing metadata columns: {metadata_path}')
+        mask = _read_has_neighbors(path)
+        require(mask.dtype == bool and mask.shape == (len(frame),), f'Invalid neighborhood mask: {path}')
+        frames.append(frame)
+        masks.append(mask)
+        inventory.append({'embedding_file': str(path.resolve()),
+                          'metadata_file': str(metadata_path.resolve()),
+                          'cells': len(frame)})
+
+    #other embedding sets: must describe the same cells
+    names = [path.name for path in files]
+    for tag in tags[1:]:
+        directory = Path(embedding_sets[tag])
+        other_names = [path.name for path in sorted(directory.glob('*_embeddings.npz'))]
+        require(other_names == names, 'Embedding section inventories differ')
+        for frame, mask, name in zip(frames, masks, names):
+            path = directory / name
+            table = pd.read_parquet(_metadata_path(path))
+            pd.testing.assert_frame_equal(frame[needed].reset_index(drop=True), table[needed].reset_index(drop=True),
+                                          check_dtype=False, check_categorical=False)
+            require(np.array_equal(mask, _read_has_neighbors(path)),
+                    'Neighborhood masks differ across embedding variants')
+
+    metadata = pd.concat(frames, ignore_index=True)
+    eligible = np.concatenate(masks)
+    require(not metadata[cell_id_column].astype(str).duplicated().any(), 'Duplicate cell IDs across native sections')
+    return metadata, eligible, inventory
+
+
+def _load_domain_labels(domains_dir, tags, ks):
+    """{tag: {k: labels}} as saved by celltransformer-cluster."""
+    labels = {}
+    for tag in tags:
+        labels[tag] = {}
+        for k in ks:
+            path = domains_dir / f'{tag}_kmeans_k{k}_labels.npy'
+            labels[tag][int(k)] = np.load(path, mmap_mode='r', allow_pickle=False)
+    return labels
+
+
+def _align_references(reference_metadata, reference_id_column, reference_columns, reference_display_names, cell_ids):
+    """Join the reference table to the cells by exact cell ID.
+
+    Returns {name: Reference} (label codes in cell order, -1 = no label) and the aligned
+    table, which has one row per cell (cells missing from the reference are empty)."""
+    if reference_metadata is None:
+        if reference_columns:
+            raise ValueError('reference_columns was supplied without reference_metadata')
+        return {}, None
+    require(bool(reference_columns), 'Specify which reference columns to use')
+    source = reference_metadata.copy()
+    require(reference_id_column in source, 'Reference metadata lacks its cell-ID column')
+    require(source[reference_id_column].notna().all(), 'Reference cell IDs cannot be missing')
+    source[reference_id_column] = source[reference_id_column].astype(str)
+    require(not source[reference_id_column].duplicated().any(), 'Reference cell IDs must be unique')
+    aligned = source.set_index(reference_id_column).reindex(cell_ids)
+
+    references = {}
+    for name, column in reference_columns.items():
+        require(column in aligned, f'Missing reference column: {column}')
+        values = aligned[column]
+        #empty strings count as missing labels
+        present = values.notna() & (values.astype(str) != '')
+        names = sorted(values[present].astype(str).unique().tolist())
+        require(names, f'No cells have reference labels for {name}')
+        codes = np.full(len(cell_ids), -1, np.int32)
+        codes[present.to_numpy()] = pd.Categorical(values[present].astype(str), categories=names).codes
+        references[name] = Reference(name, codes, names, reference_display_names.get(name, name), names)
+    return references, aligned
+
+
+def _crop_bounds_from_annotation(crop_selection, aligned, metadata, section_column, x_column, y_column):
+    """{section: [[xmin, ymin], [xmax, ymax]]} around the cells selected by crop_selection.
+
+    Cells match by exact value ('values') or prefix ('prefixes') in crop_selection['column'].
+    If fewer than min_cells match, 'fallback_values' in 'fallback_column' are used instead.
+    Sections that still have too few cells get no enlargement."""
+    require(aligned is not None, 'A reference table is needed for annotation-based enlargements')
+    preferred = crop_selection['column']
+    fallback = crop_selection.get('fallback_column')
+    require(preferred in aligned and (fallback is None or fallback in aligned),
+            'Enlargement columns must be loaded in the reference table')
+    preferred_values = aligned[preferred].astype(str).to_numpy()
+    fallback_values = aligned[fallback].astype(str).to_numpy() if fallback else None
+    prefixes = tuple(crop_selection.get('prefixes', []))
+    exact = set(crop_selection.get('values', []))
+    minimum = int(crop_selection.get('min_cells', 100))
+    padding = float(crop_selection.get('padding', 0))
+
+    crop_bounds = {}
+    for section, positions in metadata.groupby(section_column, observed=True).indices.items():
+        use = np.array([value in exact or (bool(prefixes) and value.startswith(prefixes))
+                        for value in preferred_values[positions]])
+        if use.sum() < minimum and fallback_values is not None:
+            use = np.isin(fallback_values[positions], crop_selection.get('fallback_values', []))
+        if use.sum() >= minimum:
+            coords = metadata.iloc[positions[use]][[x_column, y_column]].to_numpy(float)
+            crop_bounds[str(section)] = [(coords.min(0) - padding).tolist(), (coords.max(0) + padding).tolist()]
+    return crop_bounds
+
+
 def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
                          dataset_name='Spatial transcriptomics dataset', method_names=None,
                          reference_metadata=None, reference_columns=None, reference_id_column='cell_id',
@@ -134,85 +260,50 @@ def report_from_notebook(*, work_dir, embedding_sets, domains_dir, ks,
     use_cell_type is read_use_cell_type(checkpoint); when False, cell_type_column
     is not needed and no composition heatmaps are made.
     """
-    work_dir=Path(work_dir); domains_dir=Path(domains_dir)
-    require(embedding_sets, 'Supply at least one completed embedding set')
-    tags=list(embedding_sets); first=Path(embedding_sets[tags[0]])
-    files=sorted(first.glob('*_embeddings.npz'))
-    require(files, 'No native embedding files found')
-    wanted=[path.name for path in files]; frames=[]; masks=[]; inventory=[]
-    if not use_cell_type:cell_type_column=None
-    needed=[cell_id_column,section_column,x_column,y_column]+([cell_type_column] if cell_type_column else [])
-    for path in files:
-        metadata_path=path.with_name(path.stem.removesuffix('_embeddings')+'.parquet')
-        frame=pd.read_parquet(metadata_path)
-        require(set(needed)<=set(frame), f'Missing metadata columns: {metadata_path}')
-        with np.load(path,allow_pickle=False) as archive:
-            mask=archive['has_neighbors'].copy()
-        require(mask.dtype==bool and mask.shape==(len(frame),), f'Invalid neighborhood mask: {path}')
-        frames.append(frame); masks.append(mask)
-        inventory.append({'embedding_file':str(path.resolve()),'metadata_file':str(metadata_path.resolve()),'cells':len(frame)})
-    for tag in tags[1:]:
-        directory=Path(embedding_sets[tag]); require([p.name for p in sorted(directory.glob('*_embeddings.npz'))]==wanted,'Embedding section inventories differ')
-        for i,name in enumerate(wanted):
-            path=directory/name; table=pd.read_parquet(path.with_name(path.stem.removesuffix('_embeddings')+'.parquet'))
-            pd.testing.assert_frame_equal(frames[i][needed].reset_index(drop=True),table[needed].reset_index(drop=True),check_dtype=False,check_categorical=False)
-            with np.load(path,allow_pickle=False) as archive:
-                require(np.array_equal(masks[i],archive['has_neighbors']), 'Neighborhood masks differ across embedding variants')
-    metadata=pd.concat(frames,ignore_index=True); eligible=np.concatenate(masks)
-    require(not metadata[cell_id_column].astype(str).duplicated().any(), 'Duplicate cell IDs across native sections')
-    labels={tag:{int(k):np.load(domains_dir/f'{tag}_kmeans_k{k}_labels.npy',mmap_mode='r',allow_pickle=False) for k in ks} for tag in tags}
-    refs={}; reference_columns=reference_columns or {}; reference_display_names=reference_display_names or {}
-    aligned = None
-    if reference_metadata is not None:
-        require(bool(reference_columns),'Specify which reference columns to use')
-        source=reference_metadata.copy()
-        require(reference_id_column in source,'Reference metadata lacks its cell-ID column')
-        require(source[reference_id_column].notna().all(),'Reference cell IDs cannot be missing')
-        source[reference_id_column]=source[reference_id_column].astype(str)
-        require(not source[reference_id_column].duplicated().any(),'Reference cell IDs must be unique')
-        source=source.set_index(reference_id_column)
-        aligned=source.reindex(metadata[cell_id_column].astype(str).to_numpy())
-        for name,column in reference_columns.items():
-            require(column in aligned,f'Missing reference column: {column}')
-            values=aligned[column]; present=values.notna() & (values.astype(str)!='')
-            names=sorted(values[present].astype(str).unique().tolist())
-            require(names,f'No cells have reference labels for {name}')
-            codes=np.full(len(metadata),-1,np.int32)
-            codes[present.to_numpy()]=pd.Categorical(values[present].astype(str),categories=names).codes
-            refs[name]=Reference(name,codes,names,reference_display_names.get(name,name),names)
-    elif reference_columns:
-        raise ValueError('reference_columns was supplied without reference_metadata')
+    work_dir = Path(work_dir)
+    domains_dir = Path(domains_dir)
+    if not use_cell_type:
+        cell_type_column = None
+
+    #cells, their neighborhood masks and their domain labels
+    needed = [cell_id_column, section_column, x_column, y_column] + ([cell_type_column] if cell_type_column else [])
+    metadata, eligible, inventory = _load_sections(embedding_sets, needed, cell_id_column)
+    labels = _load_domain_labels(domains_dir, list(embedding_sets), ks)
+
+    #reference labels and optional enlargements
+    cell_ids = metadata[cell_id_column].astype(str).to_numpy()
+    references, aligned = _align_references(reference_metadata, reference_id_column, reference_columns or {},
+                                            reference_display_names or {}, cell_ids)
     if crop_selection is not None:
         require(crop_bounds is None, 'Supply either crop_selection or explicit crop_bounds')
-        require(aligned is not None, 'A reference table is needed for annotation-based enlargements')
-        preferred = crop_selection['column']
-        fallback = crop_selection.get('fallback_column')
-        require(preferred in aligned and (fallback is None or fallback in aligned), 'Enlargement columns must be loaded in the reference table')
-        preferred_values = aligned[preferred].astype(str).to_numpy()
-        fallback_values = aligned[fallback].astype(str).to_numpy() if fallback else None
-        prefixes = tuple(crop_selection.get('prefixes', []))
-        exact = set(crop_selection.get('values', []))
-        minimum = int(crop_selection.get('min_cells', 100))
-        padding = float(crop_selection.get('padding', 0))
-        crop_bounds = {}
-        for section, positions in metadata.groupby(section_column, observed=True).indices.items():
-            use = np.array([value in exact or (bool(prefixes) and value.startswith(prefixes)) for value in preferred_values[positions]])
-            if use.sum() < minimum and fallback_values is not None:
-                use = np.isin(fallback_values[positions], crop_selection.get('fallback_values', []))
-            if use.sum() >= minimum:
-                coords = metadata.iloc[positions[use]][[x_column, y_column]].to_numpy(float)
-                crop_bounds[str(section)] = [(coords.min(0)-padding).tolist(), (coords.max(0)+padding).tolist()]
-    notes=list(notes or [])
-    if not eligible.all():notes.append(f'{int((~eligible).sum()):,} centers without valid neighborhoods are grey on domain maps and excluded from correspondence calculations. Saved smoothing and clustering are preserved.')
-    details=dict(provenance or {})
+        crop_bounds = _crop_bounds_from_annotation(crop_selection, aligned, metadata,
+                                                   section_column, x_column, y_column)
+
+    #notes and provenance shown in the report
+    notes = list(notes or [])
+    if not eligible.all():
+        notes.append(f'{int((~eligible).sum()):,} centers without valid neighborhoods are grey on domain maps and '
+                     'excluded from correspondence calculations. Saved smoothing and clustering are preserved.')
+    details = dict(provenance or {})
     details.update(cell_order='Sorted native embedding filenames, then per-section metadata row order',
-                   native_files=inventory,work_dir=str(work_dir.resolve()),reference_join='Exact cell ID; unmatched reference annotations remain missing')
-    output=Path(output_dir) if output_dir else work_dir/'html_reports'/(time.strftime('%Y%m%dT%H%M%SZ',time.gmtime())+f'-{os.getpid()}')
-    result=generate_report(metadata=metadata,domain_labels=labels,output_dir=output,dataset_name=dataset_name,
-        cell_id_column=cell_id_column,section_column=section_column,x_column=x_column,y_column=y_column,
-        cell_type_column=cell_type_column,use_cell_type=use_cell_type,eligible=eligible,references=refs,reference_for_k=reference_for_k,
-        method_names=method_names,coordinate_units=coordinate_units,training_history=training_history,n_genes=n_genes,
-        notes=notes,provenance=details,crop_bounds=crop_bounds,crop_name=crop_name,
-        boundary_grid_size=boundary_grid_size,boundary_max_distance=boundary_max_distance)
-    (work_dir/'LATEST_HTML_REPORT').write_text(str(output.resolve())+'\n')
+                   native_files=inventory,
+                   work_dir=str(work_dir.resolve()),
+                   reference_join='Exact cell ID; unmatched reference annotations remain missing')
+
+    #a new folder per report, so earlier reports are kept
+    if output_dir:
+        output = Path(output_dir)
+    else:
+        stamp = time.strftime('%Y%m%dT%H%M%SZ', time.gmtime()) + f'-{os.getpid()}'
+        output = work_dir / 'html_reports' / stamp
+
+    result = generate_report(
+        metadata=metadata, domain_labels=labels, output_dir=output, dataset_name=dataset_name,
+        cell_id_column=cell_id_column, section_column=section_column, x_column=x_column, y_column=y_column,
+        cell_type_column=cell_type_column, use_cell_type=use_cell_type, eligible=eligible,
+        references=references, reference_for_k=reference_for_k, method_names=method_names,
+        coordinate_units=coordinate_units, training_history=training_history, n_genes=n_genes,
+        notes=notes, provenance=details, crop_bounds=crop_bounds, crop_name=crop_name,
+        boundary_grid_size=boundary_grid_size, boundary_max_distance=boundary_max_distance)
+    (work_dir / 'LATEST_HTML_REPORT').write_text(str(output.resolve()) + '\n')
     return result
