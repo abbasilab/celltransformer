@@ -13,6 +13,8 @@ license = "MIT"
 license-files = ["LICENSE", "allen_example/LICENSE", "barseq_example/LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [
     { name = "Alex Lee" },
+    { name = "Sara Lichtarge" },
+    { name = "Aditya Sriram" },
 ]
 maintainers = [{name = "ads303"}]
 urls.Homepage = "https://github.com/ads303/celltransformer2-test"

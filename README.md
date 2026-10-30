@@ -31,9 +31,12 @@ The tested package versions are recorded in [`environment/`](environment/README.
 
 Clone the repository and run all commands from its top-level folder:
 
+> **TODO before publishing:** confirm the repository URL and folder name below once the repository is created
+> (assumed: `abbasilab/celltransformer2`).
+
 ```bash
-git clone https://github.com/ads303/celltransformer2-test.git
-cd celltransformer2-test
+git clone https://github.com/abbasilab/celltransformer2.git
+cd celltransformer2
 ```
 
 Create the training environment and register it as a Jupyter kernel:
@@ -115,8 +118,9 @@ The MIT license does not change the data's terms. See [`THIRD_PARTY_NOTICES.md`]
 
 ## Citation
 
-If you use CellTransformer2, please cite the protocol (reference to be added on publication) and the
-original CellTransformer paper:
+> **TODO on publication:** add the protocol paper's reference (authors, title, journal, DOI) here.
+
+If you use CellTransformer2, please cite the protocol and the original CellTransformer paper:
 
 > Lee, A. J. et al. Data-driven fine-grained region discovery in the mouse brain with transformers.
 > *Nat. Commun.* **16**, 8536 (2025). https://doi.org/10.1038/s41467-025-64259-4

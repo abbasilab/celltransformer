@@ -31,7 +31,8 @@ is not required by this example and is not redistributed here.
 
 The Allen structure ontology and annotation are from the Allen Institute for
 Brain Science. The downloaded annotation volumes remain external to Git; the
-small ontology is included as `barseq_example/reference/allen_structure_graph.json`.
+small ontology is included as `barseq_example/reference/allen_structure_graph.json`, a copy of
+https://api.brain-map.org/api/v2/structure_graph_download/1.json.
 See https://doi.org/10.1016/j.cell.2020.04.007 and
 https://alleninstitute.org/legal/terms-of-use/ for the originating reference and
 data-use terms. This repository does not change the ownership of those resources.
