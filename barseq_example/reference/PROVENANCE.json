@@ -1,9 +1,0 @@
-{
-  "panel_source": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-024-07221-6/MediaObjects/41586_2024_7221_MOESM5_ESM.xlsx",
-  "xlsx_sha256": "c91508523f54be3d5c78ef0ed41973aa7fd50c839e660ba5924840ea9ff059de",
-  "extraction": "Cell types and Gene names from Gene panel worksheet; verbatim values, header included",
-  "author_analysis": "https://github.com/gillislab/barseq_analysis/tree/main/pilot",
-  "registration": "Mendeley v1 CCF_registration/BrainRegistration.ipynb",
-  "coordinate_basis": "a00 script divides physical pos by 6.5/10 micrometer pixel size; fixedpos preserves physical units. CCF coordinates already transformed to zero-based 25um Allen indices in registration notebook.",
-  "gene_selection": "All 106 named sequencing columns in supplied matrix. Published final_panel.csv has 104 unique markers excluding Hgf/Fezf2 but including five markers absent from supplementary table. Supplementary Table 1 lists 104 including three hybridization markers and Hgf/Fezf2; it excludes Rgs4, Marcksl1, Car10, Nrg1, Actb. Both are preserved for inspection. Do not label this run as exact 104-gene paper replication."
-}

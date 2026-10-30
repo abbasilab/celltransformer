@@ -1,5 +1,4 @@
 # Main dependency pins used by the successful run; not an exact conda build lock.
-# setup_environment.sh installs the same spec and performs native GPU KMeans.
 channels:
   - rapidsai
   - conda-forge
