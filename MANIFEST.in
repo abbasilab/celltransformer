@@ -1,5 +1,4 @@
 include README.md LICENSE THIRD_PARTY_NOTICES.md pyproject.toml
-include packaging_requirements.txt
 graft src
 graft config
 graft tests

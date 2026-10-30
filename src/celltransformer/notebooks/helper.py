@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import cKDTree
 
-from celltransformer2_barseq.cli import example_path
+from celltransformer._repo import example_path
 
 
 def _run_download(example, root):

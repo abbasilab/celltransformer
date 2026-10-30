@@ -26,16 +26,16 @@ dev = [
 ]
 
 [project.scripts]
-celltransformer-train      = "celltransformer2_barseq.cli:train_main"
+celltransformer-train      = "celltransformer._repo:train_main"
 celltransformer-extract    = "celltransformer.extract.main:cli"
 celltransformer-preprocess = "celltransformer.preprocess.main:cli"
 celltransformer-cluster    = "celltransformer.cluster.main:cli"
 celltransformer-smooth     = "celltransformer.smooth.main:cli"
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["barseq_example/requirements.txt", "packaging_requirements.txt"]}
+dependencies = {file = ["barseq_example/requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["celltransformer", "celltransformer.*", "celltransformer2_barseq"]
+include = ["celltransformer", "celltransformer.*"]
 namespaces = false
