@@ -1,10 +1,8 @@
 # Optional HTML report: Step 13
 
-Both notebooks can generate an HTML report from the completed outputs of Steps 9–11. The report includes training curves, maps for every section and clustering resolution, and reference–domain correspondence heatmaps when reference annotations are supplied. It uses the existing domain assignments and does not retrain, extract, smooth or cluster again.
+Both 01 and 03 notebooks can generate an HTML report from the completed outputs of Steps 9–11. The report includes training curves, maps for every section and clustering resolution, and reference–domain correspondence heatmaps when reference annotations are supplied. It uses the existing domain assignments and does not retrain, extract, smooth or cluster again.
 
-Notebook support and reporting are part of the installed `celltransformer.notebooks` package. Either notebook can be copied to its own working folder and run without companion Python files. The environment already used by the notebook supplies NumPy, pandas, SciPy, Matplotlib, PyArrow and W&B. No additional environment, GPU computation, W&B account or unattended-run manifest is needed for reporting.
-
-For an existing installation, pull the updated repository and run `python -m pip install --no-deps -e .` from its root in the notebook's Python environment. Restart the kernel after updating. The notebooks then import `helper` from `celltransformer.notebooks` and reporting functions from `celltransformer.notebooks.reporting`. A regular wheel installation includes the same modules; an editable install is not required to run the notebook from another folder.
+Notebook support and reporting are part of the installed `celltransformer.notebooks` package. Either notebook can be copied to its own working folder and run without companion Python files. The environment already used by the notebook supplies NumPy, pandas, SciPy, Matplotlib, PyArrow and W&B. No additional environment, GPU computation or W&B account is needed for reporting.
 
 ## Run the added step
 
