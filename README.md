@@ -62,7 +62,7 @@ conda create -y -n celltransformer2-rapids --override-channels \
     scipy=1.14.1 numba=0.60.0 numba-cuda=0.0.17.1 pynvjitlink=0.4.0 pip
 conda activate celltransformer2-rapids
 pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
-pip install $(grep -v '^pyarrow==' barseq_example/requirements.txt)
+pip install $(grep -v '^pyarrow==' requirements.txt)
 pip install --no-deps -e .
 ```
 

@@ -35,7 +35,7 @@ celltransformer-cluster    = "celltransformer.cluster.main:cli"
 celltransformer-smooth     = "celltransformer.smooth.main:cli"
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["barseq_example/requirements.txt"]}
+dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -195,7 +195,7 @@ def zinb_loss_log2(zinb_obj, gt_expr: torch.Tensor):
 _CONFIG_DIR = str(Path(__file__).parents[3] / "config")
 
 
-@hydra.main(config_path=_CONFIG_DIR, config_name="train_redone_registration", version_base=None)
+@hydra.main(config_path=_CONFIG_DIR, config_name="train", version_base=None)
 def main(cfg: DictConfig) -> None:
     d = cfg.data
     o = cfg.optimization

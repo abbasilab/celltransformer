@@ -1,14 +1,14 @@
 defaults:
   - _self_
-  - data: redone_registration
+  - data: default
   - model: spatial_cell_transformer
-  - optimization: redone_registration
+  - optimization: default
 
 checkpoint_dir: checkpoints/
 wandb_project: celltransformer2
 wandb_tags: []       # list of string tags for the W&B run
 wandb_notes: ""      # freeform note attached to the W&B run
 model_checkpoint: null
-save_top_k: 5       # checkpoints to keep (best by train/loss); -1 = keep all
+save_top_k: 5       # checkpoints to keep (lowest validation loss, valid/nll_epoch); -1 = keep all
 devices: [0]        # GPU indices for training; override e.g. devices=[0,1]
 output: train_results.jsonl
