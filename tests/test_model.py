@@ -82,10 +82,11 @@ class TestTransformerEncoder:
 class TestAttentionPool:
     """AttentionPool: nested jagged tensor → (batch, 1, dim) nested tensor."""
 
+    @requires_gpu
     def test_output_shape(self):
-        pool = AttentionPool(input_dim=32, output_dim=32, nheads=4)
-        flat = torch.randn(8, 32)
-        lengths = torch.tensor([3, 5])
+        pool = AttentionPool(input_dim=32, output_dim=32, nheads=4, device="cuda")
+        flat = torch.randn(8, 32, device="cuda")
+        lengths = torch.tensor([3, 5], device="cuda")
         njt = torch.nested.nested_tensor_from_jagged(flat, lengths=lengths)
         out = pool(njt)
         vals = out.values()
@@ -122,13 +123,21 @@ class TestSpatialCellTransformer:
         m.eval()
         return m
 
-    def test_forward_shape(self, model):
+    #forward passes need CUDA (to_padded_tensor has no CPU kernel in torch 2.5)
+    @pytest.fixture(scope="class")
+    def cuda_model(self, tiny_model_cfg):
+        m = SpatialCellTransformer(**tiny_model_cfg, device="cuda")
+        m.eval()
+        return m
+
+    @requires_gpu
+    def test_forward_shape(self, cuda_model):
         """Basic forward pass: check output dict keys and tensor shapes."""
         batch_size = 3
-        inputs = _make_model_inputs(batch_size, n_genes=10, n_cell_types=5)
+        inputs = _make_model_inputs(batch_size, n_genes=10, n_cell_types=5, device="cuda")
 
         with torch.no_grad():
-            out = model(**inputs)
+            out = cuda_model(**inputs)
 
         assert "nb_params" in out
         assert "spatial_context" in out
@@ -136,11 +145,12 @@ class TestSpatialCellTransformer:
         assert out["nb_params"]["mu"].shape == (batch_size, 10)
         assert out["decoder_tokens"].shape == (batch_size, 2, 32)
 
-    def test_batch_size_one(self, model):
+    @requires_gpu
+    def test_batch_size_one(self, cuda_model):
         """Edge case: single sample in batch."""
-        inputs = _make_model_inputs(1, n_genes=10, n_cell_types=5)
+        inputs = _make_model_inputs(1, n_genes=10, n_cell_types=5, device="cuda")
         with torch.no_grad():
-            out = model(**inputs)
+            out = cuda_model(**inputs)
         assert out["nb_params"]["mu"].shape == (1, 10)
 
     def test_zero_length_neighborhood_raises(self, model):
@@ -162,24 +172,26 @@ class TestSpatialCellTransformer:
         with pytest.raises(ValueError, match="Zero-length neighborhoods"):
             model(**inputs)
 
+    @requires_gpu
     @pytest.mark.parametrize("concat_mode", ["add", "cat"])
     def test_concat_modes(self, tiny_model_cfg, concat_mode):
         """Both concat modes must produce valid outputs."""
         cfg = {**tiny_model_cfg, "concat_mode": concat_mode}
-        m = SpatialCellTransformer(**cfg)
+        m = SpatialCellTransformer(**cfg, device="cuda")
         m.eval()
-        inputs = _make_model_inputs(2, n_genes=10, n_cell_types=5)
+        inputs = _make_model_inputs(2, n_genes=10, n_cell_types=5, device="cuda")
         with torch.no_grad():
             out = m(**inputs)
         assert out["nb_params"]["mu"].shape == (2, 10)
 
+    @requires_gpu
     @pytest.mark.parametrize("use_diag_norm", [True, False])
     def test_diagonal_norm_toggle(self, tiny_model_cfg, use_diag_norm):
         """DiagonalNormalization on/off must both work."""
         cfg = {**tiny_model_cfg, "use_diagonal_norm": use_diag_norm}
-        m = SpatialCellTransformer(**cfg)
+        m = SpatialCellTransformer(**cfg, device="cuda")
         m.eval()
-        inputs = _make_model_inputs(2, n_genes=10, n_cell_types=5)
+        inputs = _make_model_inputs(2, n_genes=10, n_cell_types=5, device="cuda")
         with torch.no_grad():
             out = m(**inputs)
         assert out["nb_params"]["mu"].shape == (2, 10)
