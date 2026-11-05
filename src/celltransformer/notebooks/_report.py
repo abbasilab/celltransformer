@@ -1,4 +1,4 @@
-"""Dataset-independent CellTransformer2 report rendering. No model fitting.
+"""Dataset-independent CellTransformer report rendering. No model fitting.
 
 generate_report takes per-cell metadata and saved domain labels that share one row
 order (reporting.report_from_notebook establishes that order) and writes a
@@ -711,7 +711,7 @@ def generate_report(*, metadata, domain_labels, output_dir, dataset_name='Spatia
 
     #the page
     document = _render_html(
-        title=f'{dataset_name} · CellTransformer2', n_cells=n, section_names=section_names, ks=ks, n_genes=n_genes,
+        title=f'{dataset_name} · CellTransformer', n_cells=n, section_names=section_names, ks=ks, n_genes=n_genes,
         notes=notes, training_html=training_html, references=references, crop_bounds=crop_bounds,
         crop_name=crop_name, boundary_grid_size=boundary_grid_size, boundary_max_distance=boundary_max_distance,
         coordinate_units=coordinate_units, correspondence=correspondence, use_cell_type=use_cell_type,

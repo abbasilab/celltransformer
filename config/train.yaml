@@ -5,7 +5,7 @@ defaults:
   - optimization: default
 
 checkpoint_dir: checkpoints/
-wandb_project: celltransformer2
+wandb_project: celltransformer
 wandb_tags: []       # list of string tags for the W&B run
 wandb_notes: ""      # freeform note attached to the W&B run
 model_checkpoint: null

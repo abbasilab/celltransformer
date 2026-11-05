@@ -3,9 +3,9 @@ requires = ["setuptools>=77,<81", "wheel>=0.45,<1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "celltransformer2-test"
+name = "celltransformer-test"
 version = "0.2.0"
-description = "CellTransformer2 with Allen 1 MERFISH and BARseq spatial domain discovery examples"
+description = "CellTransformer with Allen 1 MERFISH and BARseq spatial domain discovery examples"
 readme = "README.md"
 dynamic = ["dependencies"]
 requires-python = ">=3.11,<3.12"

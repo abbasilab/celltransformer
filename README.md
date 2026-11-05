@@ -1,12 +1,12 @@
-# CellTransformer2
+# CellTransformer
 
-CellTransformer2 finds spatial domains in spatial transcriptomics data without predefined region labels.
+CellTransformer finds spatial domains in spatial transcriptomics data without predefined region labels.
 It is a self-supervised encoder–decoder transformer: from the cells in a square neighborhood, it predicts a
 center cell's masked gene expression, conditioned on the center cell's type. The trained encoder turns each
 cell's neighborhood into an embedding, and k-means on those embeddings gives spatial domains at any number
 of clusters.
 
-CellTransformer2 keeps the objective of [CellTransformer](https://github.com/alexj-lee/spatialcelltransformer)
+CellTransformer keeps the objective of [CellTransformer](https://github.com/alexj-lee/spatialcelltransformer)
 (Lee et al., 2025) and adds configurable model settings, sequence packing for neighborhoods of variable size,
 and optimized spatial data loading. It scales to millions of cells on one workstation GPU.
 
@@ -23,31 +23,28 @@ The protocol is run from three Jupyter notebooks. Start with notebook 03 on the 
 
 The notebooks use two conda environments:
 
-- `celltransformer2-dev`: the notebook kernel, used for data preparation, training and embedding extraction.
-- `celltransformer2-rapids`: GPU nearest-neighbor search and k-means (cuML) for smoothing and clustering.
+- `celltransformer-dev`: the notebook kernel, used for data preparation, training and embedding extraction.
+- `celltransformer-rapids`: GPU nearest-neighbor search and k-means (cuML) for smoothing and clustering.
 
-Two environments are needed because cuDF 24.12 requires an older pyarrow than CellTransformer2.
+Two environments are needed because cuDF 24.12 requires an older pyarrow than CellTransformer.
 The tested package versions are recorded in [`environment/`](environment/README.md).
 
 Clone the repository and run all commands from its top-level folder:
 
-> **TODO before publishing:** confirm the repository URL and folder name below once the repository is created
-> (assumed: `abbasilab/celltransformer2`).
-
 ```bash
-git clone https://github.com/abbasilab/celltransformer2.git
-cd celltransformer2
+git clone --branch cleaning_up https://github.com/ads303/celltransformer2-test.git celltransformer
+cd celltransformer
 ```
 
 Create the training environment and register it as a Jupyter kernel:
 
 ```bash
-conda create -y -n celltransformer2-dev -c conda-forge python=3.11 pip
-conda activate celltransformer2-dev
+conda create -y -n celltransformer-dev -c conda-forge python=3.11 pip
+conda activate celltransformer-dev
 pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
 pip install -e .
 pip install ipykernel
-python -m ipykernel install --user --name celltransformer2-dev
+python -m ipykernel install --user --name celltransformer-dev
 ```
 
 Check it with `python -c "import torch, torchdata; print(torch.__version__, torchdata.__version__, torch.cuda.is_available())"`.
@@ -56,11 +53,11 @@ The expected output is `2.5.1+cu121 0.11.0 True`.
 Create the RAPIDS environment:
 
 ```bash
-conda create -y -n celltransformer2-rapids --override-channels \
+conda create -y -n celltransformer-rapids --override-channels \
     -c rapidsai -c conda-forge -c nvidia \
     python=3.11 cuml=24.12 cudf=24.12 cuda-version=12.2 numpy=1.26.4 \
     scipy=1.14.1 numba=0.60.0 numba-cuda=0.0.17.1 pynvjitlink=0.4.0 pip
-conda activate celltransformer2-rapids
+conda activate celltransformer-rapids
 pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cu121
 pip install $(grep -v '^pyarrow==' requirements.txt)
 pip install --no-deps -e .
@@ -70,7 +67,7 @@ Do not omit `--no-deps` from the last command: without it, pip upgrades pyarrow 
 Check it with `python -c "import cuml, pyarrow; print(cuml.__version__, pyarrow.__version__)"` and
 `celltransformer-smooth --help`. cuML should report 24.12 and pyarrow a version older than 19.
 
-Then open a notebook and select the `celltransformer2-dev` kernel. The location of the RAPIDS environment
+Then open a notebook and select the `celltransformer-dev` kernel. The location of the RAPIDS environment
 (`RAPIDS_BIN`) is set in Step 1 of each notebook.
 
 ## Notebooks
@@ -120,7 +117,7 @@ The MIT license does not change the data's terms. See [`THIRD_PARTY_NOTICES.md`]
 
 > **TODO on publication:** add the protocol paper's reference (authors, title, journal, DOI) here.
 
-If you use CellTransformer2, please cite the protocol and the original CellTransformer paper:
+If you use CellTransformer, please cite the protocol and the original CellTransformer paper:
 
 > Lee, A. J. et al. Data-driven fine-grained region discovery in the mouse brain with transformers.
 > *Nat. Commun.* **16**, 8536 (2025). https://doi.org/10.1038/s41467-025-64259-4
@@ -137,4 +134,4 @@ If you use the example data, please also cite:
 
 CellTransformer was written by Alex Lee; the original repository is
 [alexj-lee/spatialcelltransformer](https://github.com/alexj-lee/spatialcelltransformer).
-Alex also wrote much of CellTransformer2.
+Alex also wrote much of CellTransformer.

@@ -1,4 +1,4 @@
-name: CellTransformer2 CPU tests
+name: CellTransformer CPU tests
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read

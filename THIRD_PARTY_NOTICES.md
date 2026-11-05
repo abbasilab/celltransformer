@@ -1,6 +1,6 @@
 # Attribution and distribution scope
 
-The original CellTransformer2 code is copyright (c) 2026 Alex Lee, MIT licensed;
+The original CellTransformer code is copyright (c) 2026 Alex Lee, MIT licensed;
 the full original license is retained at the root. Its supplied distribution
 implementation and other inline provenance comments remain intact.
 
