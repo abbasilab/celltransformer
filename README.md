@@ -6,7 +6,7 @@ center cell's masked gene expression, conditioned on the center cell's type. The
 cell's neighborhood into an embedding, and k-means on those embeddings gives spatial domains at any number
 of clusters.
 
-CellTransformer keeps the objective of [CellTransformer](https://github.com/alexj-lee/spatialcelltransformer)
+This update to CellTransformer keeps the objective of [CellTransformer](https://github.com/alexj-lee/spatialcelltransformer)
 (Lee et al., 2025) and adds configurable model settings, sequence packing for neighborhoods of variable size,
 and optimized spatial data loading. It scales to millions of cells on one workstation GPU.
 
