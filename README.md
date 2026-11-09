@@ -6,9 +6,7 @@ center cell's masked gene expression, conditioned on the center cell's type. The
 cell's neighborhood into an embedding, and k-means on those embeddings gives spatial domains at any number
 of clusters.
 
-This update to CellTransformer keeps the objective of [CellTransformer](https://github.com/alexj-lee/spatialcelltransformer)
-(Lee et al., 2025) and adds configurable model settings, sequence packing for neighborhoods of variable size,
-and optimized spatial data loading. It scales to millions of cells on one workstation GPU.
+This update to CellTransformer keeps the objective of (Lee et al., 2025) (https://github.com/abbasilab/celltransformer/tree/main) and adds configurable model settings, sequence packing for neighborhoods of variable size, and optimized spatial data loading. It scales to millions of cells on one workstation GPU.
 
 The protocol is run from three Jupyter notebooks. Start with notebook 03 on the five example sections
 (~13 min on one GPU), then point it at your own data.
@@ -100,10 +98,9 @@ The notebooks run five command-line tools, which can also be run from a terminal
 | `celltransformer-smooth` | RAPIDS | Gaussian-weighted average of each cell's embedding over its nearest neighbors, per section |
 | `celltransformer-cluster` | RAPIDS | GPU k-means on the embeddings of all sections for each k; saves labels and per-section domain plots |
 
-## Data and licenses
+## Data
 
-The code is MIT licensed ([`LICENSE`](LICENSE)). The example data are not redistributed here; the notebooks
-download them at runtime from the URLs, with the sizes and checksums, listed in
+The example data are not redistributed here; the notebooks download them at runtime from the URLs, with the sizes and checksums, listed in
 [`allen_example/DOWNLOAD_MANIFEST.json`](allen_example/DOWNLOAD_MANIFEST.json) and
 [`barseq_example/DOWNLOAD_MANIFEST.json`](barseq_example/DOWNLOAD_MANIFEST.json).
 
@@ -111,13 +108,8 @@ download them at runtime from the URLs, with the sizes and checksums, listed in
   CC BY-NC 4.0 (Yao et al., 2023).
 - BARseq pilot brain: [Mendeley Data](https://doi.org/10.17632/8bhhk7c5n9.1), CC BY 4.0 (Chen et al., 2025).
 
-The MIT license does not change the data's terms. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for details.
 
 ## Citation
-
-> **TODO on publication:** add the protocol paper's reference (authors, title, journal, DOI) here.
-
-If you use CellTransformer, please cite the protocol and the original CellTransformer paper:
 
 > Lee, A. J. et al. Data-driven fine-grained region discovery in the mouse brain with transformers.
 > *Nat. Commun.* **16**, 8536 (2025). https://doi.org/10.1038/s41467-025-64259-4
@@ -130,8 +122,3 @@ If you use the example data, please also cite:
 > Chen, X. et al. Whole-cortex in situ sequencing reveals input-dependent area identity.
 > *Nature* **647**, 203–212 (2025). https://doi.org/10.1038/s41586-024-07221-6
 
-## Credits
-
-CellTransformer was written by Alex Lee; the original repository is
-[alexj-lee/spatialcelltransformer](https://github.com/alexj-lee/spatialcelltransformer).
-Alex also wrote much of CellTransformer.
