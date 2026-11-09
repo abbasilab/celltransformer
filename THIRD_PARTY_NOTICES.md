@@ -1,11 +1,5 @@
 # Attribution and distribution scope
 
-The original CellTransformer code is copyright (c) 2026 Alex Lee, MIT licensed;
-the full original license is retained at the root. Its supplied distribution
-implementation and other inline provenance comments remain intact.
-
-The example scripts are covered by the same license. Code licensing does not relicense external data.
-
 The Allen 1 MERFISH expression and cell/CCF annotation data are downloaded from
 the Allen Brain Cell Atlas. The source collection is licensed CC BY-NC 4.0:
 https://alleninstitute.github.io/abc_atlas_access/descriptions/MERFISH-C57BL6J-638850.html.
