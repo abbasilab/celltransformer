@@ -16,6 +16,6 @@ jobs:
           python -m pip install -r requirements.txt pytest==8.3.5
       - name: Compile source
         run: python -m compileall -q src
-      # tests that need a GPU (model forward passes, torch.compile) are reported as skipped here
+      #  tests that need a GPU (model forward passes, torch.compile) are reported as skipped here
       - name: Run CPU tests
         run: PYTHONPATH=src python -m pytest -q -rs tests
